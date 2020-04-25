@@ -5,6 +5,7 @@
 #include <iostream>
 #include "BillboardVertices.h"
 #include "Camera.h"
+#include "CustomTypes.h"
 
 ge::particle::SimpleParticleRenderer::SimpleParticleRenderer(std::shared_ptr<ge::gl::Context> glContext, int maxParticles)
 	: gl(glContext), maxParticles(maxParticles)
@@ -27,24 +28,32 @@ void ge::particle::SimpleParticleRenderer::initialize()
 	particleCenters = std::make_shared<ge::gl::Buffer>(maxParticles * sizeof(float) * 3);
 	centers = std::vector<float>();
 
+	particleColors = std::make_shared<ge::gl::Buffer>(maxParticles * sizeof(float) * 3);
+
 	VAO = std::make_shared<ge::gl::VertexArray>();
 	VAO->addAttrib(billboardVertices, 0, 3, GL_FLOAT);
 	VAO->addAttrib(particleCenters, 1, 3, GL_FLOAT);
+	VAO->addAttrib(particleColors, 2, 3, GL_FLOAT);
 }
 
 void ge::particle::SimpleParticleRenderer::render(std::shared_ptr<ParticleContainer> container)
 {
 	centers.clear();
+	colors.clear();
 	int particleCount = 0;
 
 	if (container->getType() == ParticleContainer::AoS) {
 		auto pi = AoSParticleIterator(std::static_pointer_cast<ArrayOfStructsContainer>(container));
 		for(pi; !pi.end(); pi.doNext()) {
-			Particle &p = pi.getInstance();
+			auto &p = static_cast<CustomParticle &>(pi.getInstance());
 			if (p.livingFlag) {
 				centers.push_back(p.pos.x);
 				centers.push_back(p.pos.y);
 				centers.push_back(p.pos.z);
+
+				colors.push_back(p.color.r);
+				colors.push_back(p.color.g);
+				colors.push_back(p.color.b);
 
 				particleCount++;
 			}
@@ -62,12 +71,13 @@ void ge::particle::SimpleParticleRenderer::render(std::shared_ptr<ParticleContai
 	VAO->bind();
 
 	particleCenters->setData(centers);
+	particleColors->setData(colors);
 
 	gl->glVertexAttribDivisor(0, 0); // particles vertices : always reuse the same 4 vertices -> 0
 	gl->glVertexAttribDivisor(1, 1); // positions : one per quad (its center)                 -> 1
-	//gl->glVertexAttribDivisor(2, 1); // color : one per quad                                  -> 1
+	gl->glVertexAttribDivisor(2, 1); // color : one per quad                                  -> 1
 
 	gl->glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, particleCount);
 
-	std::cout << particleCount << " -- " << particleCenters->getSize() << "\n";
+	//std::cout << particleCount << " -- " << particleCenters->getSize() << "\n";
 }

@@ -2,9 +2,9 @@
 
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec3 center;
-//layout(location = 2) in vec3 color;
+layout(location = 2) in vec3 color;
 
-//out vec3 particlecolor;
+out vec3 particlecolor;
 
 uniform mat4 MVP;
 uniform vec3 CameraUp;
@@ -22,5 +22,5 @@ void main()
 	gl_Position = MVP * vec4(pos, 1.0f);
 	//gl_Position = vec4(position, 1.0f);
 
-	//particlecolor = color;
+	particlecolor = color;
 }

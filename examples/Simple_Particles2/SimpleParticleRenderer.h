@@ -27,7 +27,9 @@ namespace ge {
 
 			std::shared_ptr<ge::gl::Buffer> billboardVertices;
 			std::shared_ptr<ge::gl::Buffer> particleCenters;
+			std::shared_ptr<ge::gl::Buffer> particleColors;
 			std::vector<float> centers;
+			std::vector<float> colors;
 
 			void initialize();
 		};

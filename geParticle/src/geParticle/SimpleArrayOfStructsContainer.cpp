@@ -1,38 +1,46 @@
-#include <geParticle/SimpleArrayOfStructsContainer.h>
+/*#include <geParticle/SimpleArrayOfStructsContainer.h>
 
-ge::particle::SimpleArrayOfStructsContainer::SimpleArrayOfStructsContainer(int maxParticleCount)
+template <class T>
+ge::particle::SimpleArrayOfStructsContainer<T>::SimpleArrayOfStructsContainer(int maxParticleCount)
 	: maxParticles(maxParticleCount), lastUsedParticle(0)
 {
-	particles = new Particle[maxParticleCount];
+	static_assert(std::is_base_of<Particle, T>::value);
+	particles = new T[maxParticleCount];
 }
 
-ge::particle::SimpleArrayOfStructsContainer::~SimpleArrayOfStructsContainer()
+template <class T>
+ge::particle::SimpleArrayOfStructsContainer<T>::~SimpleArrayOfStructsContainer()
 {
 	delete[] particles;
 }
 
-ge::particle::Particle & ge::particle::SimpleArrayOfStructsContainer::createParticle()
+template <class T>
+ge::particle::Particle & ge::particle::SimpleArrayOfStructsContainer<T>::createParticle()
 {
 	return particles[findUnusedParticle()];
 }
 
-ge::particle::Particle & ge::particle::SimpleArrayOfStructsContainer::getParticle(int idx)
+template <class T>
+ge::particle::Particle & ge::particle::SimpleArrayOfStructsContainer<T>::getParticle(int idx)
 {
 	assert(idx < maxParticles);
 	return particles[idx];
 }
 
-int ge::particle::SimpleArrayOfStructsContainer::startIdx()
+template <class T>
+int ge::particle::SimpleArrayOfStructsContainer<T>::startIdx()
 {
 	return 0;
 }
 
-int ge::particle::SimpleArrayOfStructsContainer::endIdx()
+template <class T>
+int ge::particle::SimpleArrayOfStructsContainer<T>::endIdx()
 {
 	return maxParticles - 1;
 }
 
-int ge::particle::SimpleArrayOfStructsContainer::findUnusedParticle()
+template <class T>
+int ge::particle::SimpleArrayOfStructsContainer<T>::findUnusedParticle()
 {
 	for (int i = lastUsedParticle; i < maxParticles; i++) {
 		if (!particles[i].livingFlag) {
@@ -51,3 +59,4 @@ int ge::particle::SimpleArrayOfStructsContainer::findUnusedParticle()
 	// All particles are taken, override random particle
 	return rand() % maxParticles;
 }
+*/

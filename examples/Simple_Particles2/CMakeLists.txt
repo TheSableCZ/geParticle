@@ -5,7 +5,7 @@ set(APP_NAME "Simple_Particles2")
 
 project(${PROJECT_NAME})
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_AUTOMOC ON)
 SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
 
@@ -31,6 +31,7 @@ set(SOURCES
 	BillboardVertices.h
 	Camera.h
 	Camera.cpp
+	CustomTypes.h
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
