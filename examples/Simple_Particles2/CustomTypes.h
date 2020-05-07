@@ -1,5 +1,6 @@
 #pragma once
 
+#include <geParticle/Particle.h>
 #include <geParticle/AoSParticleFactory.h>
 
 namespace ge {

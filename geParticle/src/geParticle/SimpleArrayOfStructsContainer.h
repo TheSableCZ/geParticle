@@ -43,7 +43,7 @@ namespace ge {
 
 template <class T>
 ge::particle::SimpleArrayOfStructsContainer<T>::SimpleArrayOfStructsContainer(int maxParticleCount)
-	: maxParticles(maxParticleCount), lastUsedParticle(0)
+	: maxParticles(maxParticleCount), lastUsedParticle(0), ArrayOfStructsContainer()
 {
 	static_assert(std::is_base_of<Particle, T>::value);
 	particles = new T[maxParticleCount];

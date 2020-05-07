@@ -7,7 +7,7 @@ namespace ge {
 		class ParticleContainer { 
 		public:
 			enum ContainerType {
-				AoS, SoA
+				AoS, SoA, SoA_CS
 			};
 
 			virtual ContainerType getType() = 0;
@@ -24,7 +24,14 @@ namespace ge {
 			virtual Particle & createParticle() = 0;
 			virtual Particle & getParticle(int idx) = 0;
 
-			inline ContainerType getType() { return AoS; };
+			inline ContainerType getType() override { return AoS; }
 		};
+
+		class StructureOfArraysContainer : public IndexBasedParticleContainer {
+			virtual int createParticle() = 0;
+
+			inline ContainerType getType() override { return SoA; }
+		};
+
 	}
 }
