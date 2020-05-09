@@ -17,6 +17,8 @@ namespace ge {
 			Particle & getParticle(int idx) override;
 			int startIdx() override;
 			int endIdx() override;
+
+			inline unsigned int size() override { return maxParticles; }
 		protected:
 			T *particles;
 

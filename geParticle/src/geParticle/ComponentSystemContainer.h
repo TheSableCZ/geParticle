@@ -3,19 +3,29 @@
 #include <geParticle/ParticleContainer.h>
 #include <unordered_map>
 #include <vector>
+#include <glm/glm.hpp>
 
 namespace ge {
 	namespace particle {
 		struct IComponent {};
+		class IComponentPool {
+		public:
+			virtual void clear() = 0;
+			virtual void *data() = 0;
+		};
 
 		struct LifeData : public IComponent {
 			core::time_unit life;
 			bool livingFlag = false;
 		};
 
+		struct MassPointData : public IComponent {
+			glm::vec3 position, velocity;
+		};
+
 		class ComponentSystemContainer : public StructureOfArraysContainer {
 		public:
-			ComponentSystemContainer(int maxParticleCount);
+			ComponentSystemContainer(int maxParticleCount, bool registerLifeData = true);
 
 			int startIdx() override;
 			int endIdx() override;
@@ -28,22 +38,48 @@ namespace ge {
 			T &getComponent(int idx);
 
 			inline ContainerType getType() override { return SoA_CS; }
+			inline unsigned int size() override { return maxParticles; }
 
-		private:
+		protected:
 			int maxParticles;
 
-			std::unordered_map<const char *, std::vector<IComponent>> components;
+			std::unordered_map<const char *, std::shared_ptr<IComponentPool>> components;
 
 			int findUnusedParticle();
 			int lastUsedParticle = 0;
 		};
+
+		template <typename T>
+		class ComponentPool : public IComponentPool {
+		public:
+			ComponentPool(int size) {
+				pool = std::vector<T>(size);
+			}
+
+			T &get(int idx) {
+				return pool[idx];
+			}
+
+			void clear() override {
+				pool.clear();
+			}
+
+			void *data() override {
+				return pool.data();
+			}
+
+		private:
+			std::vector<T> pool;
+		};
 	}
 }
 
-ge::particle::ComponentSystemContainer::ComponentSystemContainer(int maxParticleCount)
+inline ge::particle::ComponentSystemContainer::ComponentSystemContainer(int maxParticleCount, bool registerLifeData)
 	: maxParticles(maxParticleCount), StructureOfArraysContainer()
 {
-	registerComponent<LifeData>();
+	if (registerLifeData) {
+		registerComponent<LifeData>();
+	}
 }
 
 inline int ge::particle::ComponentSystemContainer::startIdx()
@@ -65,7 +101,10 @@ inline void ge::particle::ComponentSystemContainer::registerComponent()
 
 	assert(components.find(typeName) == components.end() && "Registering component type more than once.");
 
-	components.insert({ typeName, std::vector<T>(maxParticles) });
+	//auto pool = new ComponentPool<T>(maxParticles);
+	//std::shared_ptr<IComponentPool> pool = std::make_shared<ComponentPool<T>>(maxParticles);
+
+	components.insert({ typeName, std::make_shared<ComponentPool<T>>(maxParticles) });
 }
 
 template<typename T>
@@ -79,7 +118,9 @@ inline T & ge::particle::ComponentSystemContainer::getComponent(int idx)
 
 	assert(component != components.end() && "Component not registered before use.");
 
-	return (component->second)[idx];
+	auto componentPool = std::static_pointer_cast<ComponentPool<T>>(component->second);
+
+	return componentPool->get(idx);
 }
 
 inline int ge::particle::ComponentSystemContainer::findUnusedParticle()

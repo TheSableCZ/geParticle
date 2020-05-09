@@ -11,6 +11,7 @@ namespace ge {
 			};
 
 			virtual ContainerType getType() = 0;
+			virtual unsigned int size() = 0;
 		};
 
 		class IndexBasedParticleContainer : public ParticleContainer {
