@@ -2,6 +2,7 @@
 #include <geParticle/ParticleSystem.h>
 #include <geParticle/GPUParticleContainer.h>
 #include <geParticle/GPUParticleAffector.h>
+#include <geParticle/GPUParticleEmitter.h>
 #include "SimpleParticleRenderer.h"
 #include <geUtil/Text.h>
 #include <geParticle/ComponentSystemContainer.h>
@@ -14,16 +15,21 @@ void ge::examples::PSManager::initialize()
 	pc = std::make_shared<ge::particle::GPUParticleContainer>(MAX_PARTICLES);
 
 	pc->registerComponent<ge::particle::MassPointData>();
+	pc->registerComponent<ge::particle::GPULifeData>();
 
 	distributeParticles(pc);
 
 	pc->initBuffers();
 	pc->bindComponentBase<ge::particle::MassPointData>(0);
+	pc->bindComponentBase<ge::particle::GPULifeData>(1);
 
 	ps = std::make_shared<ge::particle::ParticleSystem>(pc);
 
-	auto affector = std::make_shared<ge::particle::GPUParticleAffector>(ge::util::loadTextFile(APP_RESOURCES"/shaders/affector.glsl"), 256);
+	auto affector = std::make_shared<ge::particle::GPUParticleAffector>(ge::util::loadTextFile(APP_RESOURCES"/shaders/affector.glsl"));
 	ps->addAffector(affector);
+
+	auto emitter = std::make_shared<ge::particle::GPUParticleEmitter>(ge::util::loadTextFile(APP_RESOURCES"/shaders/emitter.glsl"), 1);
+	ps->addEmitter(emitter);
 
 	/*auto lifeTimeAffector = std::make_shared<ge::particle::LifeTimeAffector>();
 	ps->addAffector(lifeTimeAffector);

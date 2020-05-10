@@ -19,6 +19,11 @@ namespace ge {
 			bool livingFlag = false;
 		};
 
+		struct GPULifeData {
+			float life;
+			bool livingFlag = false;
+		};
+
 		struct MassPointData {
 			// vec4 because struct align to 16 bytes in glsl shaders
 			glm::vec4 position;

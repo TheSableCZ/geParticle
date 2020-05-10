@@ -30,7 +30,7 @@ ge::particle::BasicParticleEmitter::BasicParticleEmitter(int particlesPerSecond)
 {
 }
 
-int ge::particle::BasicParticleEmitter::getNumOfParticlesToCreate(core::time_unit dt) {
+unsigned int ge::particle::BasicParticleEmitter::getNumOfParticlesToCreate(core::time_unit dt) {
     double realValue = (dt.count() * (float)particlesPerSecond);
 
     int newParticles = (int)realValue;

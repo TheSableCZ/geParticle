@@ -38,6 +38,7 @@ set(SHADERS
 	resources/shaders/billboardGeometryShader.glsl
 	resources/shaders/affector.glsl
 	resources/shaders/affector2.glsl
+	resources/shaders/emitter.glsl
 )
 
 SOURCE_GROUP(shaders FILES ${SHADERS})

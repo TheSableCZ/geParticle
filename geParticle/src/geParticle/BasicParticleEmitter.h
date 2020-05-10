@@ -21,7 +21,7 @@ namespace ge {
 			//std::unique_ptr<ParticleFactory> particleFactory;
 
 		protected:
-			int getNumOfParticlesToCreate(core::time_unit dt);
+			unsigned int getNumOfParticlesToCreate(core::time_unit dt);
 
 			//std::shared_ptr<ParticleSystem> particleSystem;
 			int particlesPerSecond;
