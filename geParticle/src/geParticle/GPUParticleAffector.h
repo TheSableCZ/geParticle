@@ -38,6 +38,6 @@ void ge::particle::GPUParticleAffector::affect(core::time_unit dt, std::shared_p
 	program->set1f("dt", dt.count());
 	program->set1ui("particleCount", particles->size());
 
-	program->dispatch(particles->size()/workgroupSize, 1, 1);
+	program->dispatch((particles->size()/workgroupSize) + 1, 1, 1);
 	program->getContext().glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 }

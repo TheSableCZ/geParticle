@@ -25,7 +25,7 @@ void ge::particle::SimpleParticleRenderer::initialize(std::shared_ptr<GPUParticl
 
 	VAO = std::make_shared<ge::gl::VertexArray>();
 
-	container->addComponentAttrib<MassPointData>(VAO, 0, 3, GL_FLOAT, sizeof(MassPointData), offsetof(MassPointData, position));
+	container->addComponentAttrib<MassPointData>(VAO, 0, 4, GL_FLOAT, sizeof(MassPointData), offsetof(MassPointData, position));
 }
 
 void ge::particle::SimpleParticleRenderer::render(std::shared_ptr<ParticleContainer> container)

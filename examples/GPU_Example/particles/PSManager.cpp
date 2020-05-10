@@ -11,7 +11,7 @@
 
 void ge::examples::PSManager::initialize()
 {
-	auto pc = std::make_shared<ge::particle::GPUParticleContainer>(MAX_PARTICLES);
+	pc = std::make_shared<ge::particle::GPUParticleContainer>(MAX_PARTICLES);
 
 	pc->registerComponent<ge::particle::MassPointData>();
 
@@ -39,7 +39,11 @@ void ge::examples::PSManager::initialize()
 
 void ge::examples::PSManager::update()
 {
+	//printParticles();
+
 	ps->update(ge::core::time_point::clock::now());
+
+	//printParticles();
 }
 
 void ge::examples::PSManager::distributeParticles(std::shared_ptr<ge::particle::GPUParticleContainer> container)
@@ -56,4 +60,14 @@ void ge::examples::PSManager::distributeParticles(std::shared_ptr<ge::particle::
 
 		container->getComponent<ge::particle::MassPointData>(i).position = glm::vec4(rndX, rndY, rndZ, 1.f);
 	}
+}
+
+void ge::examples::PSManager::printParticles()
+{
+	auto vect = pc->getBufferData<ge::particle::MassPointData>();
+	for (auto p : vect) {
+		std::cout << "pos: " << p.position.x << ", " << p.position.y << ", " << p.position.z << ", " << p.position.w << std::endl;
+		std::cout << "vel: " << p.velocity.x << ", " << p.velocity.y << ", " << p.velocity.z << std::endl << std::endl;
+	}
+	std::cout << "--------------------------------------------------" << std::endl;
 }

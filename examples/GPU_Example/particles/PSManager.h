@@ -24,8 +24,10 @@ namespace ge {
 
 		private:
 			std::shared_ptr<ge::particle::ParticleSystem> ps;
+			std::shared_ptr<ge::particle::GPUParticleContainer> pc;
 
 			void distributeParticles(std::shared_ptr<ge::particle::GPUParticleContainer> container);
+			void printParticles();
 		};
 	}
 }

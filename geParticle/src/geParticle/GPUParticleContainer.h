@@ -27,6 +27,9 @@ namespace ge {
 				GLsizei stride,
 				GLintptr offset
 			);
+
+			template <typename T>
+			std::vector<T> getBufferData();
 		private:
 			bool buffersInited = false;
 
@@ -101,4 +104,29 @@ inline void ge::particle::GPUParticleContainer::addComponentAttrib(std::shared_p
 
 	buffer->second->bind(GL_ARRAY_BUFFER);
 	vertexArray->addAttrib(buffer->second, index, nofComponents, type, stride, offset);
+}
+
+template<typename T>
+inline std::vector<T> ge::particle::GPUParticleContainer::getBufferData()
+{
+	const char* typeName = typeid(T).name();
+	auto buffer = buffers.find(typeName);
+
+	assert(buffer != buffers.end() && "Component (buffer) not found.");
+
+	std::cout << "getBufferData: buffer size: " << buffer->second->getSize() << std::endl;
+
+	T *ptr = (T *) buffer->second->map(GL_READ_ONLY);
+
+	std::vector<T> vect;
+
+	for (int i = 0; i < size(); i++) {
+		vect.push_back(ptr[i]);
+	}
+
+	buffer->second->unmap();
+
+	//buffer->second->getData<T>(vect);
+
+	return vect;
 }

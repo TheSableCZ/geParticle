@@ -7,20 +7,22 @@
 
 namespace ge {
 	namespace particle {
-		struct IComponent {};
+		//struct IComponent {};
 		class IComponentPool {
 		public:
 			virtual void clear() = 0;
-			virtual void *data() = 0;
+			virtual const void *data() = 0;
 		};
 
-		struct LifeData : public IComponent {
+		struct LifeData {
 			core::time_unit life;
 			bool livingFlag = false;
 		};
 
-		struct MassPointData : public IComponent {
-			glm::vec3 position, velocity;
+		struct MassPointData {
+			// vec4 because struct align to 16 bytes in glsl shaders
+			glm::vec4 position;
+			glm::vec4 velocity;
 		};
 
 		class ComponentSystemContainer : public StructureOfArraysContainer {
@@ -64,7 +66,7 @@ namespace ge {
 				pool.clear();
 			}
 
-			void *data() override {
+			const void *data() override {
 				return pool.data();
 			}
 
@@ -95,7 +97,7 @@ inline int ge::particle::ComponentSystemContainer::endIdx()
 template<typename T>
 inline void ge::particle::ComponentSystemContainer::registerComponent()
 {
-	static_assert(std::is_base_of<IComponent, T>::value && "Type is not derived from IComponent.");
+	//static_assert(std::is_base_of<IComponent, T>::value && "Type is not derived from IComponent.");
 
 	const char* typeName = typeid(T).name();
 

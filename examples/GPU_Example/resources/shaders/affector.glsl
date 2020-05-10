@@ -3,8 +3,8 @@
 #extension GL_ARB_shader_storage_buffer_object : enable
 
 struct MassPointData {
-	vec3 position;
-	vec3 velocity;
+	vec4 position;
+	vec4 velocity;
 };
 
 layout(std430, binding=0) buffer Pos {
@@ -19,10 +19,13 @@ layout (local_size_x = 256, local_size_y = 1, local_size_z = 1) in;
 void main(){
     uint gid = gl_GlobalInvocationID.x;
 
-    if(gid <= particleCount) {
-		p[gid].velocity += vec3(0.0f, -9.81f, 0.0f) * dt;
+    if(gid < particleCount) {
+		p[gid].velocity.xyz += vec3(0.0f, -9.81f, 0.0f) * dt;
+		p[gid].position.xyz += p[gid].velocity.xyz * dt;
 
-		p[gid].position = vec3(0.f, 0.f, 0.f);
+		//p[gid].position = vec3(particleCount, -1.f, 0.f);
+
+		//p[gid].velocity = vec3(0.f, 0.f, 0.f);
 
         //MassPointData part = p[gid];
 
