@@ -7,6 +7,10 @@ struct GPULifeData {
 	bool livingFlag;
 };
 
+layout(std430, binding=2) buffer RandomBuffer {
+	float random[];
+};
+
 layout(std430, binding=1) buffer Life {
    GPULifeData life[];
 };
@@ -23,21 +27,25 @@ layout(std430, binding=0) buffer Pos {
 uniform uint particleCount;
 uniform uint newParticles;
 
-layout (local_size_x = 256, local_size_y = 1, local_size_z = 1) in;
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 void main(){
     uint gid = gl_GlobalInvocationID.x;
 
-    if(gid < newParticles) {
-		int i;
+    //if(gid < newParticles && gid < particleCount)
+	for(uint counter = 0; counter < newParticles && counter < particleCount; counter++)
+	{
+		unsigned int i;
 		for (i = 0; i < particleCount; i++) {
 			if (life[i].livingFlag == false) {
 				break;
 			}
 		}
 
-		life[i].life = 3.2f;
+		//pos[i].position = vec4(0.f + gid, 0.f + gid, 0.f + gid, 1.f);
+
+		life[i].life = 2.f;
 		life[i].livingFlag = true;
-		pos[i].position = vec4(0.f, 1.f, 0.f, 1.f);
+		pos[i].position = vec4(random[counter*3], random[counter*3+1], random[counter*3+2], 1.f);
 		pos[i].velocity = vec4(0.f, 0.f, 0.f, 1.f);
     }
 }

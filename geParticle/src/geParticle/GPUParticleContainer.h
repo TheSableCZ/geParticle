@@ -120,7 +120,7 @@ inline std::vector<T> ge::particle::GPUParticleContainer::getBufferData()
 
 	std::vector<T> vect;
 
-	for (int i = 0; i < size(); i++) {
+	for (unsigned int i = 0; i < size(); i++) {
 		vect.push_back(ptr[i]);
 	}
 

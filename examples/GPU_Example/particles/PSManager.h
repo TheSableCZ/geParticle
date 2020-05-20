@@ -3,6 +3,8 @@
 #include <memory>
 #include <geParticle/Particle.h>
 #include <geParticle/AoSParticleFactory.h>
+#include <geGL/Buffer.h>
+#include <random>
 
 namespace ge {
 	namespace gl {
@@ -26,8 +28,13 @@ namespace ge {
 			std::shared_ptr<ge::particle::ParticleSystem> ps;
 			std::shared_ptr<ge::particle::GPUParticleContainer> pc;
 
+			std::shared_ptr<ge::gl::Buffer> randomBuffer;
+			void refreshRandomBuffer();
+
 			void distributeParticles(std::shared_ptr<ge::particle::GPUParticleContainer> container);
 			void printParticles();
+
+			std::mt19937 eng;
 		};
 	}
 }

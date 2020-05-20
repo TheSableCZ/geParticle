@@ -2,6 +2,7 @@
 
 #include <string>
 #include <geGL/Program.h>
+#include <geGL/Buffer.h>
 
 namespace ge {
 	namespace particle {
@@ -15,6 +16,8 @@ namespace ge {
 			void setUniformValue(std::string name, Args... args);*/
 
 			void dispatch(int count);
+
+			std::shared_ptr<ge::gl::Buffer> createBuffer(GLsizeiptr size, GLuint bindIndex);
 
 		protected:
 			std::shared_ptr<ge::gl::Program> program;
@@ -53,6 +56,19 @@ inline void ge::particle::ComputeProgramWrapper::setUniformValue(std::string nam
 
 inline void ge::particle::ComputeProgramWrapper::dispatch(int count)
 {
-	program->dispatch((count / workgroupSize[0]) + 1, workgroupSize[1], workgroupSize[2]);
+	// ceil
+	unsigned int xGroups = (count + workgroupSize[0] - 1) / workgroupSize[0];
+
+	program->dispatch(xGroups, workgroupSize[1], workgroupSize[2]);
 	program->getContext().glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+}
+
+inline std::shared_ptr<ge::gl::Buffer> ge::particle::ComputeProgramWrapper::createBuffer(GLsizeiptr size, GLuint bindIndex)
+{
+	auto buffer = std::make_shared<ge::gl::Buffer>(size);
+	buffer->bind(GL_SHADER_STORAGE_BUFFER);
+
+	buffer->bindBase(GL_SHADER_STORAGE_BUFFER, bindIndex);
+
+	return buffer;
 }

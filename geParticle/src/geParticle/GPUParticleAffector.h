@@ -9,7 +9,7 @@
 namespace ge {
 	namespace particle {
 
-		class GPUParticleAffector : public ParticleAffector, ComputeProgramWrapper {
+		class GPUParticleAffector : public ParticleAffector, public ComputeProgramWrapper {
 		public:
 			GPUParticleAffector(std::string shaderSource);
 			void affect(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) override;
