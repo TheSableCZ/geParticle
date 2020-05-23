@@ -34,6 +34,7 @@ set(PARTICLES_SOURCES
 	${SRC_PATH}/BasicParticleEmitter.cpp
 	${SRC_PATH}/ParticleSystem.cpp
 	${SRC_PATH}/SimpleArrayOfStructsContainer.cpp
+	${SRC_PATH}/ComputeProgramWrapper.cpp
 )
 
 ################################################

@@ -53,6 +53,8 @@ set(SOURCES
 	particles/PSManager.cpp
 	utils/Camera.h
 	utils/Camera.cpp
+	particles/BallGPUEmitter.h
+	particles/BallGPUEmitter.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${SHADERS})

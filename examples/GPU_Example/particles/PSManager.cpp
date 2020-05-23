@@ -6,6 +6,7 @@
 #include "SimpleParticleRenderer.h"
 #include <geUtil/Text.h>
 #include <geParticle/ComponentSystemContainer.h>
+#include "BallGPUEmitter.h"
 
 #define MAX_PARTICLES 10000
 
@@ -27,9 +28,10 @@ void ge::examples::PSManager::initialize()
 	auto affector = std::make_shared<ge::particle::GPUParticleAffector>(ge::util::loadTextFile(APP_RESOURCES"/shaders/affector.glsl"));
 	ps->addAffector(affector);
 
-	auto emitter = std::make_shared<ge::particle::GPUParticleEmitter>(ge::util::loadTextFile(APP_RESOURCES"/shaders/emitter.glsl"), 500);
+	//auto emitter = std::make_shared<ge::particle::GPUParticleEmitter>(ge::util::loadTextFile(APP_RESOURCES"/shaders/emitter.glsl"), 500);
+	auto emitter = std::make_shared<ge::particle::BallGPUEmitter>(ge::util::loadTextFile(APP_RESOURCES"/shaders/emitter.glsl"), 1000, MAX_PARTICLES, 15);
 
-	randomBuffer = emitter->createBuffer(MAX_PARTICLES * sizeof(float) * 3, 2);
+	//randomBuffer = emitter->createBuffer(MAX_PARTICLES * sizeof(float) * 3, 2);
 	//refreshRandomBuffer();
 
 	ps->addEmitter(emitter);
@@ -50,13 +52,12 @@ void ge::examples::PSManager::update()
 {
 	//printParticles();
 
-	refreshRandomBuffer();
 	ps->update(ge::core::time_point::clock::now());
 
 	//printParticles();
 }
 
-void ge::examples::PSManager::refreshRandomBuffer()
+/*void ge::examples::PSManager::refreshRandomBuffer()
 {
 	auto fInitRadius = static_cast<float>(10);
 	std::uniform_real_distribution<float> dist(fInitRadius*(-1.f), fInitRadius);
@@ -68,7 +69,7 @@ void ge::examples::PSManager::refreshRandomBuffer()
 	}
 
 	randomBuffer->unmap();
-}
+}*/
 
 void ge::examples::PSManager::distributeParticles(std::shared_ptr<ge::particle::GPUParticleContainer> container)
 {
@@ -90,7 +91,16 @@ void ge::examples::PSManager::printParticles()
 {
 	auto vect = pc->getBufferData<ge::particle::MassPointData>();
 	auto vect2 = pc->getBufferData<ge::particle::GPULifeData>();
-	for (auto p : vect) {
+
+	for (int i = 0; i < vect.size(); i++) {
+		auto &p = vect[i];
+		auto &l = vect2[i];
+		if (l.livingFlag == true) {
+			std::cout << "pos: " << p.position.x << ", " << p.position.y << ", " << p.position.z << ", " << p.position.w << std::endl;
+		}
+	}
+
+	/*for (auto p : vect) {
 		std::cout << "pos: " << p.position.x << ", " << p.position.y << ", " << p.position.z << ", " << p.position.w << std::endl;
 		//std::cout << "vel: " << p.velocity.x << ", " << p.velocity.y << ", " << p.velocity.z << std::endl << std::endl;
 	}
@@ -98,13 +108,7 @@ void ge::examples::PSManager::printParticles()
 		std::cout << "livingFlag: " << p.livingFlag << std::endl;
 		//std::cout << "life: " << p.life << std::endl;
 		//std::cout << "vel: " << p.velocity.x << ", " << p.velocity.y << ", " << p.velocity.z << std::endl << std::endl;
-	}
-	float *buff = (float *)randomBuffer->map();
-	for (auto i = 0u; i < MAX_PARTICLES * 3; i++) {
-		std::cout << buff[i] << " ";
-	}
-	std::cout << std::endl;
+	}*/
 
-	randomBuffer->unmap();
 	std::cout << "--------------------------------------------------" << std::endl;
 }
