@@ -4,31 +4,12 @@
 #include <unordered_map>
 #include <vector>
 #include <glm/glm.hpp>
+#include <memory>
+#include <geParticle/ComponentPool.h>
+#include <geParticle/StandardParticleComponents.h>
 
 namespace ge {
 	namespace particle {
-		//struct IComponent {};
-		class IComponentPool {
-		public:
-			virtual void clear() = 0;
-			virtual const void *data() = 0;
-		};
-
-		struct LifeData {
-			core::time_unit life;
-			bool livingFlag = false;
-		};
-
-		struct GPULifeData {
-			float life;
-			bool livingFlag = false;
-		};
-
-		struct MassPointData {
-			// vec4 because struct align to 16 bytes in glsl shaders
-			glm::vec4 position;
-			glm::vec4 velocity;
-		};
 
 		class ComponentSystemContainer : public StructureOfArraysContainer {
 		public:
@@ -55,37 +36,6 @@ namespace ge {
 			int findUnusedParticle();
 			int lastUsedParticle = 0;
 		};
-
-		template <typename T>
-		class ComponentPool : public IComponentPool {
-		public:
-			ComponentPool(int size) {
-				pool = std::vector<T>(size);
-			}
-
-			T &get(int idx) {
-				return pool[idx];
-			}
-
-			void clear() override {
-				pool.clear();
-			}
-
-			const void *data() override {
-				return pool.data();
-			}
-
-		private:
-			std::vector<T> pool;
-		};
-	}
-}
-
-inline ge::particle::ComponentSystemContainer::ComponentSystemContainer(int maxParticleCount, bool registerLifeData)
-	: maxParticles(maxParticleCount), StructureOfArraysContainer()
-{
-	if (registerLifeData) {
-		registerComponent<LifeData>();
 	}
 }
 
@@ -102,14 +52,9 @@ inline int ge::particle::ComponentSystemContainer::endIdx()
 template<typename T>
 inline void ge::particle::ComponentSystemContainer::registerComponent()
 {
-	//static_assert(std::is_base_of<IComponent, T>::value && "Type is not derived from IComponent.");
-
 	const char* typeName = typeid(T).name();
 
 	assert(components.find(typeName) == components.end() && "Registering component type more than once.");
-
-	//auto pool = new ComponentPool<T>(maxParticles);
-	//std::shared_ptr<IComponentPool> pool = std::make_shared<ComponentPool<T>>(maxParticles);
 
 	components.insert({ typeName, std::make_shared<ComponentPool<T>>(maxParticles) });
 }
@@ -128,29 +73,4 @@ inline T & ge::particle::ComponentSystemContainer::getComponent(int idx)
 	auto componentPool = std::static_pointer_cast<ComponentPool<T>>(component->second);
 
 	return componentPool->get(idx);
-}
-
-inline int ge::particle::ComponentSystemContainer::findUnusedParticle()
-{
-	for (int i = lastUsedParticle; i < maxParticles; i++) {
-		if (!getComponent<LifeData>(i).livingFlag) {
-			lastUsedParticle = i;
-			return i;
-		}
-	}
-
-	for (int i = 0; i < lastUsedParticle; i++) {
-		if (!getComponent<LifeData>(i).livingFlag) {
-			lastUsedParticle = i;
-			return i;
-		}
-	}
-
-	// All particles are taken, override random particle
-	return rand() % maxParticles;
-}
-
-inline int ge::particle::ComponentSystemContainer::createParticle()
-{
-	return findUnusedParticle();
 }

@@ -9,8 +9,6 @@ namespace ge
     {
         struct Particle {
             glm::vec3 pos, velocity;
-            //float r, g, b, a; // Color
-            //float size, angle, weight;
 
             core::time_unit life;
             bool livingFlag = false;

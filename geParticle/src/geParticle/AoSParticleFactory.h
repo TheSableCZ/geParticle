@@ -10,9 +10,7 @@ namespace ge {
 		class AoSParticleFactory : public ParticleFactory<Particle>
 		{
 		public:
-			AoSParticleFactory() {
-				//static_assert(std::is_base_of<Particle, T>::value);
-			}
+			AoSParticleFactory() : ParticleFactory<Particle>() {}
 
 			Particle &createParticle(std::shared_ptr<ParticleContainer> particles) override {
 				assert(particles->getType() == ParticleContainer::AoS);

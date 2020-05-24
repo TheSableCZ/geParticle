@@ -12,14 +12,14 @@
 
 void ge::examples::PSManager::initialize()
 {
-	pc = std::make_shared<ge::particle::GPUParticleContainer>(MAX_PARTICLES);
+	pc = std::make_shared<ge::particle::GPUParticleContainer>(MAX_PARTICLES, false, ge::particle::GPUParticleContainer::GPU_ONLY);
 
 	pc->registerComponent<ge::particle::MassPointData>();
 	pc->registerComponent<ge::particle::GPULifeData>();
 
 	//distributeParticles(pc);
 
-	pc->initBuffers();
+	//pc->initBuffers();
 	pc->bindComponentBase<ge::particle::MassPointData>(0);
 	pc->bindComponentBase<ge::particle::GPULifeData>(1);
 
@@ -29,7 +29,7 @@ void ge::examples::PSManager::initialize()
 	ps->addAffector(affector);
 
 	//auto emitter = std::make_shared<ge::particle::GPUParticleEmitter>(ge::util::loadTextFile(APP_RESOURCES"/shaders/emitter.glsl"), 500);
-	auto emitter = std::make_shared<ge::particle::BallGPUEmitter>(ge::util::loadTextFile(APP_RESOURCES"/shaders/emitter.glsl"), 1000, MAX_PARTICLES, 15);
+	auto emitter = std::make_shared<ge::particle::BallGPUEmitter>(ge::util::loadTextFile(APP_RESOURCES"/shaders/emitter.glsl"), 1000, MAX_PARTICLES, 10);
 
 	//randomBuffer = emitter->createBuffer(MAX_PARTICLES * sizeof(float) * 3, 2);
 	//refreshRandomBuffer();
@@ -71,6 +71,7 @@ void ge::examples::PSManager::update()
 	randomBuffer->unmap();
 }*/
 
+/*
 void ge::examples::PSManager::distributeParticles(std::shared_ptr<ge::particle::GPUParticleContainer> container)
 {
 	float rndX, rndY, rndZ;
@@ -86,11 +87,17 @@ void ge::examples::PSManager::distributeParticles(std::shared_ptr<ge::particle::
 		container->getComponent<ge::particle::MassPointData>(i).position = glm::vec4(rndX, rndY, rndZ, 1.f);
 	}
 }
+*/
 
 void ge::examples::PSManager::printParticles()
 {
-	auto vect = pc->getBufferData<ge::particle::MassPointData>();
-	auto vect2 = pc->getBufferData<ge::particle::GPULifeData>();
+	//auto vect = pc->getBufferData<ge::particle::MassPointData>();
+	std::vector<ge::particle::MassPointData> vect;
+	pc->getBufferData(vect);
+	
+	//auto vect2 = pc->getBufferData<ge::particle::GPULifeData>();
+	std::vector<ge::particle::GPULifeData> vect2;
+	pc->getBufferData(vect2);
 
 	for (int i = 0; i < vect.size(); i++) {
 		auto &p = vect[i];

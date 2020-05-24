@@ -1,15 +1,17 @@
 #pragma once
 
+#include <memory>
+#include <geParticle/ParticleContainer.h>
+
 namespace ge {
 	namespace particle {
 		class ParticleIterator { };
 
 		class IndexBasedParticleIterator : public ParticleIterator {
 		public:
-			IndexBasedParticleIterator(std::shared_ptr<IndexBasedParticleContainer> container) {
-				this->container = container;
-				this->posIdx = container->startIdx();
-				this->endIdx = container->endIdx();
+			IndexBasedParticleIterator(std::shared_ptr<IndexBasedParticleContainer> container) 
+				: container(container), posIdx(container->startIdx()), endIdx(container->endIdx())
+			{
 			}
 
 			bool end() {
@@ -35,9 +37,8 @@ namespace ge {
 		class AoSParticleIterator : public IndexBasedParticleIterator {
 		public:
 			AoSParticleIterator(std::shared_ptr<ArrayOfStructsContainer> container)
-				: IndexBasedParticleIterator(std::static_pointer_cast<IndexBasedParticleContainer>(container))
+				: IndexBasedParticleIterator(container)
 			{
-				this->container = container;
 			}
 
 			Particle & getInstance() {

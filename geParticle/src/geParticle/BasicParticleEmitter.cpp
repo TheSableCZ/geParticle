@@ -2,11 +2,6 @@
 #include <geParticle/BasicParticleEmitter.h>
 #include <geParticle/ParticleContainer.h>
 
-/*ge::particle::BasicParticleEmitter::BasicParticleEmitter(std::shared_ptr<ParticleSystem> ps) : particleSystem{ps}
-{
-    particleFactory = std::make_unique<BasicParticleFactory>(); // v konstruktoru, build pattern??
-}*/
-
 /*void ge::particle::BasicParticleEmitter::emitParticles(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) {
     int newParticlesCount = getNumOfParticlesToCreate(dt);
 

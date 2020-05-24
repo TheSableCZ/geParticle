@@ -1,4 +1,4 @@
-#include "ComputeProgramWrapper.h"
+#include <geParticle/ComputeProgramWrapper.h>
 
 ge::particle::ComputeProgramWrapper::ComputeProgramWrapper(std::string shaderSource)
 {

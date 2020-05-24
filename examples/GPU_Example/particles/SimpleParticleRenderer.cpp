@@ -25,8 +25,8 @@ void ge::particle::SimpleParticleRenderer::initialize(std::shared_ptr<GPUParticl
 
 	VAO = std::make_shared<ge::gl::VertexArray>();
 
-	container->addComponentAttrib<MassPointData>(VAO, 0, 4, GL_FLOAT, sizeof(MassPointData), offsetof(MassPointData, position));
-	container->addComponentAttrib<GPULifeData>(VAO, 1, 1, GL_FLOAT, sizeof(GPULifeData), offsetof(GPULifeData, life));
+	container->addComponentVertexAttrib<MassPointData>(VAO, 0, 4, GL_FLOAT, sizeof(MassPointData), offsetof(MassPointData, position));
+	container->addComponentVertexAttrib<GPULifeData>(VAO, 1, 1, GL_FLOAT, sizeof(GPULifeData), offsetof(GPULifeData, life));
 }
 
 void ge::particle::SimpleParticleRenderer::render(std::shared_ptr<ParticleContainer> container)

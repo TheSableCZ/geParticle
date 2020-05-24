@@ -1,7 +1,7 @@
 #include "PSManager.h"
 #include <geParticle/ParticleSystem.h>
 #include <geParticle/SimpleArrayOfStructsContainer.h>
-#include <geParticle/ParticleAffector.h>
+#include <geParticle/StandardParticleAffectors.h>
 #include <geParticle/PointEmitter.h>
 #include "SimpleParticleRenderer.h"
 #include "CustomTypes.h"

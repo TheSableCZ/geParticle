@@ -13,6 +13,7 @@ set(SRC_PATH ${CMAKE_CURRENT_LIST_DIR}/src/${PROJECT_NAME})
 set(PARTICLES_INCLUDES
 	${HEADER_PATH}/AoSParticleFactory.h
 	${HEADER_PATH}/BasicParticleEmitter.h
+	${HEADER_PATH}/ComponentPool.h
 	${HEADER_PATH}/ComponentSystemContainer.h
 	${HEADER_PATH}/ComputeProgramWrapper.h
 	${HEADER_PATH}/GPUParticleAffector.h
@@ -28,13 +29,16 @@ set(PARTICLES_INCLUDES
 	${HEADER_PATH}/ParticleSystem.h
 	${HEADER_PATH}/PointEmitter.h
 	${HEADER_PATH}/SimpleArrayOfStructsContainer.h
+	${HEADER_PATH}/StandardParticleAffectors.h
+	${HEADER_PATH}/StandardParticleComponents.h
 )
 
 set(PARTICLES_SOURCES
 	${SRC_PATH}/BasicParticleEmitter.cpp
+	${SRC_PATH}/ComponentSystemContainer.cpp
 	${SRC_PATH}/ParticleSystem.cpp
-	${SRC_PATH}/SimpleArrayOfStructsContainer.cpp
 	${SRC_PATH}/ComputeProgramWrapper.cpp
+	${SRC_PATH}/GPUParticleContainer.cpp
 )
 
 ################################################

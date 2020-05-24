@@ -19,6 +19,7 @@ namespace ge {
 			int endIdx() override;
 
 			inline unsigned int size() override { return maxParticles; }
+
 		protected:
 			T *particles;
 
@@ -26,20 +27,6 @@ namespace ge {
 			int maxParticles;
 			int lastUsedParticle;
 		};
-
-		/*template<class T>
-		inline SimpleArrayOfStructsContainer<T>::SimpleArrayOfStructsContainer(int maxParticleCount)
-			: maxParticles(maxParticleCount), lastUsedParticle(0)
-		{
-			static_assert(std::is_base_of<Particle, T>::value);
-			particles = new T[maxParticleCount];
-		}
-
-		template<class T>
-		inline SimpleArrayOfStructsContainer<T>::~SimpleArrayOfStructsContainer()
-		{
-			delete[] particles;
-		}*/
 	}
 }
 

@@ -19,7 +19,7 @@ namespace ge {
 					auto container = std::static_pointer_cast<ArrayOfStructsContainer>(particles);
 
 					for (int i = 0; i < newParticlesCount; i++) {
-						Particle &p = aosFactory ? aosFactory->createParticle(particles) : container->createParticle();
+						Particle &p = factory ? std::static_pointer_cast<AoSParticleFactory>(factory)->createParticle(particles) : container->createParticle();
 
 						p.pos = pos;
 						p.livingFlag = true;

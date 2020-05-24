@@ -10,16 +10,39 @@ namespace ge {
 
 		class GPUParticleContainer : public ComponentSystemContainer {
 		public:
-			GPUParticleContainer(int maxParticleCount);
+			enum StorageDestination {
+				CPU_GPU,
+				GPU_ONLY,
+				CPU_GPU_PERSISTENT_MAPPED
+			};
+
+			enum SyncDirection {
+				CPU_TO_GPU,
+				GPU_TO_CPU
+			};
+
+			GPUParticleContainer(int maxParticleCount, bool registerLifeData = true, StorageDestination storageDestination = CPU_GPU);
+
+			void bindComponentBase(const char* componentName, GLuint index);
+			void addComponentVertexAttrib(
+				const char* componentName,
+				std::shared_ptr<ge::gl::VertexArray> vertexArray,
+				GLuint index,
+				GLint nofComponents,
+				GLenum type,
+				GLsizei stride,
+				GLintptr offset
+			);
+			void sync(SyncDirection direction);
+			void getBufferData(const char* componentName, void *data);
+			void setBufferData(const char* componentName, const void *data);
 
 			template <typename T>
-			void registerComponent();
-
-			void initBuffers();
+			void registerComponent(bool syncFlag = false);
 			template <typename T>
 			void bindComponentBase(GLuint index);
 			template <typename T>
-			void addComponentAttrib(
+			void addComponentVertexAttrib(
 				std::shared_ptr<ge::gl::VertexArray> vertexArray, 
 				GLuint index, 
 				GLint nofComponents, 
@@ -27,85 +50,102 @@ namespace ge {
 				GLsizei stride,
 				GLintptr offset
 			);
+			template <typename T>
+			void syncComponent(SyncDirection direction);
 
 			template <typename T>
-			std::vector<T> getBufferData();
-		private:
-			bool buffersInited = false;
+			void getBufferData(std::vector<T> &data);
+			template <typename T>
+			void setBufferData(std::vector<T> const &data);
 
+		protected:
+			StorageDestination storageDestination;
 			std::unordered_map<const char *, std::shared_ptr<ge::gl::Buffer>> buffers;
-			std::unordered_map<const char *, std::size_t> componentsSizeOf;
+			std::unordered_map<const char *, void *> bufferPointers;
+			std::unordered_map<const char *, bool> syncFlags;
 		};
 
 	}
 }
 
-inline ge::particle::GPUParticleContainer::GPUParticleContainer(int maxParticleCount)
-	: ComponentSystemContainer(maxParticleCount, false)
-{
-}
-
 template<typename T>
-inline void ge::particle::GPUParticleContainer::registerComponent()
+inline void ge::particle::GPUParticleContainer::registerComponent(bool syncFlag)
 {
-	assert(buffersInited == false && "Buffers already created & inited.");
-
 	ComponentSystemContainer::registerComponent<T>();
 
 	const char* typeName = typeid(T).name();
-	componentsSizeOf.insert({ typeName, sizeof(T) });
-}
+	auto component = components.find(typeName);
 
-inline void ge::particle::GPUParticleContainer::initBuffers()
-{
-	for (auto &component : components) {
-		auto sizeOf = componentsSizeOf[component.first];
-		//auto buffer = std::make_shared<ge::gl::Buffer>(maxParticles * sizeOf, component.second->data(), GL_STATIC_DRAW);
-		auto buffer = std::make_shared<ge::gl::Buffer>(maxParticles * sizeOf);
-		buffer->bind(GL_SHADER_STORAGE_BUFFER);
-		buffer->setData(component.second->data());
+	auto buffer = std::make_shared<ge::gl::Buffer>(maxParticles * sizeof(T));
+	buffer->setData(component->second->data());
 
-		component.second->clear();
-
-		buffers.insert({ component.first, buffer });
+	if (storageDestination == GPU_ONLY) {
+		component->second->clear();
 	}
 
-	buffersInited = true;
+	buffers.insert({ typeName, buffer });
+	syncFlags.insert({ typeName, syncFlag });
 }
 
 template<typename T>
 inline void ge::particle::GPUParticleContainer::bindComponentBase(GLuint index)
 {
-	assert(buffersInited == true && "Call initBuffers() first.");
+	const char* typeName = typeid(T).name();
+	bindComponentBase(typeName, index);
+}
+
+template<typename T>
+inline void ge::particle::GPUParticleContainer::addComponentVertexAttrib(std::shared_ptr<ge::gl::VertexArray> vertexArray, GLuint index, GLint nofComponents, GLenum type, GLsizei stride, GLintptr offset)
+{
+	const char* typeName = typeid(T).name();
+	addComponentVertexAttrib(typeName, vertexArray, index, nofComponents, type, stride, offset);
+}
+
+template<typename T>
+inline void ge::particle::GPUParticleContainer::syncComponent(SyncDirection direction)
+{
+	assert(storageDestination != GPU_ONLY && "Data is only on GPU side, nothing to sync.");
 
 	const char* typeName = typeid(T).name();
-	auto buffer = buffers.find(typeName);
+	auto component = components.find(typeName);
 
-	assert(buffer != buffers.end() && "Component (buffer) not found.");
+	assert(component != components.end() && "Component not found.");
 
-	std::cout << "Buffer size: " << buffer->second->getSize() << std::endl;
+	if (direction == CPU_TO_GPU) {
+		setBufferData(component.first, component.second->data());
+	}
 
-	buffer->second->bindBase(GL_SHADER_STORAGE_BUFFER, index);
-
-	if (buffer->second->getContext().glGetError() != GL_NO_ERROR) {
-		throw std::runtime_error("ERROR: Could not  bind shader storage buffer for particles!");
+	if (direction == GPU_TO_CPU) {
+		getBufferData(component.first, component.second->data());
 	}
 }
 
 template<typename T>
-inline void ge::particle::GPUParticleContainer::addComponentAttrib(std::shared_ptr<ge::gl::VertexArray> vertexArray, GLuint index, GLint nofComponents, GLenum type, GLsizei stride, GLintptr offset)
+inline void ge::particle::GPUParticleContainer::getBufferData(std::vector<T>& data)
 {
-	assert(buffersInited == true && "Call initBuffers() first.");
-
 	const char* typeName = typeid(T).name();
 	auto buffer = buffers.find(typeName);
 
 	assert(buffer != buffers.end() && "Component (buffer) not found.");
 
-	buffer->second->bind(GL_ARRAY_BUFFER);
-	vertexArray->addAttrib(buffer->second, index, nofComponents, type, stride, offset);
+	size_t size = buffer->second->getSize() / sizeof(T);
+
+	data.resize(size);
+	getBufferData(typeName, data.data());
 }
 
+template<typename T>
+inline void ge::particle::GPUParticleContainer::setBufferData(std::vector<T> const & data)
+{
+	const char* typeName = typeid(T).name();
+	auto buffer = buffers.find(typeName);
+
+	assert(buffer != buffers.end() && "Component (buffer) not found.");
+
+	setBufferData(typeName, data.data());
+}
+
+/*
 template<typename T>
 inline std::vector<T> ge::particle::GPUParticleContainer::getBufferData()
 {
@@ -116,9 +156,16 @@ inline std::vector<T> ge::particle::GPUParticleContainer::getBufferData()
 
 	std::cout << "getBufferData: buffer size: " << buffer->second->getSize() << std::endl;
 
-	T *ptr = (T *) buffer->second->map(GL_READ_ONLY);
+	T *ptr;
+
+	if (storageDestination == CPU_GPU_PERSISTENT_MAPPED) {
+		ptr = (T *) bufferPointers[typeName];
+	} else {
+		ptr = (T *) buffer->second->map(GL_READ_ONLY);
+	}
 
 	std::vector<T> vect;
+	vect.reserve(size());
 
 	for (unsigned int i = 0; i < size(); i++) {
 		vect.push_back(ptr[i]);
@@ -130,3 +177,4 @@ inline std::vector<T> ge::particle::GPUParticleContainer::getBufferData()
 
 	return vect;
 }
+*/
