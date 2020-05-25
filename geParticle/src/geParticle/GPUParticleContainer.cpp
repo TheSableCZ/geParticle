@@ -1,8 +1,8 @@
 #include <geParticle/GPUParticleContainer.h>
 #include <cstring>
 
-ge::particle::GPUParticleContainer::GPUParticleContainer(int maxParticleCount, bool registerLifeData, StorageDestination storageDestination)
-	: storageDestination(storageDestination), ComponentSystemContainer(maxParticleCount, registerLifeData)
+ge::particle::GPUParticleContainer::GPUParticleContainer(int maxParticleCount, StorageDestination storageDestination)
+	: storageDestination(storageDestination), ComponentSystemContainer(maxParticleCount, false)
 {
 }
 

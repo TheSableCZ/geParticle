@@ -29,6 +29,7 @@ set(PARTICLES_INCLUDES
 	${HEADER_PATH}/ParticleSystem.h
 	${HEADER_PATH}/PointEmitter.h
 	${HEADER_PATH}/SimpleArrayOfStructsContainer.h
+	${HEADER_PATH}/SoAParticleFactory.h
 	${HEADER_PATH}/StandardParticleAffectors.h
 	${HEADER_PATH}/StandardParticleComponents.h
 )

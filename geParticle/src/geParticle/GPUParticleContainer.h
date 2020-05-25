@@ -21,7 +21,7 @@ namespace ge {
 				GPU_TO_CPU
 			};
 
-			GPUParticleContainer(int maxParticleCount, bool registerLifeData = true, StorageDestination storageDestination = CPU_GPU);
+			GPUParticleContainer(int maxParticleCount, StorageDestination storageDestination = CPU_GPU);
 
 			void bindComponentBase(const char* componentName, GLuint index);
 			void addComponentVertexAttrib(

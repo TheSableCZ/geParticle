@@ -1,10 +1,12 @@
 #include <geParticle/ComponentSystemContainer.h>
 
-ge::particle::ComponentSystemContainer::ComponentSystemContainer(int maxParticleCount, bool registerLifeData)
+ge::particle::ComponentSystemContainer::ComponentSystemContainer(int maxParticleCount, bool registerStandardComponents)
 	: maxParticles(maxParticleCount), StructureOfArraysContainer()
 {
-	if (registerLifeData) {
+	if (registerStandardComponents) {
 		registerComponent<LifeData>();
+		registerComponent<Position>();
+		registerComponent<Velocity>();
 	}
 }
 

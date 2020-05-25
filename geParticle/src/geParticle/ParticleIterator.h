@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <geParticle/ParticleContainer.h>
+#include <geParticle/ComponentSystemContainer.h>
 
 namespace ge {
 	namespace particle {
@@ -43,6 +44,19 @@ namespace ge {
 
 			Particle & getInstance() {
 				return std::static_pointer_cast<ArrayOfStructsContainer>(container)->getParticle(posIdx);
+			}
+		};
+
+		class ComponentSystemParticleIterator : public IndexBasedParticleIterator {
+		public:
+			ComponentSystemParticleIterator(std::shared_ptr<ComponentSystemContainer>(container))
+				: IndexBasedParticleIterator(container)
+			{
+			}
+
+			template <typename T>
+			T & getComponent() {
+				return std::static_pointer_cast<ComponentSystemContainer>(container)->getComponent<T>(posIdx);
 			}
 		};
 	}

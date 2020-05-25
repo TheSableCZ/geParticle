@@ -29,6 +29,7 @@ namespace ge {
 		};
 
 		class StructureOfArraysContainer : public IndexBasedParticleContainer {
+		public:
 			virtual int createParticle() = 0;
 
 			inline ContainerType getType() override { return SoA; }

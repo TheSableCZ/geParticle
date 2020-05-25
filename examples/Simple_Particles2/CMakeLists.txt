@@ -32,6 +32,10 @@ set(SOURCES
 	Camera.h
 	Camera.cpp
 	CustomTypes.h
+	ComponentSystemPSManager.h
+	ComponentSystemPSManager.cpp
+	ComponentSystemRenderer.h
+	ComponentSystemRenderer.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})

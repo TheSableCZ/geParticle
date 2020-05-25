@@ -19,6 +19,7 @@ namespace ge
    namespace examples
    {
 	   class PSManager;
+	   class ComponentSystemPSManager;
 
       /**
        * Basic QWindow subclass for simple OpenGL rendering.
@@ -51,6 +52,7 @@ namespace ge
          QSurfaceFormat surfaceFormat;
 
 		 std::shared_ptr<PSManager> psManager;
+		 std::shared_ptr<ComponentSystemPSManager> csPsManager;
       };
    }
 }

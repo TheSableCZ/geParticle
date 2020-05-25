@@ -1,7 +1,7 @@
 #pragma once
 
 #include <geParticle/ParticleEmitter.h>
-#include <geParticle/AoSParticleFactory.h>
+#include <geParticle/ParticleFactory.h>
 
 namespace ge {
 	namespace particle {
@@ -13,7 +13,7 @@ namespace ge {
 
 			inline void setParticlesPerSecond(int numOfParticles) { particlesPerSecond = numOfParticles; }
 
-			inline void setAoSParticleFactory(std::shared_ptr<AoSParticleFactory> aosFactory) { this->factory = aosFactory; }
+			inline void setParticleFactory(std::shared_ptr<IParticleFactory> factory) { this->factory = factory; }
 
 		protected:
 			unsigned int getNumOfParticlesToCreate(core::time_unit dt);

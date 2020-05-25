@@ -14,13 +14,13 @@ void ge::examples::PSManager::initialize()
 {
 	pc = std::make_shared<ge::particle::GPUParticleContainer>(MAX_PARTICLES, false, ge::particle::GPUParticleContainer::GPU_ONLY);
 
-	pc->registerComponent<ge::particle::MassPointData>();
+	pc->registerComponent<ge::particle::GPUMassPointData>();
 	pc->registerComponent<ge::particle::GPULifeData>();
 
 	//distributeParticles(pc);
 
 	//pc->initBuffers();
-	pc->bindComponentBase<ge::particle::MassPointData>(0);
+	pc->bindComponentBase<ge::particle::GPUMassPointData>(0);
 	pc->bindComponentBase<ge::particle::GPULifeData>(1);
 
 	ps = std::make_shared<ge::particle::ParticleSystem>(pc);
@@ -84,15 +84,15 @@ void ge::examples::PSManager::distributeParticles(std::shared_ptr<ge::particle::
 		rndY = dist(eng);
 		rndZ = dist(eng);
 
-		container->getComponent<ge::particle::MassPointData>(i).position = glm::vec4(rndX, rndY, rndZ, 1.f);
+		container->getComponent<ge::particle::GPUMassPointData>(i).position = glm::vec4(rndX, rndY, rndZ, 1.f);
 	}
 }
 */
 
 void ge::examples::PSManager::printParticles()
 {
-	//auto vect = pc->getBufferData<ge::particle::MassPointData>();
-	std::vector<ge::particle::MassPointData> vect;
+	//auto vect = pc->getBufferData<ge::particle::GPUMassPointData>();
+	std::vector<ge::particle::GPUMassPointData> vect;
 	pc->getBufferData(vect);
 	
 	//auto vect2 = pc->getBufferData<ge::particle::GPULifeData>();

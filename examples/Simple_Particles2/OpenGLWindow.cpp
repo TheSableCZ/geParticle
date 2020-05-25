@@ -12,6 +12,7 @@
 
 #include "PSManager.h"
 #include "Camera.h"
+#include "ComponentSystemPSManager.h"
 
 //! [ctor]
 
@@ -74,6 +75,9 @@ void ge::examples::OpenGLWindow::initialize()
    psManager = std::make_shared<PSManager>();
    psManager->initialize(gl);
 
+   csPsManager = std::make_shared<ComponentSystemPSManager>();
+   csPsManager->initialize(gl);
+
    Camera::getInstance().setWindowDimension((float)width(), (float)height());
    Camera::getInstance().setCameraPos(glm::vec3(0, 0, -5));
 
@@ -90,6 +94,7 @@ void ge::examples::OpenGLWindow::render()
    gl->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
    psManager->update();
+   csPsManager->update();
 
    printError();
 

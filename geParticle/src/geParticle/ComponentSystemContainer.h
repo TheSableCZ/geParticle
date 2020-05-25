@@ -13,7 +13,7 @@ namespace ge {
 
 		class ComponentSystemContainer : public StructureOfArraysContainer {
 		public:
-			ComponentSystemContainer(int maxParticleCount, bool registerLifeData = true);
+			ComponentSystemContainer(int maxParticleCount, bool registerStandardComponents = false);
 
 			int startIdx() override;
 			int endIdx() override;
