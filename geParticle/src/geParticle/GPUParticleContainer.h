@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <geGL/Buffer.h>
 #include <geGL/VertexArray.h>
+#include <functional>
 
 namespace ge {
 	namespace particle {
@@ -34,8 +35,10 @@ namespace ge {
 				GLintptr offset
 			);
 			void sync(SyncDirection direction);
+			int syncOnlyAlive(SyncDirection direction);
 			void getBufferData(const char* componentName, void *data);
 			void setBufferData(const char* componentName, const void *data);
+			int setBufferData(const char* componentName, const void *data, size_t elementSizeOf, std::function<bool(int)> copyIfPredicate);
 
 			template <typename T>
 			void registerComponent(bool syncFlag = false);
@@ -63,6 +66,7 @@ namespace ge {
 			std::unordered_map<const char *, std::shared_ptr<ge::gl::Buffer>> buffers;
 			std::unordered_map<const char *, void *> bufferPointers;
 			std::unordered_map<const char *, bool> syncFlags;
+			std::unordered_map<const char *, size_t> componentsSizeOfs;
 		};
 
 	}
@@ -85,6 +89,7 @@ inline void ge::particle::GPUParticleContainer::registerComponent(bool syncFlag)
 
 	buffers.insert({ typeName, buffer });
 	syncFlags.insert({ typeName, syncFlag });
+	componentsSizeOfs.insert({ typeName, sizeof(T) });
 }
 
 template<typename T>

@@ -51,6 +51,32 @@ void ge::particle::GPUParticleContainer::sync(SyncDirection direction)
 	}
 }
 
+int ge::particle::GPUParticleContainer::syncOnlyAlive(SyncDirection direction)
+{
+	assert(storageDestination != GPU_ONLY && "Data is only on GPU side, nothing to sync.");
+
+	unsigned int livingParticlesCount = 0;
+
+	for (auto &component : components) {
+		if (syncFlags[component.first]) {
+			if (direction == CPU_TO_GPU) {
+				livingParticlesCount = setBufferData(
+					component.first, 
+					component.second->data(), 
+					componentsSizeOfs[component.first],
+					[this](int idx) { return getComponent<LifeData>(idx).livingFlag; }
+				);
+			}
+
+			if (direction == GPU_TO_CPU) {
+				assert(false && "GPU_TO_CPU direction not implemented.");
+			}
+		}
+	}
+
+	return livingParticlesCount;
+}
+
 void ge::particle::GPUParticleContainer::getBufferData(const char * componentName, void * data)
 {
 	auto buffer = buffers.find(componentName);
@@ -91,4 +117,35 @@ void ge::particle::GPUParticleContainer::setBufferData(const char * componentNam
 	if (storageDestination != CPU_GPU_PERSISTENT_MAPPED) {
 		buffer->second->unmap();
 	}
+}
+
+int ge::particle::GPUParticleContainer::setBufferData(const char * componentName, const void * data, size_t elementSizeOf, std::function<bool(int)> copyIfPredicate)
+{
+	auto buffer = buffers.find(componentName);
+	assert(buffer != buffers.end() && "Component (buffer) not found.");
+
+	char *ptr;
+	if (storageDestination == CPU_GPU_PERSISTENT_MAPPED) {
+		ptr = (char *) bufferPointers[componentName];
+	}
+	else {
+		ptr = (char *) buffer->second->map(GL_WRITE_ONLY);
+	}
+
+	auto buffSize = buffer->second->getSize();
+	auto elementCount = buffSize / elementSizeOf;
+
+	unsigned int dstIdx = 0;
+	for (unsigned int idx = 0; idx < elementCount; idx++) {
+		if (copyIfPredicate(idx)) {
+			memcpy(&ptr[dstIdx * elementSizeOf], &((char *)data)[idx * elementSizeOf], elementSizeOf);
+			dstIdx++;
+		}
+	}
+
+	if (storageDestination != CPU_GPU_PERSISTENT_MAPPED) {
+		buffer->second->unmap();
+	}
+
+	return dstIdx;
 }

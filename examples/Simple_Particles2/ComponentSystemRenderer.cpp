@@ -47,7 +47,7 @@ void ge::particle::ComponentSystemRenderer::render(std::shared_ptr<ParticleConta
 {
 	auto gpuContainer = std::static_pointer_cast<GPUParticleContainer>(container);
 
-	gpuContainer->sync(GPUParticleContainer::CPU_TO_GPU);
+	auto particlesCount = gpuContainer->syncOnlyAlive(GPUParticleContainer::CPU_TO_GPU);
 
 	shaderProgram->setMatrix4fv("MVP", &(examples::Camera::getInstance().getMVP())[0][0]);
 	shaderProgram->set3fv("CameraUp", &(examples::Camera::getInstance().getCameraUp())[0]);
@@ -60,7 +60,7 @@ void ge::particle::ComponentSystemRenderer::render(std::shared_ptr<ParticleConta
 	gl->glVertexAttribDivisor(1, 1); // positions : one per quad (its center)                 -> 1
 	gl->glVertexAttribDivisor(2, 1); // color : one per quad                                  -> 1
 
-	gl->glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, container->size());
+	gl->glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, particlesCount);
 
 	/*centers.clear();
 	colors.clear();
