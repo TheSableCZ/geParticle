@@ -13,7 +13,7 @@ namespace ge
         class ParticleFactory : public IParticleFactory
         {
         public:
-			virtual T &createParticle(std::shared_ptr<ParticleContainer> particles) = 0;
+			virtual T createParticle(std::shared_ptr<ParticleContainer> particles) = 0;
         };
     }
 }

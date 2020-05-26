@@ -75,7 +75,7 @@ void ge::examples::OpenGLWindow::initialize()
    psManager->initialize();
 
    Camera::getInstance().setWindowDimension((float)width(), (float)height());
-   Camera::getInstance().setCameraPos(glm::vec3(0, 0, -40));
+   Camera::getInstance().setCameraPos(glm::vec3(0, 0, -15));
 
    printError();
 

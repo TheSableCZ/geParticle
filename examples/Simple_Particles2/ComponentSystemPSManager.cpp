@@ -16,6 +16,8 @@ void ge::examples::ComponentSystemPSManager::initialize(std::shared_ptr<ge::gl::
 	pc->registerComponent<ge::particle::Position>(true);
 	pc->registerComponent<ge::particle::Velocity>(false);
 
+	pc->registerComponent<ge::particle::Color>(true);
+
 	ps = std::make_shared<ge::particle::ParticleSystem>(pc);
 
 	auto lifeTimeAffector = std::make_shared<ge::particle::LifeTimeAffector>();
@@ -24,9 +26,9 @@ void ge::examples::ComponentSystemPSManager::initialize(std::shared_ptr<ge::gl::
 	auto linearMovementAffector = std::make_shared<ge::particle::LinearMovementAffector>();
 	ps->addAffector(linearMovementAffector);
 
-	//ps->addAffector(std::make_shared<ge::particle::GravityAffector>());
+	ps->addAffector(std::make_shared<ge::particle::GravityAffector>());
 
-	auto pointEmitter = std::make_shared<ge::particle::PointEmitter>(1, glm::vec3(-1, 0, 0));
+	auto pointEmitter = std::make_shared<ge::particle::PointEmitter>(10, glm::vec3(-1, -1, 0));
 	auto customFactory = std::make_shared<ge::particle::CSCustomFactory>();
 
 	pointEmitter->setParticleFactory(customFactory);

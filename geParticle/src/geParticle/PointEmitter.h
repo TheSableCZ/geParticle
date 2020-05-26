@@ -1,7 +1,6 @@
 #pragma once
 
 #include <geParticle/BasicParticleEmitter.h>
-#include <geParticle/SoAParticleFactory.h>
 
 namespace ge {
 	namespace particle {
@@ -13,7 +12,16 @@ namespace ge {
 			{
 			}
 
-			void emitParticles(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) override {
+			void initAoSParticle(Particle &p) override {
+				p.pos = pos;
+			}
+
+			void initComponentSystemParticle(int idx, std::shared_ptr<ComponentSystemContainer> container) override {
+				auto &p = container->getComponent<Position>(idx);
+				p.position = pos;
+			}
+
+			/*void emitParticles(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) override {
 				int newParticlesCount = getNumOfParticlesToCreate(dt);
 
 				if (particles->getType() == ParticleContainer::AoS) {
@@ -44,7 +52,7 @@ namespace ge {
 						l.life = core::time_unit(3.f);
 					}
 				}
-			}
+			}*/
 
 		protected:
 			glm::vec3 pos;

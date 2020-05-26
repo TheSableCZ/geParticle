@@ -41,6 +41,7 @@ void ge::particle::ComponentSystemRenderer::initialize(std::shared_ptr<GPUPartic
 	//VAO->addAttrib(particleColors, 2, 3, GL_FLOAT);
 
 	container->addComponentVertexAttrib<Position>(VAO, 1, 3, GL_FLOAT, sizeof(Position), offsetof(Position, position));
+	container->addComponentVertexAttrib<Color>(VAO, 2, 3, GL_FLOAT, sizeof(Color), offsetof(Color, color));
 }
 
 void ge::particle::ComponentSystemRenderer::render(std::shared_ptr<ParticleContainer> container)

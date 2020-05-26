@@ -12,7 +12,7 @@
 
 void ge::examples::PSManager::initialize()
 {
-	pc = std::make_shared<ge::particle::GPUParticleContainer>(MAX_PARTICLES, false, ge::particle::GPUParticleContainer::GPU_ONLY);
+	pc = std::make_shared<ge::particle::GPUParticleContainer>(MAX_PARTICLES, ge::particle::GPUParticleContainer::GPU_ONLY);
 
 	pc->registerComponent<ge::particle::GPUMassPointData>();
 	pc->registerComponent<ge::particle::GPULifeData>();
@@ -29,7 +29,7 @@ void ge::examples::PSManager::initialize()
 	ps->addAffector(affector);
 
 	//auto emitter = std::make_shared<ge::particle::GPUParticleEmitter>(ge::util::loadTextFile(APP_RESOURCES"/shaders/emitter.glsl"), 500);
-	auto emitter = std::make_shared<ge::particle::BallGPUEmitter>(ge::util::loadTextFile(APP_RESOURCES"/shaders/emitter.glsl"), 1000, MAX_PARTICLES, 10);
+	auto emitter = std::make_shared<ge::particle::BallGPUEmitter>(ge::util::loadTextFile(APP_RESOURCES"/shaders/emitter.glsl"), 500, MAX_PARTICLES, 15);
 
 	//randomBuffer = emitter->createBuffer(MAX_PARTICLES * sizeof(float) * 3, 2);
 	//refreshRandomBuffer();
