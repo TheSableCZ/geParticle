@@ -13,7 +13,7 @@ namespace ge {
 			AoSParticleFactory() : ParticleFactory<Particle&>() {}
 
 			Particle& createParticle(std::shared_ptr<ParticleContainer> particles) override {
-				assert(particles->getType() == ParticleContainer::AoS);
+				assert(particles->getType() == ParticleContainerType::AoS);
 
 				auto container = std::static_pointer_cast<ArrayOfStructsContainer>(particles);
 

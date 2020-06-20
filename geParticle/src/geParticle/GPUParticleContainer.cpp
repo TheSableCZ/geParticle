@@ -79,6 +79,8 @@ int ge::particle::GPUParticleContainer::syncOnlyAlive(SyncDirection direction)
 
 void ge::particle::GPUParticleContainer::getBufferData(const char * componentName, void * data)
 {
+	// TODO: možná použít pro bìžný, nepersistent buffer buffer->getData z GPUE
+
 	auto buffer = buffers.find(componentName);
 	assert(buffer != buffers.end() && "Component (buffer) not found.");
 
@@ -100,6 +102,8 @@ void ge::particle::GPUParticleContainer::getBufferData(const char * componentNam
 
 void ge::particle::GPUParticleContainer::setBufferData(const char * componentName, const void * data)
 {
+	// TODO: možná použít pro bìžný, nepersistent buffer buffer->setData z GPUE
+
 	auto buffer = buffers.find(componentName);
 	assert(buffer != buffers.end() && "Component (buffer) not found.");
 

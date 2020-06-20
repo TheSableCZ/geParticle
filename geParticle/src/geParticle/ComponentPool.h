@@ -12,8 +12,13 @@ namespace ge {
 		template <typename T>
 		class ComponentPool : public IComponentPool {
 		public:
-			ComponentPool(int size) {
-				pool = std::vector<T>(size);
+			ComponentPool(int size, std::vector<T> initData = {}) {
+				//pool = std::vector<T>(size);
+				pool.resize(size);
+
+				if (!initData.empty()) {
+					std::copy(initData.begin(), initData.end(), pool.begin());
+				}
 			}
 
 			T &get(int idx) {

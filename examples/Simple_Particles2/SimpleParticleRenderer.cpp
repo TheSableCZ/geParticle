@@ -42,7 +42,7 @@ void ge::particle::SimpleParticleRenderer::render(std::shared_ptr<ParticleContai
 	colors.clear();
 	int particleCount = 0;
 
-	if (container->getType() == ParticleContainer::AoS) {
+	if (container->getType() == ParticleContainerType::AoS) {
 		auto pi = AoSParticleIterator(std::static_pointer_cast<ArrayOfStructsContainer>(container));
 		for(pi; !pi.end(); pi.doNext()) {
 			auto &p = static_cast<CustomParticle &>(pi.getInstance());

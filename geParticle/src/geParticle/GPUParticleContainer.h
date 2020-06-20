@@ -41,7 +41,7 @@ namespace ge {
 			int setBufferData(const char* componentName, const void *data, size_t elementSizeOf, std::function<bool(int)> copyIfPredicate);
 
 			template <typename T>
-			void registerComponent(bool syncFlag = false);
+			void registerComponent(bool syncFlag = false, std::vector<T> initData = {});
 			template <typename T>
 			void bindComponentBase(GLuint index);
 			template <typename T>
@@ -73,9 +73,9 @@ namespace ge {
 }
 
 template<typename T>
-inline void ge::particle::GPUParticleContainer::registerComponent(bool syncFlag)
+inline void ge::particle::GPUParticleContainer::registerComponent(bool syncFlag, std::vector<T> initData)
 {
-	ComponentSystemContainer::registerComponent<T>();
+	ComponentSystemContainer::registerComponent<T>(initData);
 
 	const char* typeName = typeid(T).name();
 	auto component = components.find(typeName);
@@ -135,6 +135,7 @@ inline void ge::particle::GPUParticleContainer::getBufferData(std::vector<T>& da
 
 	size_t size = buffer->second->getSize() / sizeof(T);
 
+	// TODO: v novìjším commitu GPUE je funkèní funkce buffer->getData, která dìlá pøesnì tohle
 	data.resize(size);
 	getBufferData(typeName, data.data());
 }

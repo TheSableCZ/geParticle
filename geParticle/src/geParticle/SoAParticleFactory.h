@@ -12,7 +12,7 @@ namespace ge {
 			SoAParticleFactory() : ParticleFactory<int>() {}
 
 			int createParticle(std::shared_ptr<ParticleContainer> particles) override {
-				assert(particles->getType() == ParticleContainer::SoA_CS);
+				assert(particles->getType() == ParticleContainerType::SoA_CS);
 
 				auto container = std::static_pointer_cast<StructureOfArraysContainer>(particles);
 

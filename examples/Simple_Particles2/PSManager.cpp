@@ -24,7 +24,7 @@ void ge::examples::PSManager::initialize(std::shared_ptr<ge::gl::Context> glCont
 	auto pointEmitter = std::make_shared<ge::particle::PointEmitter>(10, glm::vec3(1, -1, 0));
 	auto customFactory = std::make_shared<ge::particle::CustomFactory>();
 
-	pointEmitter->setParticleFactory(customFactory);
+	//pointEmitter->setParticleFactory(customFactory);
 
 	ps->addEmitter(pointEmitter);
 

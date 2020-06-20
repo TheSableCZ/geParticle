@@ -12,7 +12,7 @@ namespace ge {
 			LifeTimeAffector() = default;
 			void affect(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) override
 			{
-				if (particles->getType() == ParticleContainer::AoS) {
+				if (particles->getType() == ParticleContainerType::AoS) {
 					auto pi = AoSParticleIterator(std::static_pointer_cast<ArrayOfStructsContainer>(particles));
 
 					for (pi; !pi.end(); pi.doNext()) {
@@ -25,7 +25,7 @@ namespace ge {
 					}
 				}
 
-				if (particles->getType() == ParticleContainer::SoA_CS) {
+				if (particles->getType() == ParticleContainerType::SoA_CS) {
 					auto pi = ComponentSystemParticleIterator(std::static_pointer_cast<ComponentSystemContainer>(particles));
 
 					for (pi; !pi.end(); pi.doNext()) {
@@ -44,7 +44,7 @@ namespace ge {
 		public:
 			void affect(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) override
 			{
-				if (particles->getType() == ParticleContainer::AoS) {
+				if (particles->getType() == ParticleContainerType::AoS) {
 					auto pi = AoSParticleIterator(std::static_pointer_cast<ArrayOfStructsContainer>(particles));
 
 					for (pi; !pi.end(); pi.doNext()) {
@@ -55,7 +55,7 @@ namespace ge {
 					}
 				}
 
-				if (particles->getType() == ParticleContainer::SoA_CS) {
+				if (particles->getType() == ParticleContainerType::SoA_CS) {
 					auto pi = ComponentSystemParticleIterator(std::static_pointer_cast<ComponentSystemContainer>(particles));
 
 					for (pi; !pi.end(); pi.doNext()) {
@@ -72,7 +72,7 @@ namespace ge {
 		public:
 			void affect(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) override
 		    {
-				if (particles->getType() == ParticleContainer::AoS) {
+				if (particles->getType() == ParticleContainerType::AoS) {
 					auto pi = AoSParticleIterator(std::static_pointer_cast<ArrayOfStructsContainer>(particles));
 
 					for (pi; !pi.end(); pi.doNext()) {
@@ -83,7 +83,7 @@ namespace ge {
 					}
 				}
 
-				if (particles->getType() == ParticleContainer::SoA_CS) {
+				if (particles->getType() == ParticleContainerType::SoA_CS) {
 					auto pi = ComponentSystemParticleIterator(std::static_pointer_cast<ComponentSystemContainer>(particles));
 
 					for (pi; !pi.end(); pi.doNext()) {

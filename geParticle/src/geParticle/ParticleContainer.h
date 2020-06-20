@@ -1,17 +1,21 @@
 #pragma once
 
 #include <geParticle/Particle.h>
+#include <geParticle/ParticleContainerType.h>
+#include <geParticle/ParticleContainerIterator.h>
 
 namespace ge {
 	namespace particle {
+
 		class ParticleContainer { 
 		public:
-			enum ContainerType {
-				AoS, SoA, SoA_CS
-			};
-
-			virtual ContainerType getType() = 0;
+			virtual ParticleContainerType getType() = 0;
 			virtual unsigned int size() = 0;
+
+			virtual std::shared_ptr<ParticleContainerIterator> begin() = 0;
+			virtual std::shared_ptr<ParticleContainerIterator> end() = 0;
+			virtual std::shared_ptr<ParticleContainerIterator> getUnusedParticlesIterator() = 0;
+			virtual std::shared_ptr<RangeParticleContainerIterator> createRangeIterator() = 0;
 		};
 
 		class IndexBasedParticleContainer : public ParticleContainer {
@@ -25,14 +29,14 @@ namespace ge {
 			virtual Particle & createParticle() = 0;
 			virtual Particle & getParticle(int idx) = 0;
 
-			inline ContainerType getType() override { return AoS; }
+			inline ParticleContainerType getType() override { return ParticleContainerType::AoS; }
 		};
 
 		class StructureOfArraysContainer : public IndexBasedParticleContainer {
 		public:
 			virtual int createParticle() = 0;
 
-			inline ContainerType getType() override { return SoA; }
+			inline ParticleContainerType getType() override { return ParticleContainerType::SoA; }
 		};
 
 	}

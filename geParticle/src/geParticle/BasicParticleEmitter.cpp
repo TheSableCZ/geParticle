@@ -31,7 +31,7 @@ void ge::particle::BasicParticleEmitter::emitParticles(core::time_unit dt, std::
 {
 	int newParticlesCount = getNumOfParticlesToCreate(dt);
 
-	if (particles->getType() == ParticleContainer::AoS) {
+	if (particles->getType() == ParticleContainerType::AoS) {
 		auto container = std::static_pointer_cast<ArrayOfStructsContainer>(particles);
 
 		for (int i = 0; i < newParticlesCount; i++) {
@@ -43,7 +43,7 @@ void ge::particle::BasicParticleEmitter::emitParticles(core::time_unit dt, std::
 		}
 	}
 
-	if (particles->getType() == ParticleContainer::SoA_CS) {
+	if (particles->getType() == ParticleContainerType::SoA_CS) {
 		auto container = std::static_pointer_cast<ComponentSystemContainer>(particles);
 
 		for (int i = 0; i < newParticlesCount; i++) {

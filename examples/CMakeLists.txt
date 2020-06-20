@@ -4,6 +4,7 @@ set(examplesList
 #	Simple_Particles
 	Simple_Particles2
 	GPU_Example
+	GPU_nbody_sim
 )
 
 foreach(example IN LISTS examplesList)
