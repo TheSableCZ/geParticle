@@ -1,20 +1,9 @@
 #include <geParticle/ComponentSystemContainer.h>
 
-ge::particle::ComponentSystemContainer::ComponentSystemContainer(int maxParticleCount, bool registerStandardComponents)
+ge::particle::ComponentSystemContainer::ComponentSystemContainer(int maxParticleCount)
 	: maxParticles(maxParticleCount),
 	StructureOfArraysContainer()
-{
-	if (registerStandardComponents) {
-		registerComponent<LifeData>();
-		registerComponent<Position>();
-		registerComponent<Velocity>();
-	}
-}
-
-int ge::particle::ComponentSystemContainer::createParticle()
-{
-	return findUnusedParticle();
-}
+{}
 
 std::shared_ptr<ge::particle::ParticleContainerIterator> ge::particle::ComponentSystemContainer::begin()
 {
@@ -37,24 +26,4 @@ std::shared_ptr<ge::particle::ParticleContainerIterator> ge::particle::Component
 std::shared_ptr<ge::particle::RangeParticleContainerIterator> ge::particle::ComponentSystemContainer::createRangeIterator()
 {
 	return std::make_shared<range_iterator>(shared_from_this());
-}
-
-int ge::particle::ComponentSystemContainer::findUnusedParticle()
-{
-	for (int i = lastUsedParticle; i < maxParticles; i++) {
-		if (!getComponent<LifeData>(i).livingFlag) {
-			lastUsedParticle = i;
-			return i;
-		}
-	}
-
-	for (int i = 0; i < lastUsedParticle; i++) {
-		if (!getComponent<LifeData>(i).livingFlag) {
-			lastUsedParticle = i;
-			return i;
-		}
-	}
-
-	// All particles are taken, override random particle
-	return rand() % maxParticles;
 }

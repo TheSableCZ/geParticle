@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <random>
-#include <geParticle/StandardParticleComponents.h>
+#include <geParticleStd/StandardParticleComponents.h>
 
 namespace ge {
 	namespace gl {

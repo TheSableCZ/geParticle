@@ -2,7 +2,8 @@
 
 #include <geParticle/ParticleAffector.h>
 #include <geParticle/ComponentSystemContainer.h>
-#include <geParticle/StandardParticleComponents.h>
+#include <geParticleStd/StandardParticleComponents.h>
+#include <geParticle/SimpleArrayOfStructsContainer.h>
 
 namespace ge {
 	namespace particle {
@@ -13,10 +14,12 @@ namespace ge {
 			void affect(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) override
 			{
 				if (particles->getType() == ParticleContainerType::AoS) {
-					auto pi = AoSParticleIterator(std::static_pointer_cast<ArrayOfStructsContainer>(particles));
+					//auto pi = AoSParticleIterator(std::static_pointer_cast<ArrayOfStructsContainer>(particles));
+					auto pi = std::static_pointer_cast<SimpleArrayOfStructsContainer<Particle>::iterator>(particles->begin());
+					auto end = particles->end();
 
-					for (pi; !pi.end(); pi.doNext()) {
-						Particle &p = pi.getInstance();
+					for (pi; *pi != *end; (*pi)++) {
+						Particle &p = **pi;
 						if (p.livingFlag) {
 							p.life -= dt;
 							if (p.life.count() <= 0.0f)
@@ -26,10 +29,12 @@ namespace ge {
 				}
 
 				if (particles->getType() == ParticleContainerType::SoA_CS) {
-					auto pi = ComponentSystemParticleIterator(std::static_pointer_cast<ComponentSystemContainer>(particles));
+					//auto pi = ComponentSystemParticleIterator(std::static_pointer_cast<ComponentSystemContainer>(particles));
+					auto pi = std::static_pointer_cast<ComponentSystemContainer::iterator>(particles->begin());
+					auto end = particles->end();
 
-					for (pi; !pi.end(); pi.doNext()) {
-						auto &p = pi.getComponent<LifeData>();
+					for (pi; *pi != *(end); (*pi)++) {
+						auto &p = pi->getComponent<LifeData>();
 						if (p.livingFlag) {
 							p.life -= dt;
 							if (p.life.count() <= 0.0f)
@@ -45,10 +50,11 @@ namespace ge {
 			void affect(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) override
 			{
 				if (particles->getType() == ParticleContainerType::AoS) {
-					auto pi = AoSParticleIterator(std::static_pointer_cast<ArrayOfStructsContainer>(particles));
+					auto pi = std::static_pointer_cast<SimpleArrayOfStructsContainer<Particle>::iterator>(particles->begin());
+					auto end = particles->end();
 
-					for (pi; !pi.end(); pi.doNext()) {
-						Particle &p = pi.getInstance();
+					for (pi; *pi != *(end); (*pi)++) {
+						Particle &p = **pi;
 						if (p.livingFlag) {
 							p.pos += p.velocity * (float)dt.count();
 						}
@@ -56,11 +62,12 @@ namespace ge {
 				}
 
 				if (particles->getType() == ParticleContainerType::SoA_CS) {
-					auto pi = ComponentSystemParticleIterator(std::static_pointer_cast<ComponentSystemContainer>(particles));
+					auto pi = std::static_pointer_cast<ComponentSystemContainer::iterator>(particles->begin());
+					auto end = particles->end();
 
-					for (pi; !pi.end(); pi.doNext()) {
-						auto &p = pi.getComponent<Position>();
-						auto &v = pi.getComponent<Velocity>();
+					for (pi; *pi != *(end); (*pi)++) {
+						auto &p = pi->getComponent<Position>();
+						auto &v = pi->getComponent<Velocity>();
 						p.position += v.velocity * (float)dt.count();
 					}
 				}
@@ -73,10 +80,11 @@ namespace ge {
 			void affect(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) override
 		    {
 				if (particles->getType() == ParticleContainerType::AoS) {
-					auto pi = AoSParticleIterator(std::static_pointer_cast<ArrayOfStructsContainer>(particles));
+					auto pi = std::static_pointer_cast<SimpleArrayOfStructsContainer<Particle>::iterator>(particles->begin());
+					auto end = particles->end();
 
-					for (pi; !pi.end(); pi.doNext()) {
-						Particle &p = pi.getInstance();
+					for (pi; *pi != *(end); (*pi)++) {
+						Particle &p = **pi;
 						if (p.livingFlag) {
 							p.velocity += glm::vec3(0.0f, -9.81f, 0.0f) * (float)dt.count();
 						}
@@ -84,10 +92,11 @@ namespace ge {
 				}
 
 				if (particles->getType() == ParticleContainerType::SoA_CS) {
-					auto pi = ComponentSystemParticleIterator(std::static_pointer_cast<ComponentSystemContainer>(particles));
+					auto pi = std::static_pointer_cast<ComponentSystemContainer::iterator>(particles->begin());
+					auto end = particles->end();
 
-					for (pi; !pi.end(); pi.doNext()) {
-						auto &v = pi.getComponent<Velocity>();
+					for (pi; *pi != *(end); (*pi)++) {
+						auto &v = pi->getComponent<Velocity>();
 						v.velocity += glm::vec3(0.0f, -9.81f, 0.0f) * (float)dt.count();
 					}
 				}

@@ -26,7 +26,6 @@ namespace ge {
 
 		class ArrayOfStructsContainer : public IndexBasedParticleContainer {
 		public:
-			virtual Particle & createParticle() = 0;
 			virtual Particle & getParticle(int idx) = 0;
 
 			inline ParticleContainerType getType() override { return ParticleContainerType::AoS; }
@@ -34,8 +33,6 @@ namespace ge {
 
 		class StructureOfArraysContainer : public IndexBasedParticleContainer {
 		public:
-			virtual int createParticle() = 0;
-
 			inline ParticleContainerType getType() override { return ParticleContainerType::SoA; }
 		};
 

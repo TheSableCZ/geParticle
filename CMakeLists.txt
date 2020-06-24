@@ -14,6 +14,10 @@ SET(CMAKE_C_STANDARD 99)
 
 add_subdirectory ("geParticle")
 
+# TODO: podmínit
+add_subdirectory ("geParticleGL")
+add_subdirectory ("geParticleStd")
+
 if(GEPARTICLE_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()

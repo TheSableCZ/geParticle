@@ -38,7 +38,7 @@ namespace ge {
 			int syncOnlyAlive(SyncDirection direction);
 			void getBufferData(const char* componentName, void *data);
 			void setBufferData(const char* componentName, const void *data);
-			int setBufferData(const char* componentName, const void *data, size_t elementSizeOf, std::function<bool(int)> copyIfPredicate);
+			int setBufferData(const char* componentName, const void *data, size_t elementSizeOf, PredicateFunction copyIfPredicate);
 
 			template <typename T>
 			void registerComponent(bool syncFlag = false, std::vector<T> initData = {});

@@ -6,13 +6,14 @@
 #include <glm/glm.hpp>
 #include <memory>
 #include <geParticle/ComponentPool.h>
-#include <geParticle/StandardParticleComponents.h>
 #include <geParticle/ParticleContainerIterator.h>
 
 namespace ge {
 	namespace particle {
 
 		class ComponentSystemContainer : public StructureOfArraysContainer, public std::enable_shared_from_this<ComponentSystemContainer> {
+		protected:
+			using PredicateFunction = std::function<bool(const int, const ComponentSystemContainer &)>;
 
 		public:
 			class iterator : public IndexBasedParticleContainerIterator
@@ -51,7 +52,7 @@ namespace ge {
 				filter_iterator(std::shared_ptr<ComponentSystemContainer> container, int idx, bool cyclic = false)
 					: cyclic(cyclic), startIdx(container->startIdx()), endIdx(container->endIdx()), iterator(container, idx) {}
 
-				void setPredicate(std::function<bool(const int, const ComponentSystemContainer &)> predicate) { this->predicate = predicate; }
+				void setPredicate(PredicateFunction predicate) { this->predicate = predicate; }
 
 				void operator++() override {
 					int tmpIdx = idx;
@@ -77,7 +78,7 @@ namespace ge {
 				int startIdx;
 				int endIdx;
 
-				std::function<bool(const int, const ComponentSystemContainer &)> predicate = [](const int, const ComponentSystemContainer &) { return true; };
+				PredicateFunction predicate = [](const int, const ComponentSystemContainer &) { return true; };
 			};
 
 			class range_iterator : public RangeParticleContainerIterator
@@ -109,7 +110,7 @@ namespace ge {
 			};
 
 		public:
-			ComponentSystemContainer(int maxParticleCount, bool registerStandardComponents = false);
+			ComponentSystemContainer(int maxParticleCount);
 
 			int startIdx() override;
 			int endIdx() override;
@@ -117,9 +118,8 @@ namespace ge {
 			template <typename T>
 			void registerComponent(std::vector<T> initData = {});
 
-			int createParticle() override;
 			template <typename T>
-			T &getComponent(int idx);
+			T &getComponent(const int idx) const;
 
 			inline ParticleContainerType getType() override { return ParticleContainerType::SoA_CS; }
 			inline unsigned int size() override { return maxParticles; }
@@ -129,15 +129,17 @@ namespace ge {
 			std::shared_ptr<ParticleContainerIterator> getUnusedParticlesIterator() override;
 			std::shared_ptr<RangeParticleContainerIterator> createRangeIterator() override;
 
+			void setLiveParticlePredicate(PredicateFunction predicate);
+			void setDeadParticlePredicate(PredicateFunction predicate);
+
 		protected:
 			int maxParticles;
 
 			std::unordered_map<const char *, std::shared_ptr<IComponentPool>> components;
 
-			int findUnusedParticle();
-			int lastUsedParticle = 0;
-
 			std::shared_ptr<filter_iterator> unusedParticlesIterator;
+			PredicateFunction liveParticlePredicate = [](const int, const ComponentSystemContainer &) { return true; };
+			PredicateFunction deadParticlePredicate = [](const int, const ComponentSystemContainer &) { return true; };
 		};
 	}
 }
@@ -163,7 +165,7 @@ inline void ge::particle::ComponentSystemContainer::registerComponent(std::vecto
 }
 
 template<typename T>
-inline T & ge::particle::ComponentSystemContainer::getComponent(int idx)
+inline T & ge::particle::ComponentSystemContainer::getComponent(const int idx) const
 {
 	assert(idx < maxParticles);
 
@@ -176,4 +178,15 @@ inline T & ge::particle::ComponentSystemContainer::getComponent(int idx)
 	auto componentPool = std::static_pointer_cast<ComponentPool<T>>(component->second);
 
 	return componentPool->get(idx);
+}
+
+inline void ge::particle::ComponentSystemContainer::setLiveParticlePredicate(PredicateFunction predicate)
+{
+	liveParticlePredicate = predicate;
+}
+
+inline void ge::particle::ComponentSystemContainer::setDeadParticlePredicate(PredicateFunction predicate)
+{
+	deadParticlePredicate = predicate;
+	std::static_pointer_cast<filter_iterator>(getUnusedParticlesIterator())->setPredicate(predicate);
 }

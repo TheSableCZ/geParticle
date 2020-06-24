@@ -4,7 +4,7 @@
 #include <string>
 #include <geGL/Program.h>
 #include <iostream>
-#include <geParticle/ComputeProgramWrapper.h>
+#include <geParticleGL/ComputeProgramWrapper.h>
 
 namespace ge {
 	namespace particle {

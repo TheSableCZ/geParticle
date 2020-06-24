@@ -3,7 +3,8 @@
 #include <geUtil/Text.h>
 #include <iostream>
 #include "utils/Camera.h"
-#include <geParticle/GPUParticleContainer.h>
+#include <geParticleGL/GPUParticleContainer.h>
+#include <geParticleStd/StandardParticleComponents.h>
 
 
 ge::particle::SimpleParticleRenderer::SimpleParticleRenderer(std::shared_ptr<GPUParticleContainer> container)

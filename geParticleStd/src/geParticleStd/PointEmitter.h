@@ -4,10 +4,11 @@
 #include <glm/glm.hpp>
 #include <memory>
 
-#include <geParticle/ConstantRateEmitter.h>
+#include <geParticle/ParticleEmitter.h>
 #include <geParticle/ComponentSystemContainer.h>
 #include <geParticle/SimpleArrayOfStructsContainer.h>
-#include <geParticle/StandardParticleComponents.h>
+#include <geParticleStd/StandardParticleComponents.h>
+#include <geParticleStd/ConstantRateCounter.h>
 
 namespace ge {
 	namespace particle {
@@ -67,7 +68,7 @@ namespace ge {
 		};
 		*/
 
-		class PointEmitter : public ConstantRateEmitter
+		class PointEmitter : public ParticleEmitterBase
 		{
 			class PointInitiator : public ParticleInitiator
 			{
@@ -134,7 +135,7 @@ namespace ge {
 
 		public:
 			PointEmitter(int particlesPerSecond, glm::vec3 pos)
-				: ConstantRateEmitter(particlesPerSecond)
+				: ParticleEmitterBase(std::make_shared<ConstantRateCounter>(particlesPerSecond))
 			{
 				initiators.push_back(std::make_shared<PointInitiator>(pos));
 			}

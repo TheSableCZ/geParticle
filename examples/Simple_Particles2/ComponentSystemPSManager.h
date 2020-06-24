@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <geParticle/Particle.h>
-#include <geParticle/AoSParticleFactory.h>
+//#include <geParticle/AoSParticleFactory.h>
 
 namespace ge {
 	namespace gl {
@@ -11,6 +11,8 @@ namespace ge {
 
 	namespace particle {
 		class ParticleSystem;
+		class ComponentSystemRenderer;
+		class GPUParticleContainer;
 	}
 
 	namespace examples {
@@ -23,6 +25,8 @@ namespace ge {
 
 		private:
 			std::shared_ptr<ge::particle::ParticleSystem> ps;
+			std::shared_ptr<ge::particle::GPUParticleContainer> pc;
+			std::shared_ptr<ge::particle::ComponentSystemRenderer> renderer;
 		};
 	}
 }

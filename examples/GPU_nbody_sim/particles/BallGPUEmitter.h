@@ -1,6 +1,7 @@
 #pragma once
 
-#include <geParticle/GPUParticleEmitter.h>
+#include <geParticle/ParticleContainer.h>
+#include <geParticleGL/GPUParticleEmitter.h>
 #include <random>
 
 namespace ge {

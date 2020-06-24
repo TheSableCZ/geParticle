@@ -2,7 +2,7 @@
 
 #include <geParticle/ParticleSystem.h>
 #include <geParticle/ParticleRenderer.h>
-#include <geParticle/GPUParticleContainer.h>
+#include <geParticleGL/GPUParticleContainer.h>
 
 namespace ge {
 	namespace gl

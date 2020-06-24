@@ -13,7 +13,6 @@ namespace ge {
 		class ComponentPool : public IComponentPool {
 		public:
 			ComponentPool(int size, std::vector<T> initData = {}) {
-				//pool = std::vector<T>(size);
 				pool.resize(size);
 
 				if (!initData.empty()) {

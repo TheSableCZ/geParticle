@@ -1,15 +1,17 @@
 #pragma once
 
-#include <geParticle/BasicParticleEmitter.h>
-#include <geParticle/ComputeProgramWrapper.h>
+#include <geParticle/ParticleEmitter.h>
+#include <geParticleGL/ComputeProgramWrapper.h>
+#include <geParticleStd/ConstantRateCounter.h>
 #include <string>
 
 namespace ge {
 	namespace particle {
 
-		class GPUParticleEmitter : public BasicParticleEmitter, public ComputeProgramWrapper {
+		class GPUParticleEmitter : public ParticleEmitterBase, public ComputeProgramWrapper {
 		public:
 			GPUParticleEmitter(std::string shaderSource, int particlesPerSecond);
+			GPUParticleEmitter(std::string shaderSource, std::shared_ptr<Counter> counter);
 			void emitParticles(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) override;
 
 		protected:
@@ -20,7 +22,11 @@ namespace ge {
 }
 
 inline ge::particle::GPUParticleEmitter::GPUParticleEmitter(std::string shaderSource, int particlesPerSecond)
-	: ComputeProgramWrapper(shaderSource), BasicParticleEmitter(particlesPerSecond)
+	: GPUParticleEmitter(shaderSource, std::make_shared<ConstantRateCounter>(particlesPerSecond))
+{}
+
+inline ge::particle::GPUParticleEmitter::GPUParticleEmitter(std::string shaderSource, std::shared_ptr<Counter> counter)
+	: ComputeProgramWrapper(shaderSource), ParticleEmitterBase(counter)
 {
 	checkUniform("newParticles");
 	checkUniform("particleCount");

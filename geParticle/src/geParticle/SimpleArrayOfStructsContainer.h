@@ -20,7 +20,6 @@ namespace ge {
 					: IndexBasedParticleContainerIterator(container, idx) {}
 
 				Particle& operator* () const { return std::static_pointer_cast<SimpleArrayOfStructsContainer<T>>(container)->getParticle(idx); }
-				//Particle& getParticle() const { return container->getParticle(idx); }
 			};
 
 			class cyclic_iterator : public iterator
@@ -85,7 +84,6 @@ namespace ge {
 					: RangeParticleContainerIterator(container, indices, pos) {}
 
 				Particle& operator* () const { return std::static_pointer_cast<SimpleArrayOfStructsContainer<T>>(container)->getParticle(*pos); }
-				//Particle& operator->() const { return container->getParticle(*pos); }
 
 				std::shared_ptr<RangeParticleContainerIterator> begin() override {
 					return std::make_shared<range_iterator>(
@@ -109,7 +107,6 @@ namespace ge {
 
 			~SimpleArrayOfStructsContainer();
 
-			Particle & createParticle() override;
 			Particle & getParticle(int idx) override;
 			int startIdx() override;
 			int endIdx() override;
@@ -123,11 +120,7 @@ namespace ge {
 
 		protected:
 			T *particles;
-
-			int findUnusedParticle();
 			int maxParticles;
-			int lastUsedParticle;
-
 			std::shared_ptr<filter_iterator> unusedParticlesIterator;
 		};
 	}
@@ -135,7 +128,7 @@ namespace ge {
 
 template <class T>
 ge::particle::SimpleArrayOfStructsContainer<T>::SimpleArrayOfStructsContainer(int maxParticleCount)
-	: maxParticles(maxParticleCount), lastUsedParticle(0), ArrayOfStructsContainer()
+	: maxParticles(maxParticleCount), ArrayOfStructsContainer()
 {
 	static_assert(std::is_base_of<Particle, T>::value);
 	particles = new T[maxParticleCount];
@@ -145,12 +138,6 @@ template <class T>
 ge::particle::SimpleArrayOfStructsContainer<T>::~SimpleArrayOfStructsContainer()
 {
 	delete[] particles;
-}
-
-template <class T>
-ge::particle::Particle & ge::particle::SimpleArrayOfStructsContainer<T>::createParticle()
-{
-	return particles[findUnusedParticle()];
 }
 
 template <class T>
@@ -170,27 +157,6 @@ template <class T>
 int ge::particle::SimpleArrayOfStructsContainer<T>::endIdx()
 {
 	return maxParticles - 1;
-}
-
-template <class T>
-int ge::particle::SimpleArrayOfStructsContainer<T>::findUnusedParticle()
-{
-	for (int i = lastUsedParticle; i < maxParticles; i++) {
-		if (!particles[i].livingFlag) {
-			lastUsedParticle = i;
-			return i;
-		}
-	}
-
-	for (int i = 0; i < lastUsedParticle; i++) {
-		if (!particles[i].livingFlag) {
-			lastUsedParticle = i;
-			return i;
-		}
-	}
-
-	// All particles are taken, override random particle
-	return rand() % maxParticles;
 }
 
 template<class T>

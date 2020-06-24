@@ -1,8 +1,8 @@
 #include "PSManager.h"
 #include <geParticle/ParticleSystem.h>
-#include <geParticle/GPUParticleContainer.h>
-#include <geParticle/GPUParticleAffector.h>
-#include <geParticle/GPUParticleEmitter.h>
+#include <geParticleGL/GPUParticleContainer.h>
+#include <geParticleGL/GPUParticleAffector.h>
+#include <geParticleGL/GPUParticleEmitter.h>
 #include "SimpleParticleRenderer.h"
 #include <geUtil/Text.h>
 #include <geParticle/ComponentSystemContainer.h>

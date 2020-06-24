@@ -39,7 +39,7 @@ set(SOURCES
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
-target_link_libraries(${PROJECT_NAME} Qt5::Gui geGL geUtil glm geParticle)
+target_link_libraries(${PROJECT_NAME} Qt5::Gui geGL geUtil glm geParticle geParticleGL geParticleStd)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 target_compile_definitions(${PROJECT_NAME} PUBLIC "VERTEX_SHADER=\"${simple2_vertexShader}\"" "FRAGMENT_SHADER=\"${simple2_fragmentShader}\"")
 

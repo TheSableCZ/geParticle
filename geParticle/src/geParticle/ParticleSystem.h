@@ -12,7 +12,6 @@ namespace ge
 		class ParticleContainer;
 	    class ParticleEmitter;
 	    class ParticleAffector;
-		class ParticleRenderer;
 
 	    class ParticleSystem : public ge::core::Updatable
 		{
@@ -25,15 +24,13 @@ namespace ge
 			void addEmitter(std::shared_ptr<ParticleEmitter> emitter);
 			void addAffector(std::shared_ptr<ParticleAffector> affector);
 
+			std::shared_ptr<ParticleContainer> getParticleContainer();
+
             std::vector<std::shared_ptr<ParticleEmitter>> particleEmitters;
 			std::vector<std::shared_ptr<ParticleAffector>> particleAffectors;
-			std::shared_ptr<ParticleRenderer> particleRenderer;
 
 		protected:
 			std::shared_ptr<ParticleContainer> particleContainer;
-
-			int MaxParticles;
-			int LastUsedParticle = 0;
 
 			core::time_point lastTime;
 		};

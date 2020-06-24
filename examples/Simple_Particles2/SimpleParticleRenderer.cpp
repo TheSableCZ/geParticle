@@ -1,11 +1,12 @@
 #include "SimpleParticleRenderer.h"
 #include <geGL/geGL.h>
 #include <geUtil/Text.h>
-#include <geParticle/ParticleIterator.h>
+//#include <geParticle/ParticleIterator.h>
 #include <iostream>
 #include "BillboardVertices.h"
 #include "Camera.h"
 #include "CustomTypes.h"
+#include <geParticle/SimpleArrayOfStructsContainer.h>
 
 ge::particle::SimpleParticleRenderer::SimpleParticleRenderer(std::shared_ptr<ge::gl::Context> glContext, int maxParticles)
 	: gl(glContext), maxParticles(maxParticles)
@@ -43,9 +44,10 @@ void ge::particle::SimpleParticleRenderer::render(std::shared_ptr<ParticleContai
 	int particleCount = 0;
 
 	if (container->getType() == ParticleContainerType::AoS) {
-		auto pi = AoSParticleIterator(std::static_pointer_cast<ArrayOfStructsContainer>(container));
-		for(pi; !pi.end(); pi.doNext()) {
-			auto &p = static_cast<CustomParticle &>(pi.getInstance());
+		auto pi = std::static_pointer_cast<SimpleArrayOfStructsContainer<Particle>::iterator>(container->begin());
+		auto end = container->end();
+		for (; *pi != *end; (*pi)++) {
+			auto &p = static_cast<CustomParticle &>(**pi);
 			if (p.livingFlag) {
 				centers.push_back(p.pos.x);
 				centers.push_back(p.pos.y);

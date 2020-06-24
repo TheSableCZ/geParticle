@@ -1,8 +1,8 @@
-#include <geParticle/GPUParticleContainer.h>
+#include <geParticleGL/GPUParticleContainer.h>
 #include <cstring>
 
 ge::particle::GPUParticleContainer::GPUParticleContainer(int maxParticleCount, StorageDestination storageDestination)
-	: storageDestination(storageDestination), ComponentSystemContainer(maxParticleCount, false)
+	: storageDestination(storageDestination), ComponentSystemContainer(maxParticleCount)
 {
 }
 
@@ -64,7 +64,8 @@ int ge::particle::GPUParticleContainer::syncOnlyAlive(SyncDirection direction)
 					component.first, 
 					component.second->data(), 
 					componentsSizeOfs[component.first],
-					[this](int idx) { return getComponent<LifeData>(idx).livingFlag; }
+					//[this](int idx) { return getComponent<LifeData>(idx).livingFlag; }
+					liveParticlePredicate
 				);
 			}
 
@@ -123,7 +124,7 @@ void ge::particle::GPUParticleContainer::setBufferData(const char * componentNam
 	}
 }
 
-int ge::particle::GPUParticleContainer::setBufferData(const char * componentName, const void * data, size_t elementSizeOf, std::function<bool(int)> copyIfPredicate)
+int ge::particle::GPUParticleContainer::setBufferData(const char * componentName, const void * data, size_t elementSizeOf, PredicateFunction copyIfPredicate)
 {
 	auto buffer = buffers.find(componentName);
 	assert(buffer != buffers.end() && "Component (buffer) not found.");
@@ -141,7 +142,7 @@ int ge::particle::GPUParticleContainer::setBufferData(const char * componentName
 
 	unsigned int dstIdx = 0;
 	for (unsigned int idx = 0; idx < elementCount; idx++) {
-		if (copyIfPredicate(idx)) {
+		if (copyIfPredicate(idx, *this)) {
 			memcpy(&ptr[dstIdx * elementSizeOf], &((char *)data)[idx * elementSizeOf], elementSizeOf);
 			dstIdx++;
 		}

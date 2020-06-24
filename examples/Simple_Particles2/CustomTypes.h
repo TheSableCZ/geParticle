@@ -1,8 +1,12 @@
 #pragma once
 
+#include <geParticle/ComponentSystemContainer.h>
 #include <geParticle/Particle.h>
-#include <geParticle/AoSParticleFactory.h>
-#include <geParticle/SoAParticleFactory.h>
+//#include <geParticle/AoSParticleFactory.h>
+//#include <geParticle/SoAParticleFactory.h>
+#include <geParticleStd/StandardParticleComponents.h>
+#include <geParticle/ParticleInitiator.h>
+#include <geParticle/ParticleAffector.h>
 
 namespace ge {
 	namespace particle {
@@ -10,7 +14,44 @@ namespace ge {
 			glm::vec3 color;
 		};
 
-		class CustomFactory : public AoSParticleFactory {
+		struct Color {
+			glm::vec3 color;
+		};
+
+		class ColorInitiator : public ParticleInitiator
+		{
+		public:
+			void init(std::shared_ptr<RangeParticleContainerIterator> range) override {
+				if (range->getContainerType() == ParticleContainerType::SoA_CS) {
+					auto begin = std::static_pointer_cast<ComponentSystemContainer::range_iterator>(range->begin());
+					auto end = range->end();
+
+					for (; (*begin) != (*end); (*begin)++) {
+						//begin->getComponent<Color>().color = glm::vec3(1.f, 0.f, 0.f);
+						begin->getComponent<Color>().color = glm::vec3(((float)rand() / (RAND_MAX)), ((float)rand() / (RAND_MAX)), ((float)rand() / (RAND_MAX)));
+					}
+				}
+			}
+		};
+
+		class ColorAffector : public ParticleAffector
+		{
+		public:
+			void affect(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) override {
+				if (particles->getType() == ParticleContainerType::SoA_CS) {
+					auto begin = std::static_pointer_cast<ComponentSystemContainer::iterator>(particles->begin());
+					auto end = particles->end();
+
+					for (; (*begin) != (*end); (*begin)++) {
+						if (begin->getComponent<LifeData>().livingFlag == false) {
+							begin->getComponent<Color>().color = glm::vec3(0.f, 0.f, 0.f);
+						}
+					}
+				}
+			}
+		};
+
+		/*class CustomFactory : public AoSParticleFactory {
 			void initParticle(Particle &p) override {
 				CustomParticle &cp = static_cast<CustomParticle &>(p);
 
@@ -32,10 +73,6 @@ namespace ge {
 
 				p.velocity = maindir + randomdir * spread;
 			}
-		};
-
-		struct Color {
-			glm::vec3 color;
 		};
 
 		class CSCustomFactory : public SoAParticleFactory {
@@ -63,6 +100,6 @@ namespace ge {
 
 				v.velocity = maindir + randomdir * spread;
 			}
-		};
+		};*/
 	}
 }

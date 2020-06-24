@@ -4,6 +4,7 @@
 #include <memory>
 #include <geParticle/ParticleContainer.h>
 #include <geParticle/ParticleInitiator.h>
+#include <geParticle/Counter.h>
 
 namespace ge
 {
@@ -18,6 +19,9 @@ namespace ge
 		class ParticleEmitterBase : public ParticleEmitter
 		{
 		public:
+			ParticleEmitterBase(std::shared_ptr<Counter> counter)
+				: counter(counter) {}
+
 			void emitParticles(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) override
 			{
 				int newParticlesCount = getNumOfParticlesToCreate(dt);
@@ -37,7 +41,12 @@ namespace ge
 			std::vector<std::shared_ptr<ParticleInitiator>> initiators;
 
 		protected:
-			virtual unsigned int getNumOfParticlesToCreate(core::time_unit dt) = 0;
+			virtual unsigned int getNumOfParticlesToCreate(core::time_unit dt)
+			{
+				return counter->getNumOfParticlesToCreate(dt);
+			}
+
+			std::shared_ptr<Counter> counter;
 		};
     }
 }

@@ -1,7 +1,6 @@
 #include "ComponentSystemRenderer.h"
 #include <geGL/geGL.h>
 #include <geUtil/Text.h>
-#include <geParticle/ParticleIterator.h>
 #include <iostream>
 #include "BillboardVertices.h"
 #include "Camera.h"
