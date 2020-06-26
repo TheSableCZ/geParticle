@@ -11,7 +11,7 @@
 namespace ge {
 	namespace particle {
 
-		class ComponentSystemContainer : public StructureOfArraysContainer, public std::enable_shared_from_this<ComponentSystemContainer> {
+		class ComponentSystemContainer : public IndexBasedParticleContainer, public std::enable_shared_from_this<ComponentSystemContainer> {
 		protected:
 			using PredicateFunction = std::function<bool(const int, const ComponentSystemContainer &)>;
 
@@ -135,7 +135,7 @@ namespace ge {
 		protected:
 			int maxParticles;
 
-			std::unordered_map<const char *, std::shared_ptr<IComponentPool>> components;
+			std::unordered_map<const char *, std::shared_ptr<ComponentPoolBase>> components;
 
 			std::shared_ptr<filter_iterator> unusedParticlesIterator;
 			PredicateFunction liveParticlePredicate = [](const int, const ComponentSystemContainer &) { return true; };

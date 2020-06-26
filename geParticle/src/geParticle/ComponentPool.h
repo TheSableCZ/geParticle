@@ -3,14 +3,14 @@
 namespace ge {
 	namespace particle {
 
-		class IComponentPool {
+		class ComponentPoolBase {
 		public:
 			virtual void clear() = 0;
 			virtual void *data() = 0;
 		};
 
 		template <typename T>
-		class ComponentPool : public IComponentPool {
+		class ComponentPool : public ComponentPoolBase {
 		public:
 			ComponentPool(int size, std::vector<T> initData = {}) {
 				pool.resize(size);

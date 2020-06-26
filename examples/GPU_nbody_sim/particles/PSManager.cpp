@@ -28,8 +28,8 @@ void ge::examples::PSManager::initialize()
 	//auto emitter = std::make_shared<ge::particle::BallGPUEmitter>(ge::util::loadTextFile(APP_RESOURCES"/shaders/emitter.glsl"), 500, MAX_PARTICLES, 15);
 	//ps->addEmitter(emitter);
 
-	auto particleRenderer = std::make_shared<ge::particle::SimpleParticleRenderer>(pc);
-	ps->particleRenderer = particleRenderer;
+	particleRenderer = std::make_shared<ge::particle::SimpleParticleRenderer>(pc);
+	//ps->particleRenderer = particleRenderer;
 
 	ps->setStartTime(ge::core::time_point::clock::now());
 }
@@ -39,6 +39,7 @@ void ge::examples::PSManager::update()
 	//printParticles();
 
 	ps->update(ge::core::time_point::clock::now());
+	particleRenderer->render(pc);
 
 	//printParticles();
 }

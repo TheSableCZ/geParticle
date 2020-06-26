@@ -2,7 +2,7 @@
 
 ge::particle::ComponentSystemContainer::ComponentSystemContainer(int maxParticleCount)
 	: maxParticles(maxParticleCount),
-	StructureOfArraysContainer()
+	IndexBasedParticleContainer()
 {}
 
 std::shared_ptr<ge::particle::ParticleContainerIterator> ge::particle::ComponentSystemContainer::begin()

@@ -6,7 +6,7 @@
 #include "BillboardVertices.h"
 #include "Camera.h"
 #include "CustomTypes.h"
-#include <geParticle/SimpleArrayOfStructsContainer.h>
+#include <geParticle/ArrayOfStructsContainer.h>
 
 ge::particle::SimpleParticleRenderer::SimpleParticleRenderer(std::shared_ptr<ge::gl::Context> glContext, int maxParticles)
 	: gl(glContext), maxParticles(maxParticles)
@@ -44,7 +44,7 @@ void ge::particle::SimpleParticleRenderer::render(std::shared_ptr<ParticleContai
 	int particleCount = 0;
 
 	if (container->getType() == ParticleContainerType::AoS) {
-		auto pi = std::static_pointer_cast<SimpleArrayOfStructsContainer<Particle>::iterator>(container->begin());
+		auto pi = std::static_pointer_cast<ArrayOfStructsContainer<Particle>::iterator>(container->begin());
 		auto end = container->end();
 		for (; *pi != *end; (*pi)++) {
 			auto &p = static_cast<CustomParticle &>(**pi);

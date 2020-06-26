@@ -14,6 +14,7 @@ set(SRC_PATH ${CMAKE_CURRENT_LIST_DIR}/src/${PROJECT_NAME})
 
 set(PARTICLES_INCLUDES
 	${HEADER_PATH}/ConstantRateCounter.h
+	${HEADER_PATH}/LifeTimeInitiator.h
 	${HEADER_PATH}/PointEmitter.h
 	${HEADER_PATH}/StandardParticleAffectors.h
 	${HEADER_PATH}/StandardParticleComponents.h

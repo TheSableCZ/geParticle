@@ -7,27 +7,34 @@
 namespace ge {
 	namespace particle {
 
+		class ArrayOfStructsContainerBase : public IndexBasedParticleContainer {
+		public:
+			virtual Particle & getParticle(int idx) = 0;
+
+			inline ParticleContainerType getType() override { return ParticleContainerType::AoS; }
+		};
+
 		template <class T>
-		class SimpleArrayOfStructsContainer : public ArrayOfStructsContainer, public std::enable_shared_from_this<SimpleArrayOfStructsContainer<T>> {
+		class ArrayOfStructsContainer : public ArrayOfStructsContainerBase, public std::enable_shared_from_this<ArrayOfStructsContainer<T>> {
 
 		public:
 			class iterator : public IndexBasedParticleContainerIterator
 			{
 			public:
-				iterator(std::shared_ptr<ArrayOfStructsContainer> container)
+				iterator(std::shared_ptr<ArrayOfStructsContainerBase> container)
 					: IndexBasedParticleContainerIterator(container, container->startIdx()) {}
-				iterator(std::shared_ptr<ArrayOfStructsContainer> container, int idx)
+				iterator(std::shared_ptr<ArrayOfStructsContainerBase> container, int idx)
 					: IndexBasedParticleContainerIterator(container, idx) {}
 
-				Particle& operator* () const { return std::static_pointer_cast<SimpleArrayOfStructsContainer<T>>(container)->getParticle(idx); }
+				Particle& operator* () const { return std::static_pointer_cast<ArrayOfStructsContainer<T>>(container)->getParticle(idx); }
 			};
 
 			class cyclic_iterator : public iterator
 			{
 			public:
-				cyclic_iterator(std::shared_ptr<ArrayOfStructsContainer> container)
+				cyclic_iterator(std::shared_ptr<ArrayOfStructsContainerBase> container)
 					: startIdx(container->startIdx()), endIdx(container->endIdx()), iterator(container) {}
-				cyclic_iterator(std::shared_ptr<ArrayOfStructsContainer> container, int idx)
+				cyclic_iterator(std::shared_ptr<ArrayOfStructsContainerBase> container, int idx)
 					: startIdx(container->startIdx()), endIdx(container->endIdx()), iterator(container, idx) {}
 
 				void operator++(int) override { idx++; if (idx == endIdx+1) idx = startIdx; }
@@ -41,17 +48,17 @@ namespace ge {
 			class filter_iterator : public iterator
 			{
 			public:
-				filter_iterator(std::shared_ptr<ArrayOfStructsContainer> container, bool cyclic = false)
+				filter_iterator(std::shared_ptr<ArrayOfStructsContainerBase> container, bool cyclic = false)
 					: cyclic(cyclic), startIdx(container->startIdx()), endIdx(container->endIdx()), iterator(container) {}
-				filter_iterator(std::shared_ptr<ArrayOfStructsContainer> container, int idx, bool cyclic = false)
+				filter_iterator(std::shared_ptr<ArrayOfStructsContainerBase> container, int idx, bool cyclic = false)
 					: cyclic(cyclic), startIdx(container->startIdx()), endIdx(container->endIdx()), iterator(container, idx) {}
 
-				void setPredicate(std::function<bool(int, std::shared_ptr<ArrayOfStructsContainer>)> predicate) { this->predicate = predicate; }
+				void setPredicate(std::function<bool(int, std::shared_ptr<ArrayOfStructsContainerBase>)> predicate) { this->predicate = predicate; }
 
 				void operator++() override {
 					int tmpIdx = idx;
 
-					auto csContainer = std::static_pointer_cast<ArrayOfStructsContainer>(container);
+					auto csContainer = std::static_pointer_cast<ArrayOfStructsContainerBase>(container);
 
 					do {
 						idx++;
@@ -72,22 +79,22 @@ namespace ge {
 				int startIdx;
 				int endIdx;
 
-				std::function<bool(int, std::shared_ptr<ArrayOfStructsContainer>)> predicate = [](int, std::shared_ptr<ArrayOfStructsContainer>) { return true; };
+				std::function<bool(int, std::shared_ptr<ArrayOfStructsContainerBase>)> predicate = [](int, std::shared_ptr<ArrayOfStructsContainerBase>) { return true; };
 			};
 
 			class range_iterator : public RangeParticleContainerIterator
 			{
 			public:
-				range_iterator(std::shared_ptr<ArrayOfStructsContainer> container)
+				range_iterator(std::shared_ptr<ArrayOfStructsContainerBase> container)
 					: RangeParticleContainerIterator(container) {}
-				range_iterator(std::shared_ptr<ArrayOfStructsContainer> container, std::vector<int> indices, std::vector<int>::iterator pos)
+				range_iterator(std::shared_ptr<ArrayOfStructsContainerBase> container, std::vector<int> indices, std::vector<int>::iterator pos)
 					: RangeParticleContainerIterator(container, indices, pos) {}
 
-				Particle& operator* () const { return std::static_pointer_cast<SimpleArrayOfStructsContainer<T>>(container)->getParticle(*pos); }
+				Particle& operator* () const { return std::static_pointer_cast<ArrayOfStructsContainer<T>>(container)->getParticle(*pos); }
 
 				std::shared_ptr<RangeParticleContainerIterator> begin() override {
 					return std::make_shared<range_iterator>(
-						std::static_pointer_cast<ArrayOfStructsContainer>(container),
+						std::static_pointer_cast<ArrayOfStructsContainerBase>(container),
 						indices,
 						indices.begin()
 						);
@@ -95,7 +102,7 @@ namespace ge {
 
 				std::shared_ptr<RangeParticleContainerIterator> end() override {
 					return std::make_shared<range_iterator>(
-						std::static_pointer_cast<ArrayOfStructsContainer>(container),
+						std::static_pointer_cast<ArrayOfStructsContainerBase>(container),
 						indices,
 						indices.end()
 						);
@@ -103,9 +110,9 @@ namespace ge {
 			};
 
 		public:
-			SimpleArrayOfStructsContainer(int maxParticleCount);
+			ArrayOfStructsContainer(int maxParticleCount);
 
-			~SimpleArrayOfStructsContainer();
+			~ArrayOfStructsContainer();
 
 			Particle & getParticle(int idx) override;
 			int startIdx() override;
@@ -127,53 +134,53 @@ namespace ge {
 }
 
 template <class T>
-ge::particle::SimpleArrayOfStructsContainer<T>::SimpleArrayOfStructsContainer(int maxParticleCount)
-	: maxParticles(maxParticleCount), ArrayOfStructsContainer()
+ge::particle::ArrayOfStructsContainer<T>::ArrayOfStructsContainer(int maxParticleCount)
+	: maxParticles(maxParticleCount), ArrayOfStructsContainerBase()
 {
 	static_assert(std::is_base_of<Particle, T>::value);
 	particles = new T[maxParticleCount];
 }
 
 template <class T>
-ge::particle::SimpleArrayOfStructsContainer<T>::~SimpleArrayOfStructsContainer()
+ge::particle::ArrayOfStructsContainer<T>::~ArrayOfStructsContainer()
 {
 	delete[] particles;
 }
 
 template <class T>
-ge::particle::Particle & ge::particle::SimpleArrayOfStructsContainer<T>::getParticle(int idx)
+ge::particle::Particle & ge::particle::ArrayOfStructsContainer<T>::getParticle(int idx)
 {
 	assert(idx < maxParticles);
 	return particles[idx];
 }
 
 template <class T>
-int ge::particle::SimpleArrayOfStructsContainer<T>::startIdx()
+int ge::particle::ArrayOfStructsContainer<T>::startIdx()
 {
 	return 0;
 }
 
 template <class T>
-int ge::particle::SimpleArrayOfStructsContainer<T>::endIdx()
+int ge::particle::ArrayOfStructsContainer<T>::endIdx()
 {
 	return maxParticles - 1;
 }
 
 template<class T>
-inline std::shared_ptr<ge::particle::ParticleContainerIterator> ge::particle::SimpleArrayOfStructsContainer<T>::begin()
+inline std::shared_ptr<ge::particle::ParticleContainerIterator> ge::particle::ArrayOfStructsContainer<T>::begin()
 {
 	return std::make_shared<iterator>(shared_from_this(), startIdx());
 }
 
 template<class T>
-inline std::shared_ptr<ge::particle::ParticleContainerIterator> ge::particle::SimpleArrayOfStructsContainer<T>::end()
+inline std::shared_ptr<ge::particle::ParticleContainerIterator> ge::particle::ArrayOfStructsContainer<T>::end()
 {
 	return std::make_shared<iterator>(shared_from_this(), size());
 }
 
 
 template<class T>
-inline std::shared_ptr<ge::particle::ParticleContainerIterator> ge::particle::SimpleArrayOfStructsContainer<T>::getUnusedParticlesIterator()
+inline std::shared_ptr<ge::particle::ParticleContainerIterator> ge::particle::ArrayOfStructsContainer<T>::getUnusedParticlesIterator()
 {
 	if (!unusedParticlesIterator) {
 		unusedParticlesIterator = std::make_shared<filter_iterator>(shared_from_this(), true);
@@ -182,7 +189,7 @@ inline std::shared_ptr<ge::particle::ParticleContainerIterator> ge::particle::Si
 }
 
 template<class T>
-inline std::shared_ptr<ge::particle::RangeParticleContainerIterator> ge::particle::SimpleArrayOfStructsContainer<T>::createRangeIterator()
+inline std::shared_ptr<ge::particle::RangeParticleContainerIterator> ge::particle::ArrayOfStructsContainer<T>::createRangeIterator()
 {
 	return std::make_shared<range_iterator>(shared_from_this());
 }

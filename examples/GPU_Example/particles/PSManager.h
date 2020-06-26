@@ -11,6 +11,7 @@ namespace ge {
 	namespace particle {
 		class ParticleSystem;
 		class GPUParticleContainer;
+		class SimpleParticleRenderer;
 	}
 
 	namespace examples {
@@ -24,6 +25,7 @@ namespace ge {
 		private:
 			std::shared_ptr<ge::particle::ParticleSystem> ps;
 			std::shared_ptr<ge::particle::GPUParticleContainer> pc;
+			std::shared_ptr<ge::particle::SimpleParticleRenderer> particleRenderer;
 
 			//std::shared_ptr<ge::gl::Buffer> randomBuffer;
 			//void refreshRandomBuffer();

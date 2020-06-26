@@ -3,7 +3,7 @@
 #include <geParticle/ParticleAffector.h>
 #include <geParticle/ComponentSystemContainer.h>
 #include <geParticleStd/StandardParticleComponents.h>
-#include <geParticle/SimpleArrayOfStructsContainer.h>
+#include <geParticle/ArrayOfStructsContainer.h>
 
 namespace ge {
 	namespace particle {
@@ -14,8 +14,7 @@ namespace ge {
 			void affect(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) override
 			{
 				if (particles->getType() == ParticleContainerType::AoS) {
-					//auto pi = AoSParticleIterator(std::static_pointer_cast<ArrayOfStructsContainer>(particles));
-					auto pi = std::static_pointer_cast<SimpleArrayOfStructsContainer<Particle>::iterator>(particles->begin());
+					auto pi = std::static_pointer_cast<ArrayOfStructsContainer<Particle>::iterator>(particles->begin());
 					auto end = particles->end();
 
 					for (pi; *pi != *end; (*pi)++) {
@@ -29,7 +28,6 @@ namespace ge {
 				}
 
 				if (particles->getType() == ParticleContainerType::SoA_CS) {
-					//auto pi = ComponentSystemParticleIterator(std::static_pointer_cast<ComponentSystemContainer>(particles));
 					auto pi = std::static_pointer_cast<ComponentSystemContainer::iterator>(particles->begin());
 					auto end = particles->end();
 
@@ -50,7 +48,7 @@ namespace ge {
 			void affect(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) override
 			{
 				if (particles->getType() == ParticleContainerType::AoS) {
-					auto pi = std::static_pointer_cast<SimpleArrayOfStructsContainer<Particle>::iterator>(particles->begin());
+					auto pi = std::static_pointer_cast<ArrayOfStructsContainer<Particle>::iterator>(particles->begin());
 					auto end = particles->end();
 
 					for (pi; *pi != *(end); (*pi)++) {
@@ -80,7 +78,7 @@ namespace ge {
 			void affect(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) override
 		    {
 				if (particles->getType() == ParticleContainerType::AoS) {
-					auto pi = std::static_pointer_cast<SimpleArrayOfStructsContainer<Particle>::iterator>(particles->begin());
+					auto pi = std::static_pointer_cast<ArrayOfStructsContainer<Particle>::iterator>(particles->begin());
 					auto end = particles->end();
 
 					for (pi; *pi != *(end); (*pi)++) {

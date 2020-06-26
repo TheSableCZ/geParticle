@@ -39,12 +39,13 @@ void ge::examples::ComponentSystemPSManager::initialize(std::shared_ptr<ge::gl::
 
 	ps->addAffector(std::make_shared<ge::particle::ColorAffector>());
 
-	auto pointEmitter = std::make_shared<ge::particle::PointEmitter>(10, glm::vec3(-1, -1, 0));
+	auto pointEmitter = std::make_shared<ge::particle::PointEmitter>(10, glm::vec3(-1, -1, 0), core::time_unit(.5f));
 	//auto customFactory = std::make_shared<ge::particle::CSCustomFactory>();
 
 	//pointEmitter->setParticleFactory(customFactory);
 
 	pointEmitter->initiators.push_back(std::make_shared<ge::particle::ColorInitiator>());
+	pointEmitter->initiators.push_back(std::make_shared<ge::particle::VelocityInitiator>());
 	ps->addEmitter(pointEmitter);
 
 	renderer = std::make_shared<ge::particle::ComponentSystemRenderer>(glContext, MAX_PARTICLES, pc);

@@ -61,48 +61,4 @@ void ge::particle::ComponentSystemRenderer::render(std::shared_ptr<ParticleConta
 	gl->glVertexAttribDivisor(2, 1); // color : one per quad                                  -> 1
 
 	gl->glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, particlesCount);
-
-	/*centers.clear();
-	colors.clear();
-	int particleCount = 0;
-
-	if (container->getType() == ParticleContainer::AoS) {
-		auto pi = AoSParticleIterator(std::static_pointer_cast<ArrayOfStructsContainer>(container));
-		for(pi; !pi.end(); pi.doNext()) {
-			auto &p = static_cast<CustomParticle &>(pi.getInstance());
-			if (p.livingFlag) {
-				centers.push_back(p.pos.x);
-				centers.push_back(p.pos.y);
-				centers.push_back(p.pos.z);
-
-				colors.push_back(p.color.r);
-				colors.push_back(p.color.g);
-				colors.push_back(p.color.b);
-
-				particleCount++;
-			}
-		}
-	}
-	else {
-		return;
-	}
-
-	shaderProgram->setMatrix4fv("MVP", &(examples::Camera::getInstance().getMVP())[0][0] );
-	shaderProgram->set3fv("CameraUp", &(examples::Camera::getInstance().getCameraUp())[0] );
-	shaderProgram->set3fv("CameraRight", &(examples::Camera::getInstance().getCameraRight())[0] );
-
-	shaderProgram->use();
-	VAO->bind();
-
-	particleCenters->setData(centers);
-	particleColors->setData(colors);
-
-	gl->glVertexAttribDivisor(0, 0); // particles vertices : always reuse the same 4 vertices -> 0
-	gl->glVertexAttribDivisor(1, 1); // positions : one per quad (its center)                 -> 1
-	gl->glVertexAttribDivisor(2, 1); // color : one per quad                                  -> 1
-
-	gl->glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, particleCount);
-
-	//std::cout << particleCount << " -- " << particleCenters->getSize() << "\n";
-	*/
 }

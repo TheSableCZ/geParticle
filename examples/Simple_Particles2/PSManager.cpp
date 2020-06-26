@@ -1,6 +1,6 @@
 #include "PSManager.h"
 #include <geParticle/ParticleSystem.h>
-#include <geParticle/SimpleArrayOfStructsContainer.h>
+#include <geParticle/ArrayOfStructsContainer.h>
 #include <geParticleStd/StandardParticleAffectors.h>
 #include <geParticleStd/PointEmitter.h>
 #include "SimpleParticleRenderer.h"
@@ -10,7 +10,7 @@
 
 void ge::examples::PSManager::initialize(std::shared_ptr<ge::gl::Context> glContext)
 {
-	pc = std::make_shared<ge::particle::SimpleArrayOfStructsContainer<ge::particle::CustomParticle>>(MAX_PARTICLES);
+	pc = std::make_shared<ge::particle::ArrayOfStructsContainer<ge::particle::CustomParticle>>(MAX_PARTICLES);
 	ps = std::make_shared<ge::particle::ParticleSystem>(pc);
 
 	auto lifeTimeAffector = std::make_shared<ge::particle::LifeTimeAffector>();
@@ -21,7 +21,8 @@ void ge::examples::PSManager::initialize(std::shared_ptr<ge::gl::Context> glCont
 
 	ps->addAffector(std::make_shared<ge::particle::GravityAffector>());
 
-	auto pointEmitter = std::make_shared<ge::particle::PointEmitter>(10, glm::vec3(1, -1, 0));
+	auto pointEmitter = std::make_shared<ge::particle::PointEmitter>(10, glm::vec3(1, -1, 0), core::time_unit(.5f));
+	pointEmitter->initiators.push_back(std::make_shared<ge::particle::VelocityInitiator>());
 	//auto customFactory = std::make_shared<ge::particle::CustomFactory>();
 
 	//pointEmitter->setParticleFactory(customFactory);

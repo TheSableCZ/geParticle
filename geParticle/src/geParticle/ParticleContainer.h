@@ -24,17 +24,5 @@ namespace ge {
 			virtual int endIdx() = 0;
 		};
 
-		class ArrayOfStructsContainer : public IndexBasedParticleContainer {
-		public:
-			virtual Particle & getParticle(int idx) = 0;
-
-			inline ParticleContainerType getType() override { return ParticleContainerType::AoS; }
-		};
-
-		class StructureOfArraysContainer : public IndexBasedParticleContainer {
-		public:
-			inline ParticleContainerType getType() override { return ParticleContainerType::SoA; }
-		};
-
 	}
 }

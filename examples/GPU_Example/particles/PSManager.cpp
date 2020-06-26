@@ -43,8 +43,8 @@ void ge::examples::PSManager::initialize()
 	auto linearMovementAffector = std::make_shared<ge::particle::LinearMovementAffector>();
 	ps->addAffector(linearMovementAffector);*/
 
-	auto particleRenderer = std::make_shared<ge::particle::SimpleParticleRenderer>(pc);
-	ps->particleRenderer = particleRenderer;
+	particleRenderer = std::make_shared<ge::particle::SimpleParticleRenderer>(pc);
+	//ps->particleRenderer = particleRenderer;
 
 	ps->setStartTime(ge::core::time_point::clock::now());
 }
@@ -54,6 +54,7 @@ void ge::examples::PSManager::update()
 	//printParticles();
 
 	ps->update(ge::core::time_point::clock::now());
+	particleRenderer->render(pc);
 
 	//printParticles();
 }
