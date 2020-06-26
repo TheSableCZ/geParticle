@@ -50,7 +50,7 @@ void ge::examples::ComponentSystemPSManager::initialize(std::shared_ptr<ge::gl::
 	renderer = std::make_shared<ge::particle::ComponentSystemRenderer>(glContext, MAX_PARTICLES, pc);
 	//ps->particleRenderer = particleRenderer;
 
-	ps->setStartTime(ge::core::time_point::clock::now());
+	//ps->setStartTime(ge::core::time_point::clock::now());
 }
 
 void ge::examples::ComponentSystemPSManager::update()

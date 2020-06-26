@@ -23,6 +23,10 @@ namespace ge {
 			void initialize(std::shared_ptr<ge::gl::Context> glContext);
 			void update();
 
+			inline std::shared_ptr<ge::particle::ParticleSystem> getPs() { return ps; }
+			inline std::shared_ptr<ge::particle::ParticleContainer> getPc() { return pc; }
+			inline std::shared_ptr<ge::particle::SimpleParticleRenderer> getRenderer() { return renderer; }
+
 		private:
 			std::shared_ptr<ge::particle::ParticleSystem> ps;
 			std::shared_ptr<ge::particle::ParticleContainer> pc;

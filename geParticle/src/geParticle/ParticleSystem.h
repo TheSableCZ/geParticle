@@ -13,7 +13,7 @@ namespace ge
 	    class ParticleEmitter;
 	    class ParticleAffector;
 
-	    class ParticleSystem : public ge::core::Updatable
+		class ParticleSystem : public ge::core::Updatable
 		{
 		public:
 			explicit ParticleSystem(std::shared_ptr<ParticleContainer> container);

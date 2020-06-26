@@ -16,6 +16,12 @@ namespace ge
       class Program;
       class VertexArray;
    }
+
+   namespace particle
+   {
+	   class ParticleSystemManager;
+   }
+
    namespace examples
    {
 	   class PSManager;
@@ -53,6 +59,8 @@ namespace ge
 
 		 std::shared_ptr<PSManager> psManager;
 		 std::shared_ptr<ComponentSystemPSManager> csPsManager;
+
+		 std::unique_ptr<particle::ParticleSystemManager> manager;
       };
    }
 }

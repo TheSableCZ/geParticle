@@ -31,7 +31,7 @@ void ge::examples::PSManager::initialize(std::shared_ptr<ge::gl::Context> glCont
 	renderer = std::make_shared<ge::particle::SimpleParticleRenderer>(glContext, MAX_PARTICLES);
 	//ps->particleRenderer = particleRenderer;
 
-	ps->setStartTime(ge::core::time_point::clock::now());
+	//ps->setStartTime(ge::core::time_point::clock::now());
 }
 
 void ge::examples::PSManager::update()

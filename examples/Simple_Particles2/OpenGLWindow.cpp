@@ -14,6 +14,10 @@
 #include "Camera.h"
 #include "ComponentSystemPSManager.h"
 
+#include <geParticle/ParticleSystemManager.h>
+#include "SimpleParticleRenderer.h"
+#include "ComponentSystemRenderer.h"
+
 //! [ctor]
 
 ge::examples::OpenGLWindow::OpenGLWindow(QWindow *parent)
@@ -78,6 +82,11 @@ void ge::examples::OpenGLWindow::initialize()
    csPsManager = std::make_shared<ComponentSystemPSManager>();
    csPsManager->initialize(gl);
 
+   manager = std::make_unique<particle::ParticleSystemManager>();
+   manager->registerParticleSystem(psManager->getPs());
+   manager->registerParticleSystem(csPsManager->getPs());
+   manager->startAll(ge::core::time_point::clock::now());
+
    Camera::getInstance().setWindowDimension((float)width(), (float)height());
    Camera::getInstance().setCameraPos(glm::vec3(0, 0, -5));
 
@@ -93,8 +102,12 @@ void ge::examples::OpenGLWindow::render()
    gl->glClearColor(1, 0.5, 0.2, 1.0);
    gl->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-   psManager->update();
-   csPsManager->update();
+   //psManager->update();
+   //csPsManager->update();
+
+   manager->update(ge::core::time_point::clock::now());
+   (psManager->getRenderer())->render(psManager->getPc());
+   (csPsManager->getRenderer())->render(csPsManager->getPc());
 
    printError();
 

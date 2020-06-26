@@ -34,6 +34,7 @@ set(PARTICLES_INCLUDES
 #	${HEADER_PATH}/ParticleIterator.h
 	${HEADER_PATH}/ParticleRenderer.h
 	${HEADER_PATH}/ParticleSystem.h
+	${HEADER_PATH}/ParticleSystemManager.h
 #	${HEADER_PATH}/PointEmitter.h
 	${HEADER_PATH}/SimpleArrayOfStructsContainer.h
 #	${HEADER_PATH}/SoAParticleFactory.h
@@ -44,10 +45,11 @@ set(PARTICLES_INCLUDES
 set(PARTICLES_SOURCES
 #	${SRC_PATH}/BasicParticleEmitter.cpp
 	${SRC_PATH}/ComponentSystemContainer.cpp
+	${SRC_PATH}/ParticleContainerIterator.cpp
 	${SRC_PATH}/ParticleSystem.cpp
+	${SRC_PATH}/ParticleSystemManager.cpp
 #	${SRC_PATH}/ComputeProgramWrapper.cpp
 #	${SRC_PATH}/GPUParticleContainer.cpp
-	${SRC_PATH}/ParticleContainerIterator.cpp
 )
 
 ################################################
