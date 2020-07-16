@@ -5,13 +5,15 @@
 
 namespace ge
 {
-    namespace particle
-    {
-        struct Particle {
-            glm::vec3 pos, velocity;
+	namespace particle
+	{
+		struct Particle
+		{
+			glm::vec3 pos, velocity;
 
-            core::time_unit life;
-            bool livingFlag = false;
-        };
-    }
+			core::time_unit life;
+			core::time_unit totalLifeTime;
+			bool livingFlag = false;
+		};
+	}
 }

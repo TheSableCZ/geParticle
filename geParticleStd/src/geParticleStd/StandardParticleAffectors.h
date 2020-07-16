@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <geParticle/ParticleAffector.h>
 #include <geParticle/ComponentSystemContainer.h>
 #include <geParticleStd/StandardParticleComponents.h>

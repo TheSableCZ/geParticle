@@ -13,7 +13,10 @@ set(HEADER_PATH ${CMAKE_CURRENT_LIST_DIR}/src/${PROJECT_NAME})
 set(SRC_PATH ${CMAKE_CURRENT_LIST_DIR}/src/${PROJECT_NAME})
 
 set(PARTICLES_INCLUDES
+	${HEADER_PATH}/ColorAffector.h
+	${HEADER_PATH}/ColorInitiator.h
 	${HEADER_PATH}/ConstantRateCounter.h
+	${HEADER_PATH}/FloorAffector.h
 	${HEADER_PATH}/LifeTimeInitiator.h
 	${HEADER_PATH}/PointEmitter.h
 	${HEADER_PATH}/StandardParticleAffectors.h
@@ -21,7 +24,10 @@ set(PARTICLES_INCLUDES
 )
 
 set(PARTICLES_SOURCES
+	${SRC_PATH}/ColorAffector.cpp
+	${SRC_PATH}/ColorInitiator.cpp
 	${SRC_PATH}/ConstantRateCounter.cpp
+	${SRC_PATH}/FloorAffector.cpp
 )
 
 ################################################

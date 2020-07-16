@@ -15,6 +15,10 @@ namespace ge
 
 			unsigned int getNumOfParticlesToCreate(core::time_unit dt) override;
 
+			void setParticlesPerSecond(int particlesPerSecond) { this->particlesPerSecond = particlesPerSecond; }
+			int getParticlesPerSecond() const { return particlesPerSecond; }
+			
+		protected:
 			int particlesPerSecond;
 			double carryOver = .0f;
 		};

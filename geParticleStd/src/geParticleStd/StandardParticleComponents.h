@@ -7,6 +7,7 @@ namespace ge {
 	namespace particle {
 		struct LifeData {
 			core::time_unit life;
+			core::time_unit totalLifeTime;
 			bool livingFlag = false;
 		};
 
@@ -19,6 +20,10 @@ namespace ge {
 
 		struct Velocity {
 			glm::vec3 velocity;
+		};
+
+		struct Color {
+			glm::vec3 color;
 		};
 
 		/*

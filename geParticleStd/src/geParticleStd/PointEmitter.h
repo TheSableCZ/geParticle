@@ -49,9 +49,16 @@ namespace ge {
 			PointEmitter(int particlesPerSecond, glm::vec3 pos, core::time_unit life)
 				: ParticleEmitterBase(std::make_shared<ConstantRateCounter>(particlesPerSecond))
 			{
-				initiators.push_back(std::make_shared<LifeTimeInitiator>(life));
+				lifeTimeInitiator = std::make_shared<LifeTimeInitiator>(life);
+				initiators.push_back(lifeTimeInitiator);
 				initiators.push_back(std::make_shared<PointInitiator>(pos));
 			}
+
+			void setLife(core::time_unit& life) const { lifeTimeInitiator->setLife(life); }
+			core::time_unit& getLife() const { return lifeTimeInitiator->getLife(); }
+
+		protected:
+			std::shared_ptr<LifeTimeInitiator> lifeTimeInitiator;
 		};
 	}
 }

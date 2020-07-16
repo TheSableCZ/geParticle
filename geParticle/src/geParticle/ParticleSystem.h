@@ -24,6 +24,9 @@ namespace ge
 			void addEmitter(std::shared_ptr<ParticleEmitter> emitter);
 			void addAffector(std::shared_ptr<ParticleAffector> affector);
 
+			void removeEmitter(std::shared_ptr<ParticleEmitter> emitter);
+			void removeAffector(std::shared_ptr<ParticleAffector> affector);
+
 			std::shared_ptr<ParticleContainer> getParticleContainer();
 
             std::vector<std::shared_ptr<ParticleEmitter>> particleEmitters;

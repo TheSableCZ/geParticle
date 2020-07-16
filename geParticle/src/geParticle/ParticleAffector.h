@@ -10,7 +10,8 @@ namespace ge
         class ParticleAffector
         {
         public:
-			virtual void affect(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) = 0;
+            virtual ~ParticleAffector() = default;
+            virtual void affect(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) = 0;
         };
     }
 }

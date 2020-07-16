@@ -30,6 +30,22 @@ void ge::particle::ParticleSystem::addAffector(std::shared_ptr<ParticleAffector>
 	particleAffectors.push_back(affector);
 }
 
+void ge::particle::ParticleSystem::removeEmitter(std::shared_ptr<ParticleEmitter> emitter)
+{
+	auto found = std::find(particleEmitters.begin(), particleEmitters.end(), emitter);
+	assert(found != particleEmitters.end() && "Emitter not found.");
+
+	particleEmitters.erase(found);
+}
+
+void ge::particle::ParticleSystem::removeAffector(std::shared_ptr<ParticleAffector> affector)
+{
+	auto found = std::find(particleAffectors.begin(), particleAffectors.end(), affector);
+	assert(found != particleAffectors.end() && "Affector not found.");
+
+	particleAffectors.erase(found);
+}
+
 std::shared_ptr<ge::particle::ParticleContainer> ge::particle::ParticleSystem::getParticleContainer()
 {
 	return particleContainer;

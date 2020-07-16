@@ -23,6 +23,7 @@ namespace ge {
 						auto &l = begin->getComponent<LifeData>();
 						l.livingFlag = true;
 						l.life = life;
+						l.totalLifeTime = life;
 					}
 				}
 				else if (range->getContainerType() == ParticleContainerType::AoS) {
@@ -33,9 +34,13 @@ namespace ge {
 						auto &particle = **begin;
 						particle.livingFlag = true;
 						particle.life = life;
+						particle.totalLifeTime = life;
 					}
 				}
 			}
+
+			void setLife(core::time_unit &life) { this->life = life; }
+			core::time_unit& getLife() { return life; }
 
 		protected:
 			core::time_unit life;

@@ -38,6 +38,9 @@ namespace ge
 					initiator->init(newRangeIterator);
 			}
 
+			void setCounter(std::shared_ptr<Counter> &counter) { this->counter = counter; }
+			std::shared_ptr<Counter>& getRefCounter() { return counter; }
+
 			std::vector<std::shared_ptr<ParticleInitiator>> initiators;
 
 		protected:
