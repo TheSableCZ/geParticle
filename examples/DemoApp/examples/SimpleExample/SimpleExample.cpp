@@ -3,10 +3,12 @@
 #include <imgui.h>
 #include <sstream>
 #include <geParticleStd/StandardParticleComponents.h>
-#include <geParticleStd/StandardParticleAffectors.h>
+#include <geParticleStd/LinearMovementAffector.h>
+#include <geParticleStd/GravityAffector.h>
+#include <geParticleStd/LifeTimeAffector.h>
 #include <geParticle/ParticleSystemManager.h>
 
-#include "SimpleExampleRenderer.h"
+#include "examples/Common/SimpleExampleRenderer.h"
 #include "geParticleStd/ColorAffector.h"
 #include "geParticleStd/FloorAffector.h"
 
@@ -43,7 +45,7 @@ void ge::examples::SimpleExample::init()
 	colInitiator = std::make_shared<particle::ColorInitiator>();
 	emitter->initiators.push_back(colInitiator);
 
-	velInitiator = std::make_shared<VelocityInitiator>();
+	velInitiator = std::make_shared<particle::VelocityInitiator>();
 	emitter->initiators.push_back(velInitiator);
 	ps->addEmitter(emitter);
 
@@ -83,7 +85,7 @@ void ge::examples::SimpleExample::renderGui()
 			std::static_pointer_cast<particle::ConstantRateCounter>(emitter->getRefCounter())->setParticlesPerSecond(numOfParticles);
 
 		ImGui::Checkbox("Random color", &colInitiator->randomColor);
-		ImGui::ColorEdit3("Particle color", &colInitiator->color[0]);
+		ImGui::ColorEdit4("Particle color", &colInitiator->color[0]);
 
 		ImGui::TreePop();
 	}
@@ -114,8 +116,8 @@ void ge::examples::SimpleExample::initAffectors()
 	allAffectors.emplace_back(std::make_tuple("Gravity Affector", gravityAffector, true));
 
 	auto colorAffector = std::make_shared<particle::ColorAffector>();
-	colorAffector->colorPoints.emplace_back(std::make_pair(0, glm::vec3(1.f, 0.f, 0.f)));
-	colorAffector->colorPoints.emplace_back(std::make_pair(100, glm::vec3(0.f, 0.f, 1.f)));
+	colorAffector->colorPoints.emplace_back(std::make_pair(0, glm::vec4(1.f, 0.f, 0.f, 1.f)));
+	colorAffector->colorPoints.emplace_back(std::make_pair(100, glm::vec4(0.f, 0.f, 1.f, 1.f)));
 	
 	allAffectors.emplace_back(std::make_tuple("Color Affector", colorAffector, false));
 
@@ -144,7 +146,7 @@ void ge::examples::SimpleExample::renderGuiAffectorDetails(std::string affectorN
 			{
 				//ImGui::Text(ss.str().c_str());
 				ImGui::SliderInt("%", &percentage, 0, 100);
-				ImGui::ColorEdit3("Color", &color[0]);
+				ImGui::ColorEdit4("Color", &color[0]);
 				ImGui::TreePop();
 			}
 

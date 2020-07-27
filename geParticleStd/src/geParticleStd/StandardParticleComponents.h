@@ -23,7 +23,7 @@ namespace ge {
 		};
 
 		struct Color {
-			glm::vec3 color;
+			glm::vec4 color;
 		};
 
 		/*

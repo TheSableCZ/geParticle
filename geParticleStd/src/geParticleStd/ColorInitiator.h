@@ -19,15 +19,17 @@ namespace ge
 						//begin->getComponent<Color>().color = glm::vec3(1.f, 0.f, 0.f);
 						auto &c = begin->getComponent<Color>().color;
 						if (randomColor)
-							c = glm::vec3(((float)rand() / (RAND_MAX)), ((float)rand() / (RAND_MAX)), ((float)rand() / (RAND_MAX)));
+							c = glm::vec4(((float)rand() / (RAND_MAX)), ((float)rand() / (RAND_MAX)), ((float)rand() / (RAND_MAX)), 1.f);
 						else
 							c = color;
 					}
 				}
+
+				// TODO: AoS
 			}
 
 			bool randomColor = true;
-			glm::vec3 color = glm::vec3(0.f, 0.f, 0.f);
+			glm::vec4 color = glm::vec4(0.f, 0.f, 0.f, 1.f);
 		};
 	}
 }

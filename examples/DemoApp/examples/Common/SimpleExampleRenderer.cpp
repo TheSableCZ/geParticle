@@ -6,15 +6,25 @@
 #include <geParticleStd/StandardParticleComponents.h>
 
 #include "CameraSingleton.h"
-#include "SimpleExample.h"
 
 ge::examples::SimpleExampleRenderer::SimpleExampleRenderer(std::shared_ptr<particle::GPUParticleContainer> container)
 {
-	std::string vexShd = ge::util::loadTextFile(APP_RESOURCES"/Simple/vertexShader.glsl");
+	const std::string vexShd = 
+#include "Simple/vertexShader.glsl"
+	;
+	//std::string vexShd = ge::util::loadTextFile(APP_RESOURCES"/Simple/vertexShader.glsl");
 	std::shared_ptr<ge::gl::Shader> vertexShader = std::make_shared<ge::gl::Shader>(GL_VERTEX_SHADER, vexShd);
-	std::string frgShd = ge::util::loadTextFile(APP_RESOURCES"/Simple/fragmentShader.glsl");
+
+	const std::string frgShd =
+#include "Simple/fragmentShader.glsl"
+		;
+	//std::string frgShd = ge::util::loadTextFile(APP_RESOURCES"/Simple/fragmentShader.glsl");
 	std::shared_ptr<ge::gl::Shader> fragmentShader = std::make_shared<ge::gl::Shader>(GL_FRAGMENT_SHADER, frgShd);
-	std::string gShd = ge::util::loadTextFile(APP_RESOURCES"/Simple/billboardGeometryShader.glsl");
+
+	const std::string gShd =
+#include "Simple/billboardGeometryShader.glsl"
+		;
+	//std::string gShd = ge::util::loadTextFile(APP_RESOURCES"/Simple/billboardGeometryShader.glsl");
 	std::shared_ptr<ge::gl::Shader> geometryShader = std::make_shared<ge::gl::Shader>(GL_GEOMETRY_SHADER, gShd);
 	shaderProgram = std::make_shared<ge::gl::Program>(vertexShader, fragmentShader, geometryShader);
 
@@ -36,11 +46,14 @@ ge::examples::SimpleExampleRenderer::SimpleExampleRenderer(std::shared_ptr<parti
 	//VAO->addAttrib(particleColors, 2, 3, GL_FLOAT);
 
 	container->addComponentVertexAttrib<particle::Position>(VAO, 0, 3, GL_FLOAT, sizeof(particle::Position), offsetof(particle::Position, position));
-	container->addComponentVertexAttrib<particle::Color>(VAO, 1, 3, GL_FLOAT, sizeof(particle::Color), offsetof(particle::Color, color));
+	container->addComponentVertexAttrib<particle::Color>(VAO, 1, 4, GL_FLOAT, sizeof(particle::Color), offsetof(particle::Color, color));
 }
 
 void ge::examples::SimpleExampleRenderer::render(std::shared_ptr<particle::ParticleContainer> container)
 {
+	shaderProgram->getContext().glEnable(GL_BLEND);
+	shaderProgram->getContext().glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
 	auto gpuContainer = std::static_pointer_cast<particle::GPUParticleContainer>(container);
 
 	auto particlesCount = gpuContainer->syncOnlyAlive(particle::GPUParticleContainer::CPU_TO_GPU);

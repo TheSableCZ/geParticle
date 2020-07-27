@@ -13,7 +13,8 @@ namespace ge
         class ParticleEmitter
         {
         public:
-            virtual void emitParticles(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) = 0;
+	        virtual ~ParticleEmitter() = default;
+	        virtual void emitParticles(core::time_unit dt, std::shared_ptr<particle::ParticleContainer> particles) = 0;
         };
 
 		class ParticleEmitterBase : public ParticleEmitter
@@ -22,7 +23,7 @@ namespace ge
 			ParticleEmitterBase(std::shared_ptr<Counter> counter)
 				: counter(counter) {}
 
-			void emitParticles(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) override
+			void emitParticles(core::time_unit dt, std::shared_ptr<particle::ParticleContainer> particles) override
 			{
 				int newParticlesCount = getNumOfParticlesToCreate(dt);
 				auto unusedParticlesIterator = particles->getUnusedParticlesIterator();

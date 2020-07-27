@@ -17,9 +17,11 @@ set(DEFAULT_RESOURCES_PATH "${CMAKE_CURRENT_LIST_DIR}/resources")
 set(${APP_NAME}_RESOURCES "${DEFAULT_RESOURCES_PATH}" CACHE PATH "Relative or absolute path to Application resources.")
 
 set(SHADERS
+	resources/Firework/vertexShader.glsl
 	resources/Simple/vertexShader.glsl
 	resources/Simple/fragmentShader.glsl
 	resources/Simple/billboardGeometryShader.glsl
+	resources/texturedBillboardFS.glsl
 )
 
 SOURCE_GROUP(shaders FILES ${SHADERS})
@@ -47,26 +49,50 @@ set(SOURCES
 	OpenGLWindow.h
 	ExampleManager.h
 	ExampleManager.cpp
-	SimpleExample.h
-	SimpleExample.cpp
-	SimpleExampleRenderer.h
-	SimpleExampleRenderer.cpp
 	CameraSingleton.h
 	CameraSingleton.cpp
-#	particles/SimpleParticleRenderer.h
-#	particles/SimpleParticleRenderer.cpp
-#	particles/PSManager.h
-#	particles/PSManager.cpp
-#	utils/Camera.h
-#	utils/Camera.cpp
-#	particles/BallGPUEmitter.h
-#	particles/BallGPUEmitter.cpp
+
+	examples/Common/SimpleExampleRenderer.h
+	examples/Common/SimpleExampleRenderer.cpp
+	examples/Common/TextureHelper.cpp
+	examples/Common/TextureHelper.h
+
+	examples/SimpleExample/SimpleExample.h
+	examples/SimpleExample/SimpleExample.cpp
+
+	examples/EmittersTestExample/EmittersTestExample.h
+	examples/EmittersTestExample/EmittersTestExample.cpp
+
+	examples/FireworkExample/ExplosionAffector.h
+	examples/FireworkExample/ExplosionAffector.cpp
+	examples/FireworkExample/ExplosionEmitter.h
+	examples/FireworkExample/ExplosionEmitter.cpp
+	examples/FireworkExample/FireworkExample.h
+	examples/FireworkExample/FireworkExample.cpp
+	examples/FireworkExample/FireworkRenderer.h
+	examples/FireworkExample/FireworkRenderer.cpp
+	examples/FireworkExample/TrailAffector.h
+	examples/FireworkExample/TrailAffector.cpp
+	examples/FireworkExample/TrailEmitter.h
+	examples/FireworkExample/TrailEmitter.cpp
 )
 
 add_executable(${PROJECT_NAME} ${LIB} ${SOURCES} ${SHADERS})
 target_link_libraries(${PROJECT_NAME} Qt5::Gui geGL geUtil glm geParticle geParticleGL geParticleStd imgui)
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR} ${${APP_NAME}_RESOURCES})
 set_target_properties(${APP_NAME} PROPERTIES COMPILE_DEFINITIONS "APP_RESOURCES=\"${${APP_NAME}_RESOURCES}\"")
+
+foreach(source IN LISTS LIB)
+    get_filename_component(source_path "${source}" PATH)
+    string(REPLACE "/" "\\" source_path_msvc "${source_path}")
+    source_group("${source_path_msvc}" FILES "${source}")
+endforeach()
+
+foreach(source IN LISTS SOURCES)
+    get_filename_component(source_path "${source}" PATH)
+    string(REPLACE "/" "\\" source_path_msvc "${source_path}")
+    source_group("${source_path_msvc}" FILES "${source}")
+endforeach()
 
 # setting up the MSVC helper var
 get_target_property(Qt5dllPath Qt5::Gui IMPORTED_LOCATION_RELEASE)

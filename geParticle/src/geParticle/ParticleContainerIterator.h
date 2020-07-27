@@ -12,6 +12,8 @@ namespace ge {
 		class ParticleContainerIterator
 		{
 		public:
+			virtual ~ParticleContainerIterator() = default;
+
 			ParticleContainerIterator(std::shared_ptr<ParticleContainer> container)
 				: container(container) {};
 

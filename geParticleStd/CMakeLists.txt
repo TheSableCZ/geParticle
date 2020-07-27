@@ -13,21 +13,34 @@ set(HEADER_PATH ${CMAKE_CURRENT_LIST_DIR}/src/${PROJECT_NAME})
 set(SRC_PATH ${CMAKE_CURRENT_LIST_DIR}/src/${PROJECT_NAME})
 
 set(PARTICLES_INCLUDES
+	${HEADER_PATH}/BallEmitter.h
+	${HEADER_PATH}/BoxEmitter.h
 	${HEADER_PATH}/ColorAffector.h
 	${HEADER_PATH}/ColorInitiator.h
 	${HEADER_PATH}/ConstantRateCounter.h
 	${HEADER_PATH}/FloorAffector.h
+	${HEADER_PATH}/GravityAffector.h
+	${HEADER_PATH}/LifeTimeAffector.h
 	${HEADER_PATH}/LifeTimeInitiator.h
+	${HEADER_PATH}/LinearMovementAffector.h
 	${HEADER_PATH}/PointEmitter.h
-	${HEADER_PATH}/StandardParticleAffectors.h
+	${HEADER_PATH}/StandardEmitter.h
 	${HEADER_PATH}/StandardParticleComponents.h
+	${HEADER_PATH}/VelocityInitiator.h
 )
 
 set(PARTICLES_SOURCES
+	${SRC_PATH}/BallEmitter.cpp
+	${SRC_PATH}/BoxEmitter.cpp
 	${SRC_PATH}/ColorAffector.cpp
 	${SRC_PATH}/ColorInitiator.cpp
 	${SRC_PATH}/ConstantRateCounter.cpp
 	${SRC_PATH}/FloorAffector.cpp
+	${SRC_PATH}/GravityAffector.cpp
+	${SRC_PATH}/LifeTimeAffector.cpp
+	${SRC_PATH}/LinearMovementAffector.cpp
+	${SRC_PATH}/StandardEmitter.cpp
+	${SRC_PATH}/VelocityInitiator.cpp
 )
 
 ################################################

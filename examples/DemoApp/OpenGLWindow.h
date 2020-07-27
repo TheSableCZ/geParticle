@@ -68,7 +68,7 @@ namespace ge
 		private:
 			bool show_test_window = true;
 			bool show_another_window = false;
-			ImVec4 clear_color = ImColor(114, 144, 154);
+			ImVec4 clear_color = ImColor(193, 210, 216);
 		};
 	}
 }

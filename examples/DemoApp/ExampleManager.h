@@ -2,6 +2,7 @@
 #include <imgui.h>
 #include <string>
 #include <vector>
+#include <geCore/Updatable.h>
 #include <glm/glm.hpp>
 
 namespace ge
@@ -53,14 +54,27 @@ namespace ge
 			ExampleManager();
 			void render();
 
+			void toggleShowGui() { showGui = !showGui; }
+			void togglePaused();
+			void toggleRealTime();
+
 		private:
 			void renderGui();
 			void exampleChanged(int newIdx);
+
+			core::time_point time() const;
 			
 			std::vector<std::shared_ptr<Example>> examples;
 			int activeExampleIdx = -1;
 
 			std::shared_ptr<particle::ParticleSystemManager> manager;
+
+			bool showGui = true;
+			bool paused = false;
+
+			bool realTime = true;
+			core::time_unit frameTime = core::time_unit(0.016f);
+			core::time_point simTime = core::time_point::clock::now();
 		};
 	}
 }

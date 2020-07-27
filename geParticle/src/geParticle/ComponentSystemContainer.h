@@ -2,6 +2,7 @@
 
 #include <geParticle/ParticleContainer.h>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 #include <glm/glm.hpp>
 #include <memory>
@@ -52,7 +53,7 @@ namespace ge {
 				filter_iterator(std::shared_ptr<ComponentSystemContainer> container, int idx, bool cyclic = false)
 					: cyclic(cyclic), startIdx(container->startIdx()), endIdx(container->endIdx()), iterator(container, idx) {}
 
-				void setPredicate(PredicateFunction predicate) { this->predicate = predicate; }
+				void setPredicate(PredicateFunction predicate) { this->predicate = std::move(predicate); }
 
 				void operator++() override {
 					int tmpIdx = idx;
@@ -79,6 +80,39 @@ namespace ge {
 				int endIdx;
 
 				PredicateFunction predicate = [](const int, const ComponentSystemContainer &) { return true; };
+			};
+
+			class unused_particles_iterator : public filter_iterator
+			{
+			public:
+				unused_particles_iterator(std::shared_ptr<ComponentSystemContainer> container, bool cyclic = false)
+					: filter_iterator(std::move(container), cyclic) {}
+				unused_particles_iterator(std::shared_ptr<ComponentSystemContainer> container, int idx, bool cyclic = false)
+					: filter_iterator(std::move(container), idx, cyclic) {}
+				void operator++() override
+				{
+					int tmpIdx = idx;
+
+					auto csContainer = std::static_pointer_cast<ComponentSystemContainer>(container);
+
+					do {
+						idx++;
+						if (idx == endIdx + 1) {
+							if (cyclic) idx = startIdx;
+							else return;
+						}
+
+						if (predicate(idx, *csContainer)) return;
+
+						// stop infinite loop when iterator is cyclic
+					} while (tmpIdx != idx);
+
+					if (tmpIdx == idx)
+					{
+						// unused particle not found
+						idx = (rand() % container->size()) + startIdx;
+					}
+				}
 			};
 
 			class range_iterator : public RangeParticleContainerIterator
@@ -137,7 +171,7 @@ namespace ge {
 
 			std::unordered_map<const char *, std::shared_ptr<ComponentPoolBase>> components;
 
-			std::shared_ptr<filter_iterator> unusedParticlesIterator;
+			std::shared_ptr<unused_particles_iterator> unusedParticlesIterator;
 			PredicateFunction liveParticlePredicate = [](const int, const ComponentSystemContainer &) { return true; };
 			PredicateFunction deadParticlePredicate = [](const int, const ComponentSystemContainer &) { return true; };
 		};

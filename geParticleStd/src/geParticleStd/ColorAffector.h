@@ -12,10 +12,10 @@ namespace ge
 		public:
 			void affect(core::time_unit dt, std::shared_ptr<particle::ParticleContainer> particles) override;
 
-			std::vector<std::pair<int, glm::vec3>> colorPoints;
+			std::vector<std::pair<int, glm::vec4>> colorPoints;
 
 		protected:
-			glm::vec3 getColor(core::time_unit life, core::time_unit totalLifeTime) const;;
+			glm::vec4 getColor(core::time_unit life, core::time_unit totalLifeTime) const;
 		};
 	}	
 }

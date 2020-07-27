@@ -6,7 +6,7 @@ ge::particle::BallGPUEmitter::BallGPUEmitter(std::string shaderSource, int parti
 	randomBuffer = createBuffer(maxParticles * sizeof(float) * 3, 2);
 }
 
-void ge::particle::BallGPUEmitter::emitParticles(core::time_unit dt, std::shared_ptr<ParticleContainer> particles)
+void ge::particle::BallGPUEmitter::emitParticles(core::time_unit dt, std::shared_ptr<ge::particle::ParticleContainer> particles)
 {
 	auto newParticlesCount = getNumOfParticlesToCreate(dt);
 	refreshRandomBuffer(newParticlesCount);

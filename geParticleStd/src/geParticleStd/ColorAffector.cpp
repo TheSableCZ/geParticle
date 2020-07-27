@@ -1,6 +1,14 @@
 ﻿#include "ColorAffector.h"
 
+
+
+#include <chrono>
+#include <chrono>
+#include <chrono>
+#include <chrono>
 #include <iostream>
+#include <glm/detail/type_mat.hpp>
+#include <glm/detail/type_mat.hpp>
 
 void ge::particle::ColorAffector::affect(core::time_unit dt, std::shared_ptr<particle::ParticleContainer> particles)
 {
@@ -22,12 +30,14 @@ void ge::particle::ColorAffector::affect(core::time_unit dt, std::shared_ptr<par
 			}
 		}
 	}
+
+	// TODO: AoS
 }
 
-glm::vec3 ge::particle::ColorAffector::getColor(core::time_unit life, core::time_unit totalLifeTime) const
+glm::vec4 ge::particle::ColorAffector::getColor(core::time_unit life, core::time_unit totalLifeTime) const
 {
 	
-	if (colorPoints.empty() || life.count() < 0.f) return glm::vec3(0, 0, 0);
+	if (colorPoints.empty() || life.count() < 0.f) return glm::vec4(0, 0, 0, 1.f);
 
 	float percentage = 1.f - life.count() / totalLifeTime.count();
 	//std::cout << life.count() << ", " << totalLifeTime.count() << ((life.count() < 0.f) ? "true" : "false") << std::endl;

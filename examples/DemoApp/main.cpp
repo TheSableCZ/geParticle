@@ -1,18 +1,35 @@
 #include <QtGui/QGuiApplication>
 #include <OpenGLWindow.h>
+#include <sstream>
 #include <QtGui/QOpenGLContext>
 
 //! [main]
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
-   QGuiApplication app(argc, argv);
+	QGuiApplication app(argc, argv);
 
-   ge::examples::OpenGLWindow window;
-   window.resize(1280, 720);
-   window.show();
+	ge::examples::OpenGLWindow window;
 
-   return app.exec();
+	int w, h;
+	if (argc > 2)
+	{
+		std::stringstream sw(argv[1]);
+		sw >> w;
+
+		std::stringstream sh(argv[2]);
+		sh >> h;
+	}
+	else
+	{
+		w = 1280;
+		h = 720;
+	}
+
+	window.resize(w, h);
+	window.show();
+
+	return app.exec();
 }
 
 //! [main]

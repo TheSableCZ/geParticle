@@ -1,9 +1,11 @@
+R"(
 #version 430
 
 layout(location=0) in vec3 pos;
-layout(location=1) in vec3 color;
+layout(location=1) in vec4 color;
 
-out vec3 particlecolor;
+out vec4 particlecolor;
+out vec2 particlesize;
 
 out Particle
 {
@@ -15,4 +17,6 @@ void main(void){
 	particle.position = pos;
 
 	particlecolor = color;
+	particlesize = vec2(.1f, .1f);
 }
+)"

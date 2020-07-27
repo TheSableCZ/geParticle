@@ -12,7 +12,7 @@ namespace ge {
 		public:
 			GPUParticleEmitter(std::string shaderSource, int particlesPerSecond);
 			GPUParticleEmitter(std::string shaderSource, std::shared_ptr<Counter> counter);
-			void emitParticles(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) override;
+			void emitParticles(core::time_unit dt, std::shared_ptr<particle::ParticleContainer> particles) override;
 
 		protected:
 			void dispatchEmit(unsigned int newParticlesCount, std::shared_ptr<ParticleContainer> particles);
@@ -32,7 +32,7 @@ inline ge::particle::GPUParticleEmitter::GPUParticleEmitter(std::string shaderSo
 	checkUniform("particleCount");
 }
 
-inline void ge::particle::GPUParticleEmitter::emitParticles(core::time_unit dt, std::shared_ptr<ParticleContainer> particles)
+inline void ge::particle::GPUParticleEmitter::emitParticles(core::time_unit dt, std::shared_ptr<ge::particle::ParticleContainer> particles)
 {
 	unsigned int newParticlesCount = getNumOfParticlesToCreate(dt);
 	dispatchEmit(newParticlesCount, particles);

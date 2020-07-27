@@ -1,26 +1,59 @@
 ﻿#include "ExampleManager.h"
 
+
+
+#include <chrono>
+#include <chrono>
+#include <chrono>
+#include <chrono>
 #include <imgui.h>
 #include <iostream>
 
-#include "SimpleExample.h"
+#include "examples/SimpleExample/SimpleExample.h"
+#include "examples/EmittersTestExample/EmittersTestExample.h"
 #include <geParticle/ParticleSystemManager.h>
+
+#include "examples/FireworkExample/FireworkExample.h"
 
 ge::examples::ExampleManager::ExampleManager()
 {
 	manager = std::make_shared<particle::ParticleSystemManager>();
 	
 	examples.push_back(std::make_shared<SimpleExample>(manager));
+	examples.push_back(std::make_shared<EmittersTestExample>(manager));
+	examples.push_back(std::make_shared<FireworkExample>(manager));
 }
 
 void ge::examples::ExampleManager::render()
 {
-	renderGui();
+	if (!realTime)
+	{
+		simTime += frameTime;
+	}
+	
+	if (showGui)
+		renderGui();
 
-	manager->update(core::time_point::clock::now());
+	manager->update(time());
 
 	if (activeExampleIdx >= 0)
 		examples[activeExampleIdx]->render();
+}
+
+void ge::examples::ExampleManager::togglePaused()
+{	
+	paused = !paused;
+	if (paused) 
+		manager->pauseAll();
+	else
+		manager->startAll(time());
+}
+
+void ge::examples::ExampleManager::toggleRealTime()
+{
+	realTime = !realTime;
+	simTime = core::time_point::clock::now();
+	manager->startAll(time());
 }
 
 void ge::examples::ExampleManager::renderGui()
@@ -54,11 +87,28 @@ void ge::examples::ExampleManager::renderGui()
 		exampleChanged(listbox_item_current);
 	}
 
-	if (ImGui::Button("Play"))
-		manager->startAll(core::time_point::clock::now());
+	if (ImGui::Button("Play")) {
+		paused = false;
+		manager->startAll(time());
+	}
 	ImGui::SameLine();
-	if (ImGui::Button("Pause"))
+	if (ImGui::Button("Pause")) {
+		paused = true;
 		manager->pauseAll();
+	}
+
+	bool isRealTime = realTime;
+	if (ImGui::Checkbox("realtime", &isRealTime))
+	{
+		toggleRealTime();
+	}
+	int frtm = static_cast<int>(frameTime.count() * 1000);
+	if (ImGui::SliderInt("frame time (ms)", &frtm, 1, 100))
+	{
+		frameTime = core::time_unit(frtm / 1000.f);
+	}
+
+	ImGui::Text("Use keyboard arrows and mouse scroll to change camera view");
 	
 	ImGui::End();
 
@@ -72,7 +122,22 @@ void ge::examples::ExampleManager::exampleChanged(int newIdx)
 		examples[activeExampleIdx]->reset();
 	
 	examples[newIdx]->init();
-	manager->startAll(core::time_point::clock::now());
+
+	if (!paused) {
+		manager->startAll(time());
+	}
 	
 	activeExampleIdx = newIdx;
+}
+
+ge::core::time_point ge::examples::ExampleManager::time() const
+{
+	if (realTime)
+	{
+		return core::time_point::clock::now();
+	}
+	else
+	{
+		return simTime;
+	}
 }

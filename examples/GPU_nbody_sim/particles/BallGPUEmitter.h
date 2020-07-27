@@ -10,7 +10,7 @@ namespace ge {
 		{
 		public:
 			BallGPUEmitter(std::string shaderSource, int particlesPerSecond, int maxParticles, int ballRadius);
-			void emitParticles(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) override;
+			void emitParticles(core::time_unit dt, std::shared_ptr<particle::ParticleContainer> particles) override;
 
 		private:
 			int ballRadius;

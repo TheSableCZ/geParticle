@@ -18,7 +18,7 @@ std::shared_ptr<ge::particle::ParticleContainerIterator> ge::particle::Component
 std::shared_ptr<ge::particle::ParticleContainerIterator> ge::particle::ComponentSystemContainer::getUnusedParticlesIterator()
 {
 	if (!unusedParticlesIterator) {
-		unusedParticlesIterator = std::make_shared<filter_iterator>(shared_from_this(), true);
+		unusedParticlesIterator = std::make_shared<unused_particles_iterator>(shared_from_this(), true);
 	}
 	return unusedParticlesIterator;
 }

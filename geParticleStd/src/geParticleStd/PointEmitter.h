@@ -8,19 +8,19 @@
 #include <geParticle/ArrayOfStructsContainer.h>
 #include <geParticleStd/StandardParticleComponents.h>
 #include <geParticleStd/ConstantRateCounter.h>
-#include <geParticleStd/LifeTimeInitiator.h>
+#include <geParticleStd/StandardEmitter.h>
 
 namespace ge {
 	namespace particle {
 
-		class PointEmitter : public ParticleEmitterBase
+		class PointEmitter : public StandardEmitter
 		{
 			class PointInitiator : public ParticleInitiator
 			{
 			public:
 				PointInitiator(glm::vec3 pos) : pos(pos) {}
 
-				void init(std::shared_ptr<RangeParticleContainerIterator> range) 
+				void init(std::shared_ptr<RangeParticleContainerIterator> range) override
 				{
 					if (range->getContainerType() == ParticleContainerType::SoA_CS) {
 						auto begin = std::static_pointer_cast<ComponentSystemContainer::range_iterator>(range->begin());
@@ -47,18 +47,10 @@ namespace ge {
 
 		public:
 			PointEmitter(int particlesPerSecond, glm::vec3 pos, core::time_unit life)
-				: ParticleEmitterBase(std::make_shared<ConstantRateCounter>(particlesPerSecond))
+				: StandardEmitter(life, std::make_shared<ConstantRateCounter>(particlesPerSecond))
 			{
-				lifeTimeInitiator = std::make_shared<LifeTimeInitiator>(life);
-				initiators.push_back(lifeTimeInitiator);
 				initiators.push_back(std::make_shared<PointInitiator>(pos));
 			}
-
-			void setLife(core::time_unit& life) const { lifeTimeInitiator->setLife(life); }
-			core::time_unit& getLife() const { return lifeTimeInitiator->getLife(); }
-
-		protected:
-			std::shared_ptr<LifeTimeInitiator> lifeTimeInitiator;
 		};
 	}
 }

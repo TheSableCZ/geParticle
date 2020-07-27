@@ -96,10 +96,12 @@ void ge::examples::OpenGLWindow::render()
 	gl->glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 	gl->glClear(GL_COLOR_BUFFER_BIT);
 
+	//ImGui::ColorEdit3("clear color", (float*)&clear_color);
+
 	exampleManager->render();
 
 	ImGui::Render();
-
+	
 	printError();
 
 	context->swapBuffers(this);
@@ -173,6 +175,14 @@ void ge::examples::OpenGLWindow::keyPressEvent(QKeyEvent * event)
 	}
 	if (event->key() == Qt::Key_Down) {
 		CameraSingleton::getInstance().moveXY(0, -.1f);
+	}
+
+	if (event->key() == Qt::Key_F1) {
+		exampleManager->toggleShowGui();
+	}
+	if (event->key() == Qt::Key_Space)
+	{
+		exampleManager->togglePaused();
 	}
 }
 
