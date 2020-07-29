@@ -14,42 +14,26 @@ set(SRC_PATH ${CMAKE_CURRENT_LIST_DIR}/src/${PROJECT_NAME})
 
 set(PARTICLES_INCLUDES
 	${HEADER_PATH}/ArrayOfStructsContainer.h
-#	${HEADER_PATH}/AoSParticleFactory.h
-#	${HEADER_PATH}/BasicParticleEmitter.h
 	${HEADER_PATH}/ComponentPool.h
 	${HEADER_PATH}/ComponentSystemContainer.h
 	${HEADER_PATH}/Counter.h
-#	${HEADER_PATH}/ComputeProgramWrapper.h
-#	${HEADER_PATH}/ConstantRateEmitter.h
-#	${HEADER_PATH}/GPUParticleAffector.h
-#	${HEADER_PATH}/GPUParticleContainer.h
-#	${HEADER_PATH}/GPUParticleEmitter.h
 	${HEADER_PATH}/Particle.h
 	${HEADER_PATH}/ParticleAffector.h
 	${HEADER_PATH}/ParticleContainer.h
 	${HEADER_PATH}/ParticleContainerIterator.h
 	${HEADER_PATH}/ParticleContainerType.h
 	${HEADER_PATH}/ParticleEmitter.h
-#	${HEADER_PATH}/ParticleFactory.h
 	${HEADER_PATH}/ParticleInitiator.h
-#	${HEADER_PATH}/ParticleIterator.h
 	${HEADER_PATH}/ParticleRenderer.h
 	${HEADER_PATH}/ParticleSystem.h
 	${HEADER_PATH}/ParticleSystemManager.h
-#	${HEADER_PATH}/PointEmitter.h
-#	${HEADER_PATH}/SoAParticleFactory.h
-#	${HEADER_PATH}/StandardParticleAffectors.h
-#	${HEADER_PATH}/StandardParticleComponents.h
 )
 
 set(PARTICLES_SOURCES
-#	${SRC_PATH}/BasicParticleEmitter.cpp
 	${SRC_PATH}/ComponentSystemContainer.cpp
 	${SRC_PATH}/ParticleContainerIterator.cpp
 	${SRC_PATH}/ParticleSystem.cpp
 	${SRC_PATH}/ParticleSystemManager.cpp
-#	${SRC_PATH}/ComputeProgramWrapper.cpp
-#	${SRC_PATH}/GPUParticleContainer.cpp
 )
 
 ################################################

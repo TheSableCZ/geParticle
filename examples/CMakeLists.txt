@@ -1,10 +1,6 @@
 set(examples_folder_name "examples")
 
 set(examplesList
-#	Simple_Particles
-	Simple_Particles2
-	GPU_Example
-	GPU_nbody_sim
 	DemoApp
 )
 

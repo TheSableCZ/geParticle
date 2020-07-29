@@ -7,6 +7,8 @@ PROJECT(geParticle
 )
 
 SET(GEPARTICLE_BUILD_EXAMPLES ON CACHE BOOL "Build examples (examples directory).")
+SET(GEPARTICLE_BUILD_GL ON CACHE BOOL "Build geParticleGL.")
+SET(GEPARTICLE_BUILD_STD ON CACHE BOOL "Build geParticleStd.")
 
 SET(CMAKE_CXX_STANDARD 14)
 SET(CMAKE_C_STANDARD 99)
@@ -14,10 +16,14 @@ SET(CMAKE_C_STANDARD 99)
 
 add_subdirectory ("geParticle")
 
-# TODO: podmínit
-add_subdirectory ("geParticleGL")
-add_subdirectory ("geParticleStd")
+if(GEPARTICLE_BUILD_GL)
+  add_subdirectory ("geParticleGL")
+endif()
+
+if(GEPARTICLE_BUILD_STD)
+  add_subdirectory ("geParticleStd")
+endif()
 
 if(GEPARTICLE_BUILD_EXAMPLES)
-  add_subdirectory(examples)
+  add_subdirectory ("examples")
 endif()
