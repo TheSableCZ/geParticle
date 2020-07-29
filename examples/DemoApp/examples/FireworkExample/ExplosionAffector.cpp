@@ -6,19 +6,24 @@
 
 void ge::examples::ExplosionAffector::affect(core::time_unit dt, std::shared_ptr<particle::ParticleContainer> particles)
 {
-	auto it = std::static_pointer_cast<particle::ComponentSystemContainer::iterator>(particles->begin());
-	auto end = particles->end();
+	auto it = std::static_pointer_cast<particle::ComponentSystemContainer>(particles)->begin<particle::LifeData>();
+	auto end = std::static_pointer_cast<particle::ComponentSystemContainer>(particles)->end<particle::LifeData>();
+	//auto it = std::static_pointer_cast<particle::ComponentSystemContainer::iterator>(particles->begin());
+	//auto end = particles->end();
 
-	for (; *it != *end; ++(*it))
+	auto typePi = std::static_pointer_cast<particle::ComponentSystemContainer>(particles)->begin<Type>();
+	auto explPi = std::static_pointer_cast<particle::ComponentSystemContainer>(particles)->begin<ExplodedFlag>();
+
+	for (; *it != *end; ++(*it), ++(*typePi), ++(*explPi))
 	{
-		if (it->getComponent<Type>().type == 1 && it->getComponent<particle::LifeData>().livingFlag == false && it->getComponent<ExplodedFlag>().exploded == false)
+		if (typePi->get().type == 1 && explPi->get().exploded == false && it->get().livingFlag == false)
 		{
 			explEmitter->addExplosion(
 				it->getComponent<particle::Position>().position,
 				it->getComponent<particle::Color>().color
 			);
 			
-			it->getComponent<ExplodedFlag>().exploded = true;
+			explPi->get().exploded = true;
 		}
 	}
 }

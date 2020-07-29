@@ -26,17 +26,19 @@ namespace ge
 			void emitParticles(core::time_unit dt, std::shared_ptr<particle::ParticleContainer> particles) override
 			{
 				int newParticlesCount = getNumOfParticlesToCreate(dt);
-				auto unusedParticlesIterator = particles->getUnusedParticlesIterator();
-				auto newRangeIterator = particles->createRangeIterator();
 
-				for (int i = 0; i < newParticlesCount; i++) {
-					auto newIdx = unusedParticlesIterator->getIndex();
-					newRangeIterator->addIndex(newIdx);
-					(*unusedParticlesIterator)++;
+				if (newParticlesCount > 0) {
+					auto unusedParticlesIterator = particles->getUnusedParticlesIterator();
+					auto newRangeIterator = particles->createRangeIterator();
+
+					for (int i = 0; i < newParticlesCount; i++) {
+						auto newIdx = unusedParticlesIterator->getIndex();
+						newRangeIterator->addIndex(newIdx);
+						(*unusedParticlesIterator)++;
+					}
+					for (auto &initiator : initiators)
+						initiator->init(newRangeIterator);
 				}
-
-				for (auto &initiator : initiators)
-					initiator->init(newRangeIterator);
 			}
 
 			void setCounter(std::shared_ptr<Counter> &counter) { this->counter = counter; }

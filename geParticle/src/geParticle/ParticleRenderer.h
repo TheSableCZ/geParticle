@@ -10,6 +10,7 @@ namespace ge
 		class ParticleRenderer
 		{
 		public:
+			virtual ~ParticleRenderer() = default;
 			virtual void render(std::shared_ptr<ParticleContainer> container) = 0;
 		};
 	}

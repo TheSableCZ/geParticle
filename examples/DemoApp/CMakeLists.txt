@@ -17,11 +17,16 @@ set(DEFAULT_RESOURCES_PATH "${CMAKE_CURRENT_LIST_DIR}/resources")
 set(${APP_NAME}_RESOURCES "${DEFAULT_RESOURCES_PATH}" CACHE PATH "Relative or absolute path to Application resources.")
 
 set(SHADERS
-	resources/Firework/vertexShader.glsl
+	resources/Firework/fireworkVertexShader.glsl
 	resources/Simple/vertexShader.glsl
 	resources/Simple/fragmentShader.glsl
 	resources/Simple/billboardGeometryShader.glsl
 	resources/texturedBillboardFS.glsl
+	resources/GPURain/affector.glsl
+	resources/GPURain/emitter.glsl
+	resources/GPURain/vertexShader.glsl
+	resources/GPURain/billboardGeometryShader.glsl
+	resources/GPUNbody/affector.glsl
 )
 
 SOURCE_GROUP(shaders FILES ${SHADERS})
@@ -75,6 +80,18 @@ set(SOURCES
 	examples/FireworkExample/TrailAffector.cpp
 	examples/FireworkExample/TrailEmitter.h
 	examples/FireworkExample/TrailEmitter.cpp
+
+	examples/GPURainExample/GPURainExample.h
+	examples/GPURainExample/GPURainExample.cpp
+	examples/GPURainExample/GPURainRenderer.h
+	examples/GPURainExample/GPURainRenderer.cpp
+	examples/GPURainExample/GPUPlaneEmitter.h
+	examples/GPURainExample/GPUPlaneEmitter.cpp
+
+	examples/GPUNbodyExample/GPUNbodyExample.h
+	examples/GPUNbodyExample/GPUNbodyExample.cpp
+	examples/GPUNbodyExample/GPUNbodyRenderer.h
+	examples/GPUNbodyExample/GPUNbodyRenderer.cpp
 )
 
 add_executable(${PROJECT_NAME} ${LIB} ${SOURCES} ${SHADERS})
@@ -89,6 +106,12 @@ foreach(source IN LISTS LIB)
 endforeach()
 
 foreach(source IN LISTS SOURCES)
+    get_filename_component(source_path "${source}" PATH)
+    string(REPLACE "/" "\\" source_path_msvc "${source_path}")
+    source_group("${source_path_msvc}" FILES "${source}")
+endforeach()
+
+foreach(source IN LISTS SHADERS)
     get_filename_component(source_path "${source}" PATH)
     string(REPLACE "/" "\\" source_path_msvc "${source_path}")
     source_group("${source_path_msvc}" FILES "${source}")

@@ -1,11 +1,5 @@
 ﻿#include "ExampleManager.h"
 
-
-
-#include <chrono>
-#include <chrono>
-#include <chrono>
-#include <chrono>
 #include <imgui.h>
 #include <iostream>
 
@@ -14,6 +8,8 @@
 #include <geParticle/ParticleSystemManager.h>
 
 #include "examples/FireworkExample/FireworkExample.h"
+#include "examples/GPUNbodyExample/GPUNbodyExample.h"
+#include "examples/GPURainExample/GPURainExample.h"
 
 ge::examples::ExampleManager::ExampleManager()
 {
@@ -22,6 +18,8 @@ ge::examples::ExampleManager::ExampleManager()
 	examples.push_back(std::make_shared<SimpleExample>(manager));
 	examples.push_back(std::make_shared<EmittersTestExample>(manager));
 	examples.push_back(std::make_shared<FireworkExample>(manager));
+	examples.push_back(std::make_shared<GPURainExample>(manager));
+	examples.push_back(std::make_shared<GPUNbodyExample>(manager));
 }
 
 void ge::examples::ExampleManager::render()

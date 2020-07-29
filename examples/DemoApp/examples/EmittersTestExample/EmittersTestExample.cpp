@@ -53,6 +53,7 @@ void ge::examples::EmittersTestExample::reset()
 	ps.reset();
 	pc.reset();
 	allEmitters.clear();
+	renderer.reset();
 }
 
 void ge::examples::EmittersTestExample::renderGui()

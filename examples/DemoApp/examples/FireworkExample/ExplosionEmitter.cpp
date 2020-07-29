@@ -17,32 +17,39 @@ constexpr int explosionNum = 20;
 
 void ge::examples::ExplosionEmitter::emitParticles(core::time_unit dt, std::shared_ptr<particle::ParticleContainer> particles)
 {
-	//int newParticlesCount = getNumOfParticlesToCreate(dt);
-	auto unusedParticlesIterator = std::static_pointer_cast<particle::ComponentSystemContainer::iterator>(particles->getUnusedParticlesIterator());
-	auto newRangeIterator = particles->createRangeIterator();
+	if (!posQueue.empty()) {
+		auto unusedParticlesIterator = particles->getUnusedParticlesIterator();
+		auto newRangeIterator = particles->createRangeIterator();
 
-	while (!posQueue.empty())
-	{
-		auto point = posQueue.back();
-		posQueue.pop_back();
-		auto color = colorQueue.back();
-		colorQueue.pop_back();
+		newRangeIterator->addIndexesFrom(unusedParticlesIterator, explosionNum * posQueue.size());
+		auto it = std::static_pointer_cast<particle::ComponentSystemContainer::range_iterator>(newRangeIterator->begin());
 		
-		for (int i = 0; i < explosionNum; i++) {
-			auto newIdx = unusedParticlesIterator->getIndex();
-			newRangeIterator->addIndex(newIdx);
-
-			unusedParticlesIterator->getComponent<Type>().type = 2;
-			unusedParticlesIterator->getComponent<particle::Position>().position = point;
-			unusedParticlesIterator->getComponent<particle::Color>().color = color;
-			unusedParticlesIterator->getComponent<Size>().size = glm::vec2(0.1f, 0.1f);
+		while (!posQueue.empty())
+		{
 			
-			(*unusedParticlesIterator)++;
-		}
-	}
+			auto point = posQueue.back();
+			posQueue.pop_back();
+			auto color = colorQueue.back();
+			colorQueue.pop_back();
 
-	for (auto &initiator : initiators)
-		initiator->init(newRangeIterator);
+			for (int i = 0; i < explosionNum; i++) {
+				//auto newIdx = unusedParticlesIterator->getIndex();
+				//newRangeIterator->addIndex(newIdx);
+
+				it->getComponent<Type>().type = 2;
+				it->getComponent<particle::Position>().position = point;
+				it->getComponent<particle::Color>().color = color;
+				it->getComponent<Size>().size = glm::vec2(0.1f, 0.1f);
+
+				++(*it);
+
+				//(*unusedParticlesIterator)++;
+			}
+		}
+
+		for (auto &initiator : initiators)
+			initiator->init(newRangeIterator);
+	}
 }
 
 void ge::examples::ExplosionEmitter::addExplosion(glm::vec3 pos, glm::vec4 color)

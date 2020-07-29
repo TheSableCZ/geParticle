@@ -25,12 +25,14 @@ void ge::particle::LifeTimeAffector::affect(core::time_unit dt, std::shared_ptr<
 
 	if (particles->getType() == ParticleContainerType::SoA_CS)
 	{
-		auto pi = std::static_pointer_cast<ComponentSystemContainer::iterator>(particles->begin());
-		auto end = particles->end();
+		auto pi = std::static_pointer_cast<ComponentSystemContainer>(particles)->begin<LifeData>();
+		auto end = std::static_pointer_cast<ComponentSystemContainer>(particles)->end<LifeData>();
+		//auto pi = std::static_pointer_cast<ComponentSystemContainer::iterator>(particles->begin());
+		//auto end = particles->end();
 
 		for (pi; *pi != *(end); (*pi)++)
 		{
-			auto& p = pi->getComponent<LifeData>();
+			auto& p = pi->get();
 			if (p.livingFlag)
 			{
 				p.life -= dt;

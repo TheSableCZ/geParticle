@@ -27,13 +27,25 @@ void ge::examples::SimpleExample::init()
 
 	pc->registerComponent<particle::Color>(true);
 
-	pc->setLiveParticlePredicate(
+	/*pc->setLiveParticlePredicate(
 		[](const int i, const ge::particle::ComponentSystemContainer &container) -> bool
 	{ return container.getComponent<ge::particle::LifeData>(i).livingFlag; }
 	);
 	pc->setDeadParticlePredicate(
 		[](const int i, const ge::particle::ComponentSystemContainer &container) -> bool
 	{ return !container.getComponent<ge::particle::LifeData>(i).livingFlag; }
+	);*/
+
+	auto it = pc->begin<particle::LifeData>();
+	pc->setLiveParticlePredicate(
+		[it](const int i, const ge::particle::ComponentSystemContainer &container) -> bool
+		//{ return container.getComponent<ge::particle::LifeData>(i).livingFlag; }
+	{ it->setIndex(i); return it->get().livingFlag; }
+	);
+	pc->setDeadParticlePredicate(
+		[it](const int i, const ge::particle::ComponentSystemContainer &container) -> bool
+		//{ return !container.getComponent<ge::particle::LifeData>(i).livingFlag; }
+	{ it->setIndex(i); return !it->get().livingFlag; }
 	);
 
 	ps = std::make_shared<ge::particle::ParticleSystem>(pc);
@@ -65,6 +77,7 @@ void ge::examples::SimpleExample::reset()
 	ps.reset();
 	pc.reset();
 	allAffectors.clear();
+	renderer.reset();
 }
 
 void ge::examples::SimpleExample::renderGui()

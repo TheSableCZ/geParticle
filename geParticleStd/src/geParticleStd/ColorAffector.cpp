@@ -14,13 +14,17 @@ void ge::particle::ColorAffector::affect(core::time_unit dt, std::shared_ptr<par
 {
 	if (particles->getType() == ParticleContainerType::SoA_CS)
 	{
-		const auto begin = std::static_pointer_cast<ComponentSystemContainer::iterator>(particles->begin());
-		const auto end = particles->end();
+		auto pi = std::static_pointer_cast<ComponentSystemContainer>(particles)->begin<LifeData>();
+		auto end = std::static_pointer_cast<ComponentSystemContainer>(particles)->end<LifeData>();
 
-		for (; (*begin) != (*end); (*begin)++)
+		auto colPi = std::static_pointer_cast<ComponentSystemContainer>(particles)->begin<Color>();
+		//const auto begin = std::static_pointer_cast<ComponentSystemContainer::iterator>(particles->begin());
+		//const auto end = particles->end();
+
+		for (; (*pi) != (*end); ++(*pi), ++(*colPi))
 		{
-			auto& l = begin->getComponent<LifeData>();
-			auto& c = begin->getComponent<Color>();
+			auto& l = pi->get(); //begin->getComponent<LifeData>();
+			auto& c = colPi->get(); //begin->getComponent<Color>();
 
 			if (l.livingFlag)
 			{

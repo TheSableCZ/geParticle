@@ -22,6 +22,7 @@ set(PARTICLES_INCLUDES
 set(PARTICLES_SOURCES
 	${SRC_PATH}/ComputeProgramWrapper.cpp
 	${SRC_PATH}/GPUParticleContainer.cpp
+	${SRC_PATH}/GPUParticleAffector.cpp
 )
 
 ################################################

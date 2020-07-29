@@ -6,6 +6,7 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <memory>
+#include <set>
 #include <geParticle/ComponentPool.h>
 #include <geParticle/ParticleContainerIterator.h>
 
@@ -27,6 +28,46 @@ namespace ge {
 
 				template <typename T>
 				T& getComponent() const { return std::static_pointer_cast<ComponentSystemContainer>(container)->getComponent<T>(idx); }
+
+				void startUniqueSelection() { uniqueSel = true; indexSet.clear(); }
+				void endUniqueSelection() { uniqueSel = false; }
+
+				int getIndex() override
+				{
+					if (uniqueSel)
+					{
+						indexSet.emplace(idx);
+					}
+					return IndexBasedParticleContainerIterator::getIndex();
+				}
+
+			protected:
+				bool uniqueSel = false;
+				std::set<int> indexSet;
+			};
+
+			template <typename T>
+			class component_iterator : public iterator
+			{
+			public:
+				component_iterator(std::shared_ptr<ComponentSystemContainer> container)
+					: iterator(container)
+				{
+					component = container->getComponent<T>();
+				}
+				component_iterator(std::shared_ptr<ComponentSystemContainer> container, int idx)
+					: iterator(container, idx)
+				{
+					component = container->getComponent<T>();
+				}
+					
+				T& get()
+				{
+					return component->get(idx);
+				}
+
+			protected:
+				std::shared_ptr<ComponentPool<T>> component;
 			};
 
 			class cyclic_iterator : public iterator
@@ -102,7 +143,7 @@ namespace ge {
 							else return;
 						}
 
-						if (predicate(idx, *csContainer)) return;
+						if (predicate(idx, *csContainer) && indexSet.find(idx) == indexSet.end()) return;
 
 						// stop infinite loop when iterator is cyclic
 					} while (tmpIdx != idx);
@@ -110,7 +151,9 @@ namespace ge {
 					if (tmpIdx == idx)
 					{
 						// unused particle not found
-						idx = (rand() % container->size()) + startIdx;
+						do {
+							idx = (rand() % container->size()) + startIdx;
+						} while (indexSet.find(idx) != indexSet.end());
 					}
 				}
 			};
@@ -125,6 +168,24 @@ namespace ge {
 
 				template <typename T>
 				T& getComponent() const { return std::static_pointer_cast<ComponentSystemContainer>(container)->getComponent<T>(*pos); }
+
+				void addIndexesFrom(std::shared_ptr<ParticleContainerIterator> iterator, unsigned count) override
+				{
+					if (iterator->getContainerType() == ParticleContainerType::SoA_CS)
+					{
+						auto csIterator = std::static_pointer_cast<ComponentSystemContainer::iterator>(iterator);
+						csIterator->startUniqueSelection();
+						for (unsigned int i = 0; i < count; i++) {
+							addIndex(csIterator->getIndex());
+							++(*csIterator);
+						}
+						csIterator->endUniqueSelection();
+					}
+					else
+					{
+						RangeParticleContainerIterator::addIndexesFrom(iterator, count);
+					}
+				}
 
 				std::shared_ptr<RangeParticleContainerIterator> begin() override {
 					return std::make_shared<range_iterator>(
@@ -155,6 +216,9 @@ namespace ge {
 			template <typename T>
 			T &getComponent(const int idx) const;
 
+			template <typename T>
+			std::shared_ptr<ComponentPool<T>> getComponent() const;
+
 			inline ParticleContainerType getType() override { return ParticleContainerType::SoA_CS; }
 			inline unsigned int size() override { return maxParticles; }
 
@@ -162,6 +226,11 @@ namespace ge {
 			std::shared_ptr<ParticleContainerIterator> end() override;
 			std::shared_ptr<ParticleContainerIterator> getUnusedParticlesIterator() override;
 			std::shared_ptr<RangeParticleContainerIterator> createRangeIterator() override;
+
+			template <typename T>
+			std::shared_ptr<component_iterator<T>> begin();
+			template <typename T>
+			std::shared_ptr<component_iterator<T>> end();
 
 			void setLiveParticlePredicate(PredicateFunction predicate);
 			void setDeadParticlePredicate(PredicateFunction predicate);
@@ -205,13 +274,41 @@ inline T & ge::particle::ComponentSystemContainer::getComponent(const int idx) c
 
 	const char* typeName = typeid(T).name();
 
-	auto component = components.find(typeName);
+	const auto component = components.find(typeName);
 
 	assert(component != components.end() && "Component not registered before use.");
 
-	auto componentPool = std::static_pointer_cast<ComponentPool<T>>(component->second);
+	auto &componentPool = std::static_pointer_cast<ComponentPool<T>>(component->second);
 
 	return componentPool->get(idx);
+}
+
+template <typename T>
+std::shared_ptr<ge::particle::ComponentPool<T>> ge::particle::ComponentSystemContainer::getComponent() const
+{
+	const char* typeName = typeid(T).name();
+
+	const auto component = components.find(typeName);
+
+	assert(component != components.end() && "Component not registered before use.");
+
+	auto &componentPool = std::static_pointer_cast<ComponentPool<T>>(component->second);
+
+	return componentPool;
+}
+
+template <typename T>
+std::shared_ptr<ge::particle::ComponentSystemContainer::component_iterator<T>> ge::particle::ComponentSystemContainer::
+begin()
+{
+	return std::make_shared<component_iterator<T>>(shared_from_this());
+}
+
+template <typename T>
+std::shared_ptr<ge::particle::ComponentSystemContainer::component_iterator<T>> ge::particle::ComponentSystemContainer::
+end()
+{
+	return std::make_shared<component_iterator<T>>(shared_from_this(), size());
 }
 
 inline void ge::particle::ComponentSystemContainer::setLiveParticlePredicate(PredicateFunction predicate)

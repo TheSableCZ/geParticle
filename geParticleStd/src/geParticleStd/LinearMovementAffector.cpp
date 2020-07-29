@@ -23,14 +23,21 @@ void ge::particle::LinearMovementAffector::affect(core::time_unit dt, std::share
 
 	if (particles->getType() == ParticleContainerType::SoA_CS)
 	{
-		auto pi = std::static_pointer_cast<ComponentSystemContainer::iterator>(particles->begin());
-		auto end = particles->end();
+		auto pi = std::static_pointer_cast<ComponentSystemContainer>(particles)->begin<LifeData>();
+		auto end = std::static_pointer_cast<ComponentSystemContainer>(particles)->end<LifeData>();
+		
+		auto posIt = std::static_pointer_cast<ComponentSystemContainer>(particles)->begin<Position>();
+		auto velIt = std::static_pointer_cast<ComponentSystemContainer>(particles)->begin<Velocity>();
+		//auto pi = std::static_pointer_cast<ComponentSystemContainer::iterator>(particles->begin());
+		//auto end = particles->end();
 
-		for (pi; *pi != *(end); (*pi)++)
+		for (; *(pi) != *(end); ++(*pi), ++(*posIt), ++(*velIt))
 		{
-			auto& p = pi->getComponent<Position>();
-			auto& v = pi->getComponent<Velocity>();
-			p.position += v.velocity * (float)dt.count();
+			if (pi->get().livingFlag) {
+				auto& p = posIt->get();
+				auto& v = velIt->get();
+				p.position += v.velocity * static_cast<float>(dt.count());
+			}
 		}
 	}
 }

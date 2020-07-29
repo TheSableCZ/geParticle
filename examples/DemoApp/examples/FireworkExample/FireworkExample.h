@@ -67,24 +67,48 @@ namespace ge
 			}
 		};
 
+		class FountainInitiator : public particle::ParticleInitiator
+		{
+			void init(std::shared_ptr<particle::RangeParticleContainerIterator> range) override
+			{
+				auto begin = std::static_pointer_cast<particle::ComponentSystemContainer::range_iterator>(range->begin());
+				auto end = range->end();
+
+				for (; (*begin) != (*end); (*begin)++)
+				{
+					begin->getComponent<Type>().type = 2;
+					begin->getComponent<ExplodedFlag>().exploded = true;
+					begin->getComponent<Size>().size = glm::vec2(0.1f, 0.1f);
+				}
+			}
+		};
+
 		class TypedGravityAffector : public particle::GravityAffector
 		{
 		public:
 			void affect(core::time_unit dt, std::shared_ptr<particle::ParticleContainer> particles) override
 			{
-				auto pi = std::static_pointer_cast<particle::ComponentSystemContainer::iterator>(particles->begin());
-				auto end = particles->end();
+				auto pi = std::static_pointer_cast<particle::ComponentSystemContainer>(particles)->begin<particle::LifeData>();
+				auto end = std::static_pointer_cast<particle::ComponentSystemContainer>(particles)->end<particle::LifeData>();
 
-				for (pi; *pi != *(end); (*pi)++)
+				auto typePi = std::static_pointer_cast<particle::ComponentSystemContainer>(particles)->begin<Type>();
+
+				//auto velPi = std::static_pointer_cast<ComponentSystemContainer>(particles)->begin<Velocity>();
+				//auto pi = std::static_pointer_cast<particle::ComponentSystemContainer::iterator>(particles->begin());
+				//auto end = particles->end();
+
+				for (pi; *pi != *(end); ++(*pi), ++(*typePi))
 				{
-					const auto type = pi->getComponent<Type>().type;
+					if (pi->get().livingFlag) {
+						const auto type = typePi->get().type;
 
-					float g = -9.81f;
-					if (type == 2) g = -4.f;
-					if (type == 3) g = 0.f;
-					
-					auto& v = pi->getComponent<particle::Velocity>();
-					v.velocity += glm::vec3(0.0f, g, 0.0f) * (float)dt.count();
+						float g = -9.81f;
+						if (type == 2) g = -4.f;
+						if (type == 3) g = 0.f;
+
+						auto& v = pi->getComponent<particle::Velocity>();
+						v.velocity += glm::vec3(0.0f, g, 0.0f) * (float)dt.count();
+					}
 				}
 			}
 		};
@@ -103,14 +127,19 @@ namespace ge
 			
 			void affect(core::time_unit dt, std::shared_ptr<particle::ParticleContainer> particles) override
 			{
-				auto pi = std::static_pointer_cast<particle::ComponentSystemContainer::iterator>(particles->begin());
-				auto end = particles->end();
+				auto pi = std::static_pointer_cast<particle::ComponentSystemContainer>(particles)->begin<particle::LifeData>();
+				auto end = std::static_pointer_cast<particle::ComponentSystemContainer>(particles)->end<particle::LifeData>();
 
-				for (pi; *pi != *(end); (*pi)++)
+				auto typePi = std::static_pointer_cast<particle::ComponentSystemContainer>(particles)->begin<Type>();
+				
+				//auto pi = std::static_pointer_cast<particle::ComponentSystemContainer::iterator>(particles->begin());
+				//auto end = particles->end();
+
+				for (pi; *pi != *(end); ++(*pi), ++(*typePi))
 				{
-					if (pi->getComponent<Type>().type == 3)
+					if (typePi->get().type == 3)
 					{
-						auto& l = pi->getComponent<particle::LifeData>();
+						auto& l = pi->get();
 						auto& c = pi->getComponent<particle::Color>();
 
 						if (l.livingFlag)
@@ -143,18 +172,21 @@ namespace ge
 		{
 			void affect(core::time_unit dt, std::shared_ptr<particle::ParticleContainer> particles) override
 			{
-				auto pi = std::static_pointer_cast<particle::ComponentSystemContainer::iterator>(particles->begin());
-				auto end = particles->end();
+				auto pi = std::static_pointer_cast<particle::ComponentSystemContainer>(particles)->begin<particle::LifeData>();
+				auto end = std::static_pointer_cast<particle::ComponentSystemContainer>(particles)->end<particle::LifeData>();
+
+				auto typePi = std::static_pointer_cast<particle::ComponentSystemContainer>(particles)->begin<Type>();
+				
+				//auto pi = std::static_pointer_cast<particle::ComponentSystemContainer::iterator>(particles->begin());
+				//auto end = particles->end();
 
 				for (pi; *pi != *(end); (*pi)++)
 				{
-					if (pi->getComponent<Type>().type == 3)
-					{
-						auto& l = pi->getComponent<particle::LifeData>();
-						auto& s = pi->getComponent<Size>();
-
-						if (l.livingFlag)
+					if (pi->get().livingFlag) {
+						if (typePi->get().type == 3)
 						{
+							//auto& l = pi->getComponent<particle::LifeData>();
+							auto& s = pi->getComponent<Size>();
 							s.size += 0.07 * dt.count();
 						}
 					}

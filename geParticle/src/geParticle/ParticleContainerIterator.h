@@ -21,7 +21,7 @@ namespace ge {
 			virtual void operator++() = 0;
 			virtual bool operator==(const ParticleContainerIterator &rhs) const = 0;
 			virtual bool operator!=(const ParticleContainerIterator &rhs) const = 0;
-			virtual int getIndex() const = 0;
+			virtual int getIndex() = 0;
 
 			ParticleContainerType getContainerType() const;
 
@@ -45,7 +45,8 @@ namespace ge {
 				return static_cast<const IndexBasedParticleContainerIterator &>(rhs).idx != idx;
 			}
 
-			virtual int getIndex() const override { return idx; }
+			virtual int getIndex() override { return idx; }
+			void setIndex(int idx) { this->idx = idx; }
 
 		protected:
 			int idx = 0;
@@ -72,10 +73,18 @@ namespace ge {
 				indices.push_back(idx);
 			}
 
+			virtual void addIndexesFrom(std::shared_ptr<ParticleContainerIterator> iterator, unsigned int count)
+			{
+				for (unsigned int i = 0; i < count; i++) {
+					addIndex(iterator->getIndex());
+					++(*iterator);
+				}
+			}
+
 			virtual std::shared_ptr<RangeParticleContainerIterator> begin() = 0;
 			virtual std::shared_ptr<RangeParticleContainerIterator> end() = 0;
 
-			int getIndex() const override { return *pos; }
+			int getIndex() override { return *pos; }
 
 		protected:
 			std::vector<int> indices;
