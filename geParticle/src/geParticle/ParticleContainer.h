@@ -9,6 +9,7 @@ namespace ge {
 
 		class ParticleContainer { 
 		public:
+			virtual ~ParticleContainer() = default;
 			virtual ParticleContainerType getType() = 0;
 			virtual unsigned int size() = 0;
 

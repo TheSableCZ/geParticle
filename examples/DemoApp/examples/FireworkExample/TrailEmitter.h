@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "geParticle/ParticleEmitter.h"
+#include "geParticle/ParticleInitiator.h"
 
 namespace ge
 {

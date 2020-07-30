@@ -22,6 +22,7 @@ namespace ge
 			void reset() override;
 			void renderGui() override;
 			std::string getName() const override { return "Simple Particle System"; }
+			unsigned getContainerSize() const override;
 
 		private:
 			void initAffectors();

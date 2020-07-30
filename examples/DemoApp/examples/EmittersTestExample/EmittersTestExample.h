@@ -18,7 +18,7 @@ namespace ge
 			void reset() override;
 			void renderGui() override;
 			std::string getName() const override { return "Standard Emitters Test"; }
-
+			unsigned getContainerSize() const override;
 
 		private:
 			void initEmitters();

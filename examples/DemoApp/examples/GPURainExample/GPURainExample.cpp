@@ -16,7 +16,7 @@ ge::examples::GPURainExample::GPURainExample(std::shared_ptr<particle::ParticleS
 
 void ge::examples::GPURainExample::init()
 {
-	pc = std::make_shared<ge::particle::GPUParticleContainer>(MAX_PARTICLES, ge::particle::GPUParticleContainer::GPU_ONLY);
+	pc = std::make_shared<ge::particle::GPUParticleContainer>(MAX_PARTICLES, ge::particle::GPUParticleContainer::GPU_ONLY, true, 1000);
 
 	pc->registerComponent<ge::particle::GPUMassPointData>();
 	pc->registerComponent<ge::particle::GPULifeData>();
@@ -64,5 +64,13 @@ void ge::examples::GPURainExample::renderGui()
 	if (ImGui::SliderInt("Particles/sec", &numOfParticles, 100, 1000))
 		std::static_pointer_cast<particle::ConstantRateCounter>(emitter->getRefCounter())->setParticlesPerSecond(numOfParticles);
 
+	//if (ImGui::Button("Resize particle container up"))
+	//	pc->resize(1);
+
 	ImGui::End();
+}
+
+unsigned ge::examples::GPURainExample::getContainerSize() const
+{
+	return pc->size();
 }

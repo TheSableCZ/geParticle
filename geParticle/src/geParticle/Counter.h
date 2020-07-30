@@ -9,7 +9,8 @@ namespace ge
 		class Counter
 		{
 		public:
-			virtual unsigned int getNumOfParticlesToCreate(core::time_unit dt) = 0;
+			virtual ~Counter() = default;
+			virtual unsigned int getNum(core::time_unit dt) = 0;
 		};
 	}
 }

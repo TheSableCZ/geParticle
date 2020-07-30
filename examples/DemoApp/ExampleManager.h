@@ -26,6 +26,8 @@ namespace ge
 			
 			virtual std::string getName() const = 0;
 
+			virtual unsigned int getContainerSize() const = 0;
+
 			static void GuiRange(glm::vec2 &range, std::string label, float min, float max)
 			{
 				if (ImGui::TreeNode(label.c_str()))

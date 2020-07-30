@@ -1,6 +1,6 @@
 #include <geParticleStd/ConstantRateCounter.h>
 
-unsigned int ge::particle::ConstantRateCounter::getNumOfParticlesToCreate(core::time_unit dt)
+unsigned int ge::particle::ConstantRateCounter::getNum(core::time_unit dt)
 {
 	double realValue = (dt.count() * (float)particlesPerSecond);
 

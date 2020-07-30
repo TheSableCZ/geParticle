@@ -23,6 +23,7 @@ set(PARTICLES_INCLUDES
 	${HEADER_PATH}/ParticleContainerIterator.h
 	${HEADER_PATH}/ParticleContainerType.h
 	${HEADER_PATH}/ParticleEmitter.h
+	${HEADER_PATH}/ParticleEmitterBase.h
 	${HEADER_PATH}/ParticleInitiator.h
 	${HEADER_PATH}/ParticleRenderer.h
 	${HEADER_PATH}/ParticleSystem.h
@@ -32,6 +33,7 @@ set(PARTICLES_INCLUDES
 set(PARTICLES_SOURCES
 	${SRC_PATH}/ComponentSystemContainer.cpp
 	${SRC_PATH}/ParticleContainerIterator.cpp
+	${SRC_PATH}/ParticleEmitterBase.cpp
 	${SRC_PATH}/ParticleSystem.cpp
 	${SRC_PATH}/ParticleSystemManager.cpp
 )

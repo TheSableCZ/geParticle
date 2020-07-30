@@ -13,7 +13,7 @@ namespace ge
 				: particlesPerSecond(particlesPerSecond)
 			{}
 
-			unsigned int getNumOfParticlesToCreate(core::time_unit dt) override;
+			unsigned int getNum(core::time_unit dt) override;
 
 			void setParticlesPerSecond(int particlesPerSecond) { this->particlesPerSecond = particlesPerSecond; }
 			int getParticlesPerSecond() const { return particlesPerSecond; }

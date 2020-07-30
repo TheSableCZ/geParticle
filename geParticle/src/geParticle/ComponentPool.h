@@ -5,8 +5,10 @@ namespace ge {
 
 		class ComponentPoolBase {
 		public:
+			virtual ~ComponentPoolBase() = default;
 			virtual void clear() = 0;
 			virtual void *data() = 0;
+			virtual void resize(unsigned int n) = 0;
 		};
 
 		template <typename T>
@@ -30,6 +32,11 @@ namespace ge {
 
 			void *data() override {
 				return pool.data();
+			}
+
+			void resize(unsigned n) override
+			{
+				pool.resize(n);
 			}
 
 		private:

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <geParticle/ParticleEmitter.h>
+#include <geParticle/ParticleEmitterBase.h>
 #include <geParticleGL/ComputeProgramWrapper.h>
 #include <geParticleStd/ConstantRateCounter.h>
 #include <string>

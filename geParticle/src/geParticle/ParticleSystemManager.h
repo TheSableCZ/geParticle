@@ -11,6 +11,7 @@ namespace ge
     {
 		class ParticleSystemManager : public ge::core::Updatable {
 		public:
+			virtual ~ParticleSystemManager() = default;
 			void update(const core::time_point& t) override;
 			void registerParticleSystem(std::shared_ptr<ParticleSystem>& ps, const core::time_point& startTime = core::time_point());
 			void unregisterParticleSystem(std::shared_ptr<ParticleSystem>& ps);

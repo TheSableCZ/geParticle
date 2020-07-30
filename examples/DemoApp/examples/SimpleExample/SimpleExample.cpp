@@ -12,7 +12,7 @@
 #include "geParticleStd/ColorAffector.h"
 #include "geParticleStd/FloorAffector.h"
 
-constexpr auto MAX_PARTICLES = 100;
+constexpr auto MAX_PARTICLES = 500;
 
 ge::examples::SimpleExample::SimpleExample(std::shared_ptr<particle::ParticleSystemManager>& manager)
 	: manager(manager)
@@ -20,7 +20,7 @@ ge::examples::SimpleExample::SimpleExample(std::shared_ptr<particle::ParticleSys
 
 void ge::examples::SimpleExample::init()
 {
-	pc = std::make_shared<ge::particle::GPUParticleContainer>(MAX_PARTICLES, ge::particle::GPUParticleContainer::CPU_GPU);
+	pc = std::make_shared<ge::particle::GPUParticleContainer>(MAX_PARTICLES, ge::particle::GPUParticleContainer::CPU_GPU, false, 50);
 	pc->registerComponent<ge::particle::LifeData>(false);
 	pc->registerComponent<ge::particle::Position>(true);
 	pc->registerComponent<ge::particle::Velocity>(false);
@@ -39,8 +39,8 @@ void ge::examples::SimpleExample::init()
 	auto it = pc->begin<particle::LifeData>();
 	pc->setLiveParticlePredicate(
 		[it](const int i, const ge::particle::ComponentSystemContainer &container) -> bool
-		//{ return container.getComponent<ge::particle::LifeData>(i).livingFlag; }
-	{ it->setIndex(i); return it->get().livingFlag; }
+	//{ return container.getComponent<ge::particle::LifeData>(i).livingFlag; }
+		{ it->setIndex(i); return it->get().livingFlag; }
 	);
 	pc->setDeadParticlePredicate(
 		[it](const int i, const ge::particle::ComponentSystemContainer &container) -> bool
@@ -115,6 +115,11 @@ void ge::examples::SimpleExample::renderGui()
 	}
 	
 	ImGui::End();
+}
+
+unsigned ge::examples::SimpleExample::getContainerSize() const
+{
+	return pc->size();
 }
 
 void ge::examples::SimpleExample::initAffectors()

@@ -55,6 +55,11 @@ void ge::examples::GPUNbodyExample::renderGui()
 	ImGui::End();
 }
 
+unsigned ge::examples::GPUNbodyExample::getContainerSize() const
+{
+	return pc->size();
+}
+
 std::vector<ge::particle::GPUMassPointData> ge::examples::GPUNbodyExample::distributeParticles()
 {
 	std::vector<ge::particle::GPUMassPointData> vect;

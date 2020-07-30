@@ -18,6 +18,7 @@ namespace ge
 			void reset() override;
 			void renderGui() override;
 			std::string getName() const override { return "GPU Rain"; }
+			unsigned getContainerSize() const override;
 
 		private:
 			std::shared_ptr<particle::ParticleSystemManager> manager;

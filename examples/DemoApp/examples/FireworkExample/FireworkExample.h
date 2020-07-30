@@ -4,6 +4,7 @@
 #include "geParticle/ParticleRenderer.h"
 #include "geParticle/ParticleSystem.h"
 #include "geParticleGL/GPUParticleContainer.h"
+#include "geParticleStd/BoxEmitter.h"
 #include "geParticleStd/ColorAffector.h"
 #include "geParticleStd/GravityAffector.h"
 #include "geParticleStd/StandardParticleComponents.h"
@@ -21,12 +22,15 @@ namespace ge
 			void reset() override;
 			void renderGui() override;
 			std::string getName() const override { return "Firework Effect"; }
+			unsigned getContainerSize() const override;
 
 		private:
 			std::shared_ptr<particle::ParticleSystemManager> manager;
 			std::shared_ptr<particle::ParticleSystem> ps;
 			std::shared_ptr<particle::GPUParticleContainer> pc;
 			std::shared_ptr<particle::ParticleRenderer> renderer;
+
+			std::shared_ptr<particle::BoxEmitter> plane;
 		};
 
 		// custom particle attributes

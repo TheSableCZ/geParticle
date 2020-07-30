@@ -1,14 +1,11 @@
 ﻿#include "FireworkExample.h"
 
-
-
 #include "ExplosionAffector.h"
 #include "ExplosionEmitter.h"
 #include "FireworkRenderer.h"
 #include "TrailAffector.h"
 #include "TrailEmitter.h"
 #include "geParticle/ParticleSystemManager.h"
-#include "geParticleStd/BoxEmitter.h"
 #include "geParticleStd/ColorInitiator.h"
 #include "geParticleStd/LifeTimeAffector.h"
 #include "geParticleStd/LinearMovementAffector.h"
@@ -16,7 +13,6 @@
 #include "geParticleStd/StandardParticleComponents.h"
 #include "geParticleStd/VelocityInitiator.h"
 
-// original 1000
 constexpr auto MAX_PARTICLES = 10000;
 
 ge::examples::FireworkExample::FireworkExample(std::shared_ptr<particle::ParticleSystemManager>& manager)
@@ -26,7 +22,7 @@ ge::examples::FireworkExample::FireworkExample(std::shared_ptr<particle::Particl
 
 void ge::examples::FireworkExample::init()
 {
-	pc = std::make_shared<particle::GPUParticleContainer>(MAX_PARTICLES, ge::particle::GPUParticleContainer::CPU_GPU);
+	pc = std::make_shared<particle::GPUParticleContainer>(MAX_PARTICLES, ge::particle::GPUParticleContainer::CPU_GPU, false, 1000);
 	pc->registerComponent<particle::LifeData>(false);
 	pc->registerComponent<particle::Position>(true);
 	pc->registerComponent<particle::Velocity>(false);
@@ -41,7 +37,7 @@ void ge::examples::FireworkExample::init()
 	pc->setLiveParticlePredicate(
 		[it](const int i, const ge::particle::ComponentSystemContainer &container) -> bool
 	//{ return container.getComponent<ge::particle::LifeData>(i).livingFlag; }
-	{ it->setIndex(i); return it->get().livingFlag; }
+		{ it->setIndex(i); return it->get().livingFlag; }
 	);
 	pc->setDeadParticlePredicate(
 		[it](const int i, const ge::particle::ComponentSystemContainer &container) -> bool
@@ -51,14 +47,15 @@ void ge::examples::FireworkExample::init()
 
 	ps = std::make_shared<ge::particle::ParticleSystem>(pc);
 
-	// Plane emitter 4x4 worldspace
-	auto plane = std::make_shared<particle::BoxEmitter>(-12, 12, -2, -2, -2, 2, core::time_unit(1.f), std::make_shared<particle::ConstantRateCounter>(10));
+	// Plane emitter 22x4 worldspace
+	plane = std::make_shared<particle::BoxEmitter>(-12, 12, -2, -2, -2, 2, core::time_unit(1.f), std::make_shared<particle::ConstantRateCounter>(2));
 	plane->initiators.emplace_back(std::make_shared<particle::VelocityInitiator>(glm::vec2(9, 12)));
 	plane->initiators.emplace_back(std::make_shared<particle::ColorInitiator>());
 	plane->initiators.emplace_back(std::make_shared<FireworkAttribInitiator>());
 
 	ps->addEmitter(plane);
 
+	// Fountain fireworks emitters
 	auto velInit = std::make_shared<particle::VelocityInitiator>(glm::vec2(8, 9), 3.f);
 	auto colInit = std::make_shared<particle::ColorInitiator>();
 	colInit->randomColor = false;
@@ -108,4 +105,18 @@ void ge::examples::FireworkExample::reset()
 
 void ge::examples::FireworkExample::renderGui()
 {
+	ImGui::Begin(getName().c_str());
+
+	ImGui::Text("Zoom out!!");
+	
+	int numOfParticles = std::static_pointer_cast<particle::ConstantRateCounter>(plane->getRefCounter())->getParticlesPerSecond();
+	if (ImGui::SliderInt("Particles/sec", &numOfParticles, 1, 10))
+		std::static_pointer_cast<particle::ConstantRateCounter>(plane->getRefCounter())->setParticlesPerSecond(numOfParticles);
+
+	ImGui::End();
+}
+
+unsigned ge::examples::FireworkExample::getContainerSize() const
+{
+	return pc->size();
 }

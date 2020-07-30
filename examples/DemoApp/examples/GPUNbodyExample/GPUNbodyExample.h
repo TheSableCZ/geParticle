@@ -18,6 +18,7 @@ namespace ge
 			void reset() override;
 			void renderGui() override;
 			std::string getName() const override { return "GPU N-body Simulation"; }
+			unsigned getContainerSize() const override;
 
 		private:
 			std::vector<ge::particle::GPUMassPointData> distributeParticles();

@@ -22,7 +22,9 @@ namespace ge {
 				GPU_TO_CPU
 			};
 
-			GPUParticleContainer(int maxParticleCount, StorageDestination storageDestination = CPU_GPU);
+			GPUParticleContainer(int maxParticleCount, StorageDestination storageDestination = CPU_GPU, bool fixedSize = true, unsigned int reallocBlockSize = 64);
+
+			bool resize(int reallocBlockCount) override;
 
 			void bindComponentBase(const char* componentName, GLuint index);
 			void addComponentVertexAttrib(
@@ -62,13 +64,17 @@ namespace ge {
 			void setBufferData(std::vector<T> const &data);
 
 		protected:
+			void resizeBuffer(std::shared_ptr<gl::Buffer>& buffer, unsigned newSize);
+			
 			StorageDestination storageDestination;
 			std::unordered_map<const char *, std::shared_ptr<ge::gl::Buffer>> buffers;
 			std::unordered_map<const char *, void *> bufferPointers;
 			std::unordered_map<const char *, bool> syncFlags;
 			std::unordered_map<const char *, size_t> componentsSizeOfs;
+			//std::set<std::shared_ptr<gl::VertexArray>> vaos;
+			std::vector<std::pair<std::shared_ptr<ge::gl::Buffer>, std::pair<std::shared_ptr<gl::VertexArray>, GLuint>>> vertexAttribIndexes;
+			std::vector<std::pair<std::shared_ptr<ge::gl::Buffer>, GLuint>> bindIndexes;
 		};
-
 	}
 }
 
@@ -80,7 +86,7 @@ inline void ge::particle::GPUParticleContainer::registerComponent(bool syncFlag,
 	const char* typeName = typeid(T).name();
 	auto component = components.find(typeName);
 
-	auto buffer = std::make_shared<ge::gl::Buffer>(maxParticles * sizeof(T));
+	auto buffer = std::make_shared<ge::gl::Buffer>(actSize * sizeof(T));
 	buffer->setData(component->second->data());
 
 	if (storageDestination == GPU_ONLY) {

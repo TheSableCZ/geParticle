@@ -151,6 +151,14 @@ namespace ge {
 					if (tmpIdx == idx)
 					{
 						// unused particle not found
+						if (csContainer->resize(1))
+						{
+							idx = endIdx + 1;
+							startIdx = csContainer->startIdx();
+							endIdx = csContainer->endIdx();
+
+							return;
+						}
 						do {
 							idx = (rand() % container->size()) + startIdx;
 						} while (indexSet.find(idx) != indexSet.end());
@@ -205,7 +213,7 @@ namespace ge {
 			};
 
 		public:
-			ComponentSystemContainer(int maxParticleCount);
+			ComponentSystemContainer(int maxParticleCount, bool fixedSize = true, unsigned int reallocBlockSize = 64);
 
 			int startIdx() override;
 			int endIdx() override;
@@ -219,8 +227,10 @@ namespace ge {
 			template <typename T>
 			std::shared_ptr<ComponentPool<T>> getComponent() const;
 
+			virtual bool resize(int reallocBlockCount);
+
 			inline ParticleContainerType getType() override { return ParticleContainerType::SoA_CS; }
-			inline unsigned int size() override { return maxParticles; }
+			inline unsigned int size() override { return actSize; }
 
 			std::shared_ptr<ParticleContainerIterator> begin() override;
 			std::shared_ptr<ParticleContainerIterator> end() override;
@@ -232,11 +242,14 @@ namespace ge {
 			template <typename T>
 			std::shared_ptr<component_iterator<T>> end();
 
-			void setLiveParticlePredicate(PredicateFunction predicate);
-			void setDeadParticlePredicate(PredicateFunction predicate);
+			void setLiveParticlePredicate(const PredicateFunction& predicate);
+			void setDeadParticlePredicate(const PredicateFunction& predicate);
 
 		protected:
+			unsigned int actSize;
 			int maxParticles;
+			bool fixedSize;
+			unsigned int reallocBlockSize;
 
 			std::unordered_map<const char *, std::shared_ptr<ComponentPoolBase>> components;
 
@@ -254,7 +267,7 @@ inline int ge::particle::ComponentSystemContainer::startIdx()
 
 inline int ge::particle::ComponentSystemContainer::endIdx()
 {
-	return maxParticles - 1;
+	return actSize - 1;
 }
 
 template<typename T>
@@ -264,13 +277,13 @@ inline void ge::particle::ComponentSystemContainer::registerComponent(std::vecto
 
 	assert(components.find(typeName) == components.end() && "Registering component type more than once.");
 
-	components.insert({ typeName, std::make_shared<ComponentPool<T>>(maxParticles, initData) });
+	components.insert({ typeName, std::make_shared<ComponentPool<T>>(actSize, initData) });
 }
 
 template<typename T>
 inline T & ge::particle::ComponentSystemContainer::getComponent(const int idx) const
 {
-	assert(idx < maxParticles);
+	assert(idx < actSize);
 
 	const char* typeName = typeid(T).name();
 
@@ -311,12 +324,12 @@ end()
 	return std::make_shared<component_iterator<T>>(shared_from_this(), size());
 }
 
-inline void ge::particle::ComponentSystemContainer::setLiveParticlePredicate(PredicateFunction predicate)
+inline void ge::particle::ComponentSystemContainer::setLiveParticlePredicate(const PredicateFunction& predicate)
 {
 	liveParticlePredicate = predicate;
 }
 
-inline void ge::particle::ComponentSystemContainer::setDeadParticlePredicate(PredicateFunction predicate)
+inline void ge::particle::ComponentSystemContainer::setDeadParticlePredicate(const PredicateFunction& predicate)
 {
 	deadParticlePredicate = predicate;
 	std::static_pointer_cast<filter_iterator>(getUnusedParticlesIterator())->setPredicate(predicate);

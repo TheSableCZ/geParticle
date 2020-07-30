@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include <geParticle/ParticleEmitter.h>
+#include <geParticle/ParticleEmitterBase.h>
 #include <geParticleStd/LifeTimeInitiator.h>
 
 namespace ge

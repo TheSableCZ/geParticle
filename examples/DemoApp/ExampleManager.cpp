@@ -61,6 +61,8 @@ void ge::examples::ExampleManager::renderGui()
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate,
 		ImGui::GetIO().Framerate);
 
+	ImGui::Text("Particle container size: %d", activeExampleIdx >= 0 ? examples[activeExampleIdx]->getContainerSize() : 0);
+
 	std::vector<std::string> names;
 	for(auto &example : examples)
 	{

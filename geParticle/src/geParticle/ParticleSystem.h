@@ -1,7 +1,6 @@
 #pragma once
 
 #include <geCore/Updatable.h>
-#include <glm/glm.hpp>
 #include <memory>
 #include <vector>
 
@@ -16,6 +15,7 @@ namespace ge
 		class ParticleSystem : public ge::core::Updatable
 		{
 		public:
+			virtual ~ParticleSystem() = default;
 			explicit ParticleSystem(std::shared_ptr<ParticleContainer> container);
 
 			void setStartTime(const core::time_point& t) { lastTime = t; }

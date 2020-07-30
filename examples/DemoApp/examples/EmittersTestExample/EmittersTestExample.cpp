@@ -26,7 +26,7 @@ void ge::examples::EmittersTestExample::init()
 
 	pc->setLiveParticlePredicate(
 		[](const int i, const ge::particle::ComponentSystemContainer &container) -> bool
-	{ return container.getComponent<ge::particle::LifeData>(i).livingFlag; }
+		{ return container.getComponent<ge::particle::LifeData>(i).livingFlag; }
 	);
 	pc->setDeadParticlePredicate(
 		[](const int i, const ge::particle::ComponentSystemContainer &container) -> bool
@@ -75,6 +75,11 @@ void ge::examples::EmittersTestExample::renderGui()
 		ImGui::TreePop();
 	}
 	ImGui::End();
+}
+
+unsigned ge::examples::EmittersTestExample::getContainerSize() const
+{
+	return pc->size();
 }
 
 void ge::examples::EmittersTestExample::initEmitters()
