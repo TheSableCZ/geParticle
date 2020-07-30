@@ -32,7 +32,6 @@ layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 void main(){
     uint gid = gl_GlobalInvocationID.x;
 
-    //if(gid < newParticles && gid < particleCount)
 	for(uint counter = 0; counter < newParticles && counter < particleCount; counter++)
 	{
 		int i = 0;
@@ -41,8 +40,6 @@ void main(){
 				break;
 			}
 		}
-
-		//pos[i].position = vec4(0.f + gid, 0.f + gid, 0.f + gid, 1.f);
 
 		life[i].life = 4.f;
 		life[i].livingFlag = true;

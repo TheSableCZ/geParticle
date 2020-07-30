@@ -21,7 +21,6 @@ layout(std430, binding=1) buffer Life {
    GPULifeData life[];
 };
 
-//uniform vec4 attPos;
 uniform float dt;
 uniform uint particleCount;
 
@@ -36,46 +35,6 @@ void main(){
 		life[gid].life -= dt;
 		if(life[gid].life <= 0)
 			life[gid].livingFlag = false;
-
-		//p[gid].position = vec3(particleCount, -1.f, 0.f);
-
-		//p[gid].velocity = vec4(0.f, 0.f, 0.f, 1.f);
-
-        //MassPointData part = p[gid];
-
-		//part.velocity = vec3(0.f, 0.f, 0.f);
-		//part.position = vec3(0.f, 0.f, 0.f);
-
-		//part.velocity *= 1 - .99f * dt;
-		//part.velocity += vec3(0.0f, -9.81f, 0.0f) * dt;
-		//part.position += part.velocity * dt;
-		//float _dt = dt;
-		//part.position = vec3(0.f, 0.f, 0.f);
-		//p[gid] = part;
-
-        // The direction of this vector corresponds to the direction of the gravity.
-        // A zero vector will freeze the particles when not interacted with them.
-        //vec4 gv = normalize(vec4(0, -1, 0, 0));
-
-        // Direction vector of the acceleration.
-        // The length of this vector determines strength of attractor.
-        //vec4 a = vec4(0);
-
-        //if(attPos.w >= 0.0f){
-            // Take particle's distance from origin as coefficient, so that every
-            // particle behaves differently. Change coefficient to change attractor's strength.
-        //    a = normalize(attPos - part.currPos) * length(part.currPos.xyz) * 10.f;
-        //}
-
-        // Add gravity vector times its strength.
-        //a += gv * 0.5f;
-
-        // Slightly modified verlet integration http://lonesock.net/article/verlet.html
-        //vec4 tempCurrPos = 1.99f * part.currPos - 0.99f * part.prevPos + a * dt * dt;
-        //part.prevPos = part.currPos;
-        //part.currPos = tempCurrPos;
-
-        //p[gid] = part;
     }
 }
 )"

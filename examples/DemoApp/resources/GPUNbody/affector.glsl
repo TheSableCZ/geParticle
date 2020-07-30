@@ -17,7 +17,6 @@ layout(std430, binding=0) buffer Pos {
    MassPointData p[];
 };
 
-//uniform vec4 attPos;
 uniform float dt;
 uniform uint particleCount;
 
@@ -36,7 +35,6 @@ void main(){
     uint id = gl_GlobalInvocationID.x;
 
     if(id < particleCount) {
-		//p[id].velocity.xyz += vec3(0.0f, -9.81f, 0.0f) * dt;
 
 		vec4 p1 = p[id].position;
 		vec3 vel = vec3(0.f);
@@ -53,7 +51,6 @@ void main(){
 		}
 		vec3 final_vel = dt*vel*G+p[id].velocity.xyz;
 		p[id].velocity = vec4(final_vel, 0.f);
-		//p[id].velocity = vec4(interaction(p1, cache[1]), 0.f);
 
 		p[id].position.xyz += p[id].velocity.xyz * dt;
     }
