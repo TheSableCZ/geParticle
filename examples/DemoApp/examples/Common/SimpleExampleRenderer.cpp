@@ -1,4 +1,9 @@
-﻿#include "SimpleExampleRenderer.h"
+﻿/** @file SimpleExampleRenderer.cpp
+ *  @brief Simple particle renderer. Used by SimpleExample and EmittersTestExample.
+ *  @author Jan Sobol xsobol04
+ */
+
+#include "SimpleExampleRenderer.h"
 
 #include <geGL/Program.h>
 #include <geGL/Shader.h>
@@ -28,22 +33,7 @@ ge::examples::SimpleExampleRenderer::SimpleExampleRenderer(std::shared_ptr<parti
 	std::shared_ptr<ge::gl::Shader> geometryShader = std::make_shared<ge::gl::Shader>(GL_GEOMETRY_SHADER, gShd);
 	shaderProgram = std::make_shared<ge::gl::Program>(vertexShader, fragmentShader, geometryShader);
 
-
-	//billboardVertices = std::make_shared<ge::gl::Buffer>(particleVertices.size() * sizeof(float), particleVertices.data());
-
-	/*
-	particleCenters = std::make_shared<ge::gl::Buffer>(maxParticles * sizeof(float) * 3);
-	centers = std::vector<float>();
-	*/
-
-	/*
-	particleColors = std::make_shared<ge::gl::Buffer>(maxParticles * sizeof(float) * 3);
-	*/
-
 	VAO = std::make_shared<ge::gl::VertexArray>();
-	//VAO->addAttrib(billboardVertices, 0, 3, GL_FLOAT);
-	//VAO->addAttrib(particleCenters, 1, 3, GL_FLOAT);
-	//VAO->addAttrib(particleColors, 2, 3, GL_FLOAT);
 
 	container->addComponentVertexAttrib<particle::Position>(VAO, 0, 3, GL_FLOAT, sizeof(particle::Position), offsetof(particle::Position, position));
 	container->addComponentVertexAttrib<particle::Color>(VAO, 1, 4, GL_FLOAT, sizeof(particle::Color), offsetof(particle::Color, color));
@@ -67,10 +57,4 @@ void ge::examples::SimpleExampleRenderer::render(std::shared_ptr<particle::Parti
 	VAO->bind();
 
 	shaderProgram->getContext().glDrawArrays(GL_POINTS, 0, particlesCount);
-
-	/*gl->glVertexAttribDivisor(0, 0); // particles vertices : always reuse the same 4 vertices -> 0
-	gl->glVertexAttribDivisor(1, 1); // positions : one per quad (its center)                 -> 1
-	gl->glVertexAttribDivisor(2, 1); // color : one per quad                                  -> 1
-
-	gl->glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, particlesCount);*/
 }

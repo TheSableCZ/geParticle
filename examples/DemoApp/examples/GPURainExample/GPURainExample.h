@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿/** @file GPURainExample.h
+ *  @brief GPU accelerated rain particle system.
+ *  @author Jan Sobol xsobol04
+ */
+
+#pragma once
 #include "ExampleManager.h"
 #include "GPUPlaneEmitter.h"
 #include "geParticle/ParticleRenderer.h"

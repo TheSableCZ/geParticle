@@ -1,8 +1,16 @@
+/** @file ComponentPool.h
+ *  @brief Component for ComponentSystemContainer
+ *  @author Jan Sobol xsobol04
+ */
+
 #pragma once
 
 namespace ge {
 	namespace particle {
 
+		/**
+		 * @brief Base class for component.
+		 */
 		class ComponentPoolBase {
 		public:
 			virtual ~ComponentPoolBase() = default;
@@ -11,6 +19,9 @@ namespace ge {
 			virtual void resize(unsigned int n) = 0;
 		};
 
+		/**
+		 * @brief Component for ComponentSystemContainer.
+		 */
 		template <typename T>
 		class ComponentPool : public ComponentPoolBase {
 		public:

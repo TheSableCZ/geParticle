@@ -1,4 +1,9 @@
-﻿#include "EmittersTestExample.h"
+﻿/** @file EmittersTestExample.cpp
+ *  @brief Simple example to test standard emitters.
+ *  @author Jan Sobol xsobol04
+ */
+
+#include "EmittersTestExample.h"
 
 #include "examples/Common/SimpleExampleRenderer.h"
 #include "geParticle/ParticleSystemManager.h"

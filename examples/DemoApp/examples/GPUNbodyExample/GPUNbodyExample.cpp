@@ -1,4 +1,9 @@
-﻿#include "GPUNbodyExample.h"
+﻿/** @file GPUNbodyExample.cpp
+ *  @brief N-body simulation example.
+ *  @author Jan Sobol xsobol04
+ */
+
+#include "GPUNbodyExample.h"
 
 #include <random>
 

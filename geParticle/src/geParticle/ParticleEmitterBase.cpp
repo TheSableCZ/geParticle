@@ -1,4 +1,9 @@
-﻿#include "ParticleEmitterBase.h"
+﻿/** @file ParticleEmitterBase.cpp
+ *  @brief Implementation of ParticleEmitter. Uses object ParticleInitiators to init particle attributes.
+ *  @author Jan Sobol xsobol04
+ */
+
+#include "ParticleEmitterBase.h"
 
 void ge::particle::ParticleEmitterBase::emitParticles(core::time_unit dt,
                                                       std::shared_ptr<particle::ParticleContainer> particles)

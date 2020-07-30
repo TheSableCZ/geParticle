@@ -1,3 +1,8 @@
+/** @file ComputeProgramWrapper.cpp
+ *  @brief Wrapper for OpenGL (geGL) compute shader.
+ *  @author Jan Sobol xsobol04
+ */
+
 #include <geParticleGL/ComputeProgramWrapper.h>
 
 ge::particle::ComputeProgramWrapper::ComputeProgramWrapper(std::string shaderSource)

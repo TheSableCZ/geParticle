@@ -1,4 +1,8 @@
-﻿cmake_minimum_required (VERSION 3.11.1)
+﻿# @file CMakeLists.txt
+# @brief CMake list for geParticle project. Core of particle module.
+# @author Jan Sobol xsobol04
+
+cmake_minimum_required (VERSION 3.11.1)
 
 project(geParticle VERSION 1.0)
 
@@ -8,12 +12,13 @@ set(LIB_NAME_UPPER)
 string(TOUPPER ${PROJECT_NAME} LIB_NAME_UPPER)
 
 include(GenerateExportHeader)
+include(GNUInstallDirs)
 
 set(HEADER_PATH ${CMAKE_CURRENT_LIST_DIR}/src/${PROJECT_NAME})
 set(SRC_PATH ${CMAKE_CURRENT_LIST_DIR}/src/${PROJECT_NAME})
 
 set(PARTICLES_INCLUDES
-#	${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}/Export.h
+	${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/Export.h
 
 	${HEADER_PATH}/ArrayOfStructsContainer.h
 	${HEADER_PATH}/ComponentPool.h
@@ -49,7 +54,7 @@ find_package(GPUEngine COMPONENTS geCore REQUIRED)
 #########################################
 # Target
 
-ADD_LIBRARY(${PROJECT_NAME} SHARED
+ADD_LIBRARY(${PROJECT_NAME}
 	${PARTICLES_INCLUDES}
 	${PARTICLES_SOURCES}
 )
@@ -72,4 +77,20 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/src>
     $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/${PROJECT_NAME}>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
+
+install(FILES
+  ${PARTICLES_INCLUDES}
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+  )
+  
+install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Targets
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  )
+
+install(EXPORT ${PROJECT_NAME}Targets
+   FILE ${PROJECT_NAME}Config.cmake
+   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )

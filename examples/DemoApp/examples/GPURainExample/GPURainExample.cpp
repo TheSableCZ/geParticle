@@ -1,4 +1,9 @@
-﻿#include "GPURainExample.h"
+﻿/** @file GPURainExample.cpp
+ *  @brief GPU accelerated rain particle system.
+ *  @author Jan Sobol xsobol04
+ */
+
+#include "GPURainExample.h"
 
 #include <imgui.h>
 #include <geParticleStd/StandardParticleComponents.h>

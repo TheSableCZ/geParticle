@@ -1,3 +1,8 @@
+/** @file ParticleSystemManager.cpp
+ *  @brief Manager class for instances of ParticleSystem.
+ *  @author Jan Sobol xsobol04
+ */
+
 #include <geParticle/ParticleSystemManager.h>
 #include <algorithm>
 

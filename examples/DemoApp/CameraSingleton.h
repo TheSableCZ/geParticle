@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿/** @file CameraSingleton.h
+ *  @brief BaseCamera implementation. Singleton.
+ *  @author Jan Sobol xsobol04
+ */
+
+#pragma once
 
 #include <geUtil/BasicCamera.h>
 

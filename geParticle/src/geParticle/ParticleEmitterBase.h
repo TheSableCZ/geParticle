@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿/** @file ParticleEmitterBase.h
+ *  @brief Implementation of ParticleEmitter. Uses object ParticleInitiators to init particle attributes.
+ *  @author Jan Sobol xsobol04
+ */
+
+#pragma once
 
 #include <geParticle/ParticleEmitter.h>
 #include <geParticle/Counter.h>
@@ -8,7 +13,10 @@ namespace ge
 {
 	namespace particle
 	{
-		class ParticleEmitterBase : public ParticleEmitter
+		/**
+		 * @brief Implementation of ParticleEmitter. Uses object ParticleInitiators to init particle attributes and Counter.
+		 */
+		class GEPARTICLE_EXPORT ParticleEmitterBase : public ParticleEmitter
 		{
 		public:
 			ParticleEmitterBase(std::shared_ptr<Counter> counter)

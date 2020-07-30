@@ -1,4 +1,9 @@
-﻿#include "FireworkExample.h"
+﻿/** @file FireworkExample.cpp
+ *  @brief Firework effect example root.
+ *  @author Jan Sobol xsobol04
+ */
+
+#include "FireworkExample.h"
 
 #include "ExplosionAffector.h"
 #include "ExplosionEmitter.h"

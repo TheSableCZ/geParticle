@@ -1,4 +1,13 @@
-﻿#include <geParticleStd/BallEmitter.h>
+﻿/** @file BallEmitter.cpp
+ *  @brief Emitter of ball shape.
+ *  @author Jan Sobol xsobol04
+ */
+
+#include <geParticleStd/BallEmitter.h>
+
+#include <geParticle/ArrayOfStructsContainer.h>
+#include <geParticle/ComponentSystemContainer.h>
+#include <geParticleStd/StandardParticleComponents.h>
 
 void ge::particle::BallEmitter::BallInitiator::init(std::shared_ptr<RangeParticleContainerIterator> range)
 {

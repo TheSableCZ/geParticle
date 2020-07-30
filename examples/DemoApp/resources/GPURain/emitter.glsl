@@ -35,8 +35,8 @@ void main(){
     //if(gid < newParticles && gid < particleCount)
 	for(uint counter = 0; counter < newParticles && counter < particleCount; counter++)
 	{
-		unsigned int i;
-		for (i = 0; i < particleCount; i++) {
+		int i = 0;
+		for (; i < particleCount; i++) {
 			if (life[i].livingFlag == false) {
 				break;
 			}

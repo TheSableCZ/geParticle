@@ -1,4 +1,9 @@
-﻿#include "ExplosionAffector.h"
+﻿/** @file ExplosionAffector.cpp
+ *  @brief Affect to initiate explosion.
+ *  @author Jan Sobol xsobol04
+ */
+
+#include "ExplosionAffector.h"
 
 #include "FireworkExample.h"
 #include "geParticle/ComponentSystemContainer.h"

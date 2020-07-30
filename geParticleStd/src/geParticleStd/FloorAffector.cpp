@@ -1,4 +1,9 @@
-﻿#include "FloorAffector.h"
+﻿/** @file FloorAffector.cpp
+ *  @brief Affector simulating simple floor.
+ *  @author Jan Sobol xsobol04
+ */
+
+#include "FloorAffector.h"
 
 #include <geParticle/ComponentSystemContainer.h>
 #include <geParticleStd/StandardParticleComponents.h>

@@ -1,4 +1,9 @@
-﻿#include "GPUNbodyRenderer.h"
+﻿/** @file GPUNbodyRenderer.cpp
+ *  @brief N-body simulation renderer.
+ *  @author Jan Sobol xsobol04
+ */
+
+#include "GPUNbodyRenderer.h"
 
 #include <geGL/Program.h>
 
@@ -30,7 +35,12 @@ ge::examples::GPUNbodyRenderer::GPUNbodyRenderer(std::shared_ptr<particle::GPUPa
 	container->addComponentVertexAttrib<particle::GPUMassPointData>(VAO, 0, 4, GL_FLOAT, sizeof(particle::GPUMassPointData), offsetof(particle::GPUMassPointData, position));
 	container->addComponentVertexAttrib<particle::Color>(VAO, 1, 4, GL_FLOAT, sizeof(particle::Color), offsetof(particle::Color, color));
 
-	texture = TextureHelper::loadDDS(APP_RESOURCES"/GPURain/particle.DDS", shaderProgram->getContext());
+#if defined(INDIR_RESOURCES)
+	const std::string texturePath = "particle.DDS";
+#else
+	const std::string texturePath = APP_RESOURCES"/textures/particle.DDS";
+#endif
+	texture = TextureHelper::loadDDS(texturePath, shaderProgram->getContext());
 	textureUniformID = shaderProgram->getUniformLocation("myTextureSampler");
 }
 

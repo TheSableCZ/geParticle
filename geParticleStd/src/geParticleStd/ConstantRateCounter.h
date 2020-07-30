@@ -1,12 +1,21 @@
+/** @file ConstantRateCounter.h
+ *  @brief Generator of constant number per second.
+ *  @author Jan Sobol xsobol04
+ */
+
 #pragma once
 
 #include <geParticle/Counter.h>
+#include <geParticleStd/Export.h>
 
 namespace ge
 {
     namespace particle
     {
-		class ConstantRateCounter : public Counter
+    	/**
+    	 * @brief Generator of constant number per second.
+    	 */
+		class GEPARTICLESTD_EXPORT ConstantRateCounter : public Counter
 		{
 		public:
 			ConstantRateCounter(int particlesPerSecond)

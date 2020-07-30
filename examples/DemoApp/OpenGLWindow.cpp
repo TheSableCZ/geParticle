@@ -1,6 +1,7 @@
-//
-// Created by forry on 24.11.2017.
-//
+/** @file OpenGLWindow.h
+ *  @brief Qt main window. From GPUEngine examples.
+ *  @author Jan Sobol xsobol04
+ */
 
 #include <OpenGLWindow.h>
 

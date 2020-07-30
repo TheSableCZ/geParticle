@@ -1,8 +1,14 @@
+/** @file ParticleSystem.h
+ *  @brief Particle system class.
+ *  @author Jan Sobol xsobol04
+ */
+
 #pragma once
 
 #include <geCore/Updatable.h>
 #include <memory>
 #include <vector>
+#include <geParticle/Export.h>
 
 namespace ge
 {
@@ -12,13 +18,23 @@ namespace ge
 	    class ParticleEmitter;
 	    class ParticleAffector;
 
-		class ParticleSystem : public ge::core::Updatable
+		/**
+		 * @brief Particle system class.
+		 */
+		class GEPARTICLE_EXPORT ParticleSystem : public ge::core::Updatable
 		{
 		public:
 			virtual ~ParticleSystem() = default;
 			explicit ParticleSystem(std::shared_ptr<ParticleContainer> container);
 
+			/**
+			 * @brief Set start time for first delta time computing. Defines time when simulation starts or continues. Better call with ParticleSystemManager.
+			 */
 			void setStartTime(const core::time_point& t) { lastTime = t; }
+
+			/**
+			 * @brief Propagate update to affectors, emitters. Better call with ParticleSystemManager.
+			 */
             void update(const core::time_point& t = core::time_point()) override;
 
 			void addEmitter(std::shared_ptr<ParticleEmitter> emitter);

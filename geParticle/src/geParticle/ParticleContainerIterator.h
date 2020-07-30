@@ -1,15 +1,24 @@
+/** @file ParticleContainerIterator.h
+ *  @brief Classes for iterating through particle container.
+ *  @author Jan Sobol xsobol04
+ */
+
 #pragma once
 
 #include <memory>
 #include <functional>
 #include <geParticle/ParticleContainerType.h>
+#include <geParticle/Export.h>
 
 namespace ge {
 	namespace particle {
 
 		class ParticleContainer;
 
-		class ParticleContainerIterator
+		/**
+		 * @brief Base particle iterator.
+		 */
+		class GEPARTICLE_EXPORT ParticleContainerIterator
 		{
 		public:
 			virtual ~ParticleContainerIterator() = default;
@@ -23,6 +32,9 @@ namespace ge {
 			virtual bool operator!=(const ParticleContainerIterator &rhs) const = 0;
 			virtual int getIndex() = 0;
 
+			/**
+			 * @return Type of iterated container. Useful for static_pointer_cast downcast.
+			 */
 			ParticleContainerType getContainerType() const;
 
 		protected:
@@ -52,6 +64,9 @@ namespace ge {
 			int idx = 0;
 		};
 
+		/**
+		 * @brief Special iterator. Iterates over indexes in collection. Used for ParticleInitiator.
+		 */
 		class RangeParticleContainerIterator : public ParticleContainerIterator
 		{
 		public:
@@ -73,6 +88,9 @@ namespace ge {
 				indices.push_back(idx);
 			}
 
+			/**
+			 * @brief Useful for emitting more particles in one moment.
+			 */
 			virtual void addIndexesFrom(std::shared_ptr<ParticleContainerIterator> iterator, unsigned int count)
 			{
 				for (unsigned int i = 0; i < count; i++) {

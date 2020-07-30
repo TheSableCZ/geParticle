@@ -1,4 +1,9 @@
-﻿#include <geParticleStd/BoxEmitter.h>
+﻿/** @file BoxEmitter.cpp
+ *  @brief Emitter of box shape.
+ *  @author Jan Sobol xsobol04
+ */
+
+#include <geParticleStd/BoxEmitter.h>
 
 #include <geParticle/ComponentSystemContainer.h>
 #include <geParticle/ArrayOfStructsContainer.h>

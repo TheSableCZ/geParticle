@@ -1,5 +1,9 @@
-﻿#include "ExplosionEmitter.h"
+﻿/** @file ExplosionEmitter.cpp
+ *  @brief Explosion emitter.
+ *  @author Jan Sobol xsobol04
+ */
 
+#include "ExplosionEmitter.h"
 
 #include "FireworkExample.h"
 #include "geParticle/ComponentSystemContainer.h"

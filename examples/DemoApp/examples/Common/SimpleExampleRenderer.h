@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿/** @file SimpleExampleRenderer.h
+ *  @brief Simple particle renderer. Used by SimpleExample and EmittersTestExample.
+ *  @author Jan Sobol xsobol04
+ */
+
+#pragma once
 #include <geParticle/ParticleRenderer.h>
 #include <geParticleGL/GPUParticleContainer.h>
 

@@ -1,3 +1,8 @@
+/** @file GPUParticleAffector.cpp
+ *  @brief Particle affector accelerated on GPU.
+ *  @author Jan Sobol xsobol04
+ */
+
 #include <geParticleGL/GPUParticleAffector.h>
 
 ge::particle::GPUParticleAffector::GPUParticleAffector(std::string shaderSource)

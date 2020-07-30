@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿/** @file BallEmitter.h
+ *  @brief Emitter of ball shape.
+ *  @author Jan Sobol xsobol04
+ */
+
+#pragma once
 #include <random>
 #include <glm/glm.hpp>
 #include <geParticle/ParticleInitiator.h>
@@ -8,7 +13,10 @@ namespace ge
 {
 	namespace particle
 	{
-		class BallEmitter : public StandardEmitter
+		/**
+		 * @brief Emitter of ball shape.
+		 */
+		class GEPARTICLESTD_EXPORT BallEmitter : public StandardEmitter
 		{
 			class BallInitiator : public ParticleInitiator
 			{

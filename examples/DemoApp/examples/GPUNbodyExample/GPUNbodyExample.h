@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿/** @file GPUNbodyExample.h
+ *  @brief N-body simulation example.
+ *  @author Jan Sobol xsobol04
+ */
+
+#pragma once
 #include "ExampleManager.h"
 #include "geParticle/ParticleRenderer.h"
 #include "geParticle/ParticleSystem.h"

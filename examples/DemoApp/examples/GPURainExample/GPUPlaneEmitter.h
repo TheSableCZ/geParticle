@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿/** @file GPUPlaneEmitter.h
+ *  @brief GPU emitter with random particle distribution.
+ *  @author Jan Sobol xsobol04
+ */
+
+#pragma once
 #include <random>
 
 #include "geParticleGL/GPUParticleEmitter.h"

@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿/** @file EmittersTestExample.h
+ *  @brief Simple example to test standard emitters.
+ *  @author Jan Sobol xsobol04
+ */
+
+#pragma once
 #include "ExampleManager.h"
 #include "geParticle/ParticleRenderer.h"
 #include "geParticle/ParticleSystem.h"

@@ -1,4 +1,9 @@
-﻿#include <geParticleStd/LifeTimeAffector.h>
+﻿/** @file LifeTimeAffector.cpp
+ *  @brief Affector for control particles life cycle.
+ *  @author Jan Sobol xsobol04
+ */
+
+#include <geParticleStd/LifeTimeAffector.h>
 
 #include <geParticleStd/StandardParticleComponents.h>
 #include <geParticle/ArrayOfStructsContainer.h>

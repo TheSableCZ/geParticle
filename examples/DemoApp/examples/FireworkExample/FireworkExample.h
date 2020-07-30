@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿/** @file FireworkExample.h
+ *  @brief Firework effect example root.
+ *  @author Jan Sobol xsobol04
+ */
+
+#pragma once
 #include <array>
 
 #include "ExampleManager.h"

@@ -1,3 +1,8 @@
+/** @file main.cpp
+ *  @brief DemoApp main.
+ *  @author Jan Sobol xsobol04
+ */
+
 #include <QtGui/QGuiApplication>
 #include <OpenGLWindow.h>
 #include <sstream>

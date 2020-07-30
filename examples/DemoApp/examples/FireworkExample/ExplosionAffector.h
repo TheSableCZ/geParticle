@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿/** @file ExplosionAffector.h
+ *  @brief Affect to initiate explosion.
+ *  @author Jan Sobol xsobol04
+ */
+
+#pragma once
 #include "ExplosionEmitter.h"
 #include "geParticle/ParticleAffector.h"
 

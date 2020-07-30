@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿/** @file GPUNbodyRenderer.h
+ *  @brief N-body simulation renderer.
+ *  @author Jan Sobol xsobol04
+ */
+
+#pragma once
 #include "geParticle/ParticleRenderer.h"
 #include "geParticleGL/GPUParticleContainer.h"
 

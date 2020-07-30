@@ -1,3 +1,8 @@
+/** @file ComponentSystemContainer.cpp
+ *  @brief Storage for particles using ECS methodology
+ *  @author Jan Sobol xsobol04
+ */
+
 #include <geParticle/ComponentSystemContainer.h>
 
 ge::particle::ComponentSystemContainer::ComponentSystemContainer(int maxParticleCount, bool fixedSize, unsigned int reallocBlockSize)

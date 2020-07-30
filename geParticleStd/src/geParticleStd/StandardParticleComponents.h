@@ -1,3 +1,8 @@
+/** @file StandardParticleComponents.h
+ *  @brief Standard particle attributes used by ComponentSystemContainer.
+ *  @author Jan Sobol xsobol04
+ */
+
 #pragma once
 
 #include <glm/glm.hpp>

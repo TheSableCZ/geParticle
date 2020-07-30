@@ -1,4 +1,9 @@
-﻿#include "CameraSingleton.h"
+﻿/** @file CameraSingleton.cpp
+ *  @brief BaseCamera implementation. Singleton.
+ *  @author Jan Sobol xsobol04
+ */
+
+#include "CameraSingleton.h"
 
 #include <geUtil/OrbitManipulator.h>
 

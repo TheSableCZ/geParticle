@@ -1,4 +1,9 @@
-﻿#include "GPURainRenderer.h"
+﻿/** @file GPURainRenderer.cpp
+ *  @brief Renderer for GPU rain example.
+ *  @author Jan Sobol xsobol04
+ */
+
+#include "GPURainRenderer.h"
 
 #include <geGL/Program.h>
 
@@ -30,7 +35,12 @@ ge::examples::GPURainRenderer::GPURainRenderer(std::shared_ptr<particle::GPUPart
 	container->addComponentVertexAttrib<particle::GPUMassPointData>(VAO, 0, 4, GL_FLOAT, sizeof(particle::GPUMassPointData), offsetof(particle::GPUMassPointData, position));
 	container->addComponentVertexAttrib<particle::GPULifeData>(VAO, 1, 1, GL_FLOAT, sizeof(particle::GPULifeData), offsetof(particle::GPULifeData, life));
 
-	texture = TextureHelper::loadDDS(APP_RESOURCES"/GPURain/particle.DDS", shaderProgram->getContext());
+#if defined(INDIR_RESOURCES)
+	const std::string texturePath = "particle.DDS";
+#else
+	const std::string texturePath = APP_RESOURCES"/textures/particle.DDS";
+#endif
+	texture = TextureHelper::loadDDS(texturePath, shaderProgram->getContext());
 	textureUniformID = shaderProgram->getUniformLocation("myTextureSampler");
 }
 

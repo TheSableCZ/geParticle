@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿/** @file ExplosionEmitter.h
+ *  @brief Explosion emitter.
+ *  @author Jan Sobol xsobol04
+ */
+
+#pragma once
 #include "geParticle/ParticleEmitter.h"
 #include "geParticle/ParticleInitiator.h"
 

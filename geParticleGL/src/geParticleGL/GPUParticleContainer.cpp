@@ -1,3 +1,9 @@
+/** @file GPUParticleContainer.cpp
+ *  @brief Particle container which comunicate with GPU (OpenGL, geGL).
+ *  @author Jan Sobol xsobol04
+ */
+
+
 #include <geParticleGL/GPUParticleContainer.h>
 #include <cstring>
 
@@ -97,7 +103,7 @@ int ge::particle::GPUParticleContainer::syncOnlyAlive(SyncDirection direction)
 	return livingParticlesCount;
 }
 
-void ge::particle::GPUParticleContainer::getBufferData(const char * componentName, void * data)
+void ge::particle::GPUParticleContainer::getBufferData(const std::string& componentName, void * data)
 {
 	// TODO: možná použít pro bìžný, nepersistent buffer buffer->getData z GPUE
 
@@ -120,7 +126,7 @@ void ge::particle::GPUParticleContainer::getBufferData(const char * componentNam
 	}
 }
 
-void ge::particle::GPUParticleContainer::setBufferData(const char * componentName, const void * data)
+void ge::particle::GPUParticleContainer::setBufferData(const std::string& componentName, const void * data)
 {
 	// TODO: možná použít pro bìžný, nepersistent buffer buffer->setData z GPUE
 
@@ -143,7 +149,7 @@ void ge::particle::GPUParticleContainer::setBufferData(const char * componentNam
 	}
 }
 
-int ge::particle::GPUParticleContainer::setBufferData(const char * componentName, const void * data, size_t elementSizeOf, PredicateFunction copyIfPredicate)
+int ge::particle::GPUParticleContainer::setBufferData(const std::string& componentName, const void * data, size_t elementSizeOf, PredicateFunction copyIfPredicate)
 {
 	auto buffer = buffers.find(componentName);
 	assert(buffer != buffers.end() && "Component (buffer) not found.");

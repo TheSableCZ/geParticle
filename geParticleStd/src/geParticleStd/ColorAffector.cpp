@@ -1,14 +1,9 @@
-﻿#include "ColorAffector.h"
+﻿/** @file ColorAffector.cpp
+ *  @brief Changes color during particle life cycle.
+ *  @author Jan Sobol xsobol04
+ */
 
-
-
-#include <chrono>
-#include <chrono>
-#include <chrono>
-#include <chrono>
-#include <iostream>
-#include <glm/detail/type_mat.hpp>
-#include <glm/detail/type_mat.hpp>
+#include "ColorAffector.h"
 
 void ge::particle::ColorAffector::affect(core::time_unit dt, std::shared_ptr<particle::ParticleContainer> particles)
 {
@@ -28,7 +23,6 @@ void ge::particle::ColorAffector::affect(core::time_unit dt, std::shared_ptr<par
 
 			if (l.livingFlag)
 			{
-				//begin->getComponent<Color>().color = glm::vec3(0.f, 0.f, 0.f);
 				auto newCol = getColor(l.life, l.totalLifeTime);
 				c.color = newCol;
 			}
@@ -44,7 +38,6 @@ glm::vec4 ge::particle::ColorAffector::getColor(core::time_unit life, core::time
 	if (colorPoints.empty() || life.count() < 0.f) return glm::vec4(0, 0, 0, 1.f);
 
 	float percentage = 1.f - life.count() / totalLifeTime.count();
-	//std::cout << life.count() << ", " << totalLifeTime.count() << ((life.count() < 0.f) ? "true" : "false") << std::endl;
 
 	auto it = colorPoints.begin();
 	auto last = *it;
@@ -63,8 +56,6 @@ glm::vec4 ge::particle::ColorAffector::getColor(core::time_unit life, core::time
 		return last.second;
 
 	auto distance = (percentage * 100 - last.first) / (next.first - last.first);
-
-	//std::cout << percentage << "   " << distance << std::endl;
 
 	return last.second + (next.second - last.second) * distance;
 }

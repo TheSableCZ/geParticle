@@ -1,4 +1,9 @@
-﻿#include <geParticleStd/GravityAffector.h>
+﻿/** @file GravityAffector.cpp
+ *  @brief Affector simulating earth gravity.
+ *  @author Jan Sobol xsobol04
+ */
+
+#include <geParticleStd/GravityAffector.h>
 
 #include <geParticleStd/StandardParticleComponents.h>
 #include <geParticle/ArrayOfStructsContainer.h>

@@ -1,4 +1,9 @@
-﻿#include <geParticleStd/LinearMovementAffector.h>
+﻿/** @file LinearMovementAffector.cpp
+ *  @brief Linear movement affector.
+ *  @author Jan Sobol xsobol04
+ */
+
+#include <geParticleStd/LinearMovementAffector.h>
 
 #include <geParticleStd/StandardParticleComponents.h>
 #include <geParticle/ArrayOfStructsContainer.h>

@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿/** @file TrailEmitter.h
+ *  @brief Firework trail emitter.
+ *  @author Jan Sobol xsobol04
+ */
+
+#pragma once
 #include "geParticle/ParticleEmitter.h"
 #include "geParticle/ParticleInitiator.h"
 

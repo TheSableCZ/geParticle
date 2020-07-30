@@ -1,3 +1,8 @@
+/** @file GPUParticleContainer.h
+ *  @brief Particle container which comunicate with GPU (OpenGL, geGL).
+ *  @author Jan Sobol xsobol04
+ */
+
 #pragma once
 
 #include <geParticle/ComponentSystemContainer.h>
@@ -5,11 +10,15 @@
 #include <geGL/Buffer.h>
 #include <geGL/VertexArray.h>
 #include <functional>
+#include <geParticleGL/Export.h>
 
 namespace ge {
 	namespace particle {
 
-		class GPUParticleContainer : public ComponentSystemContainer {
+		/**
+		 * @brief Particle container which comunicate with GPU (OpenGL, geGL).
+		 */
+		class GEPARTICLEGL_EXPORT GPUParticleContainer : public ComponentSystemContainer {
 		public:
 			enum StorageDestination {
 				CPU_GPU,
@@ -26,7 +35,14 @@ namespace ge {
 
 			bool resize(int reallocBlockCount) override;
 
+			/**
+			 * @brief Bind base of component SSBO to index.
+			 */
 			void bindComponentBase(const char* componentName, GLuint index);
+
+			/**
+			 * @brief Add component buffer as vertex attribute.
+			 */
 			void addComponentVertexAttrib(
 				const char* componentName,
 				std::shared_ptr<ge::gl::VertexArray> vertexArray,
@@ -36,16 +52,34 @@ namespace ge {
 				GLsizei stride,
 				GLintptr offset
 			);
+
+			/**
+			 * @brief Sync all components which have positive sync flag.
+			 */
 			void sync(SyncDirection direction);
+
+			/**
+			 * @brief Sync positive sync flag components. Test every index with livingParticlePredicate.
+			 */
 			int syncOnlyAlive(SyncDirection direction);
-			void getBufferData(const char* componentName, void *data);
-			void setBufferData(const char* componentName, const void *data);
-			int setBufferData(const char* componentName, const void *data, size_t elementSizeOf, PredicateFunction copyIfPredicate);
+
+			
+			void getBufferData(const std::string& componentName, void *data);
+			void setBufferData(const std::string& componentName, const void *data);
+			int setBufferData(const std::string& componentName, const void *data, size_t elementSizeOf, PredicateFunction copyIfPredicate);
 
 			template <typename T>
 			void registerComponent(bool syncFlag = false, std::vector<T> initData = {});
+
+			/**
+			 * @brief Bind base of component SSBO to index.
+			 */
 			template <typename T>
 			void bindComponentBase(GLuint index);
+
+			/**
+			 * @brief Add component buffer as vertex attribute.
+			 */
 			template <typename T>
 			void addComponentVertexAttrib(
 				std::shared_ptr<ge::gl::VertexArray> vertexArray, 
@@ -55,6 +89,10 @@ namespace ge {
 				GLsizei stride,
 				GLintptr offset
 			);
+
+			/**
+			 * @brief Sync single component.
+			 */
 			template <typename T>
 			void syncComponent(SyncDirection direction);
 
@@ -67,11 +105,11 @@ namespace ge {
 			void resizeBuffer(std::shared_ptr<gl::Buffer>& buffer, unsigned newSize);
 			
 			StorageDestination storageDestination;
-			std::unordered_map<const char *, std::shared_ptr<ge::gl::Buffer>> buffers;
-			std::unordered_map<const char *, void *> bufferPointers;
-			std::unordered_map<const char *, bool> syncFlags;
-			std::unordered_map<const char *, size_t> componentsSizeOfs;
-			//std::set<std::shared_ptr<gl::VertexArray>> vaos;
+			std::unordered_map<std::string, std::shared_ptr<ge::gl::Buffer>> buffers;
+			std::unordered_map<std::string, void *> bufferPointers;
+			std::unordered_map<std::string, bool> syncFlags;
+			std::unordered_map<std::string, size_t> componentsSizeOfs;
+
 			std::vector<std::pair<std::shared_ptr<ge::gl::Buffer>, std::pair<std::shared_ptr<gl::VertexArray>, GLuint>>> vertexAttribIndexes;
 			std::vector<std::pair<std::shared_ptr<ge::gl::Buffer>, GLuint>> bindIndexes;
 		};
@@ -141,7 +179,7 @@ inline void ge::particle::GPUParticleContainer::getBufferData(std::vector<T>& da
 
 	size_t size = buffer->second->getSize() / sizeof(T);
 
-	// TODO: v nov�j��m commitu GPUE je funk�n� funkce buffer->getData, kter� d�l� p�esn� tohle
+	// TODO: replace with fixed geGL function buffer->getData
 	data.resize(size);
 	getBufferData(typeName, data.data());
 }
@@ -156,37 +194,3 @@ inline void ge::particle::GPUParticleContainer::setBufferData(std::vector<T> con
 
 	setBufferData(typeName, data.data());
 }
-
-/*
-template<typename T>
-inline std::vector<T> ge::particle::GPUParticleContainer::getBufferData()
-{
-	const char* typeName = typeid(T).name();
-	auto buffer = buffers.find(typeName);
-
-	assert(buffer != buffers.end() && "Component (buffer) not found.");
-
-	std::cout << "getBufferData: buffer size: " << buffer->second->getSize() << std::endl;
-
-	T *ptr;
-
-	if (storageDestination == CPU_GPU_PERSISTENT_MAPPED) {
-		ptr = (T *) bufferPointers[typeName];
-	} else {
-		ptr = (T *) buffer->second->map(GL_READ_ONLY);
-	}
-
-	std::vector<T> vect;
-	vect.reserve(size());
-
-	for (unsigned int i = 0; i < size(); i++) {
-		vect.push_back(ptr[i]);
-	}
-
-	buffer->second->unmap();
-
-	//buffer->second->getData<T>(vect);
-
-	return vect;
-}
-*/

@@ -1,3 +1,8 @@
+/** @file GPUParticleEmitter.h
+ *  @brief Particle emitter accelrated on GPU.
+ *  @author Jan Sobol xsobol04
+ */
+
 #pragma once
 
 #include <geParticle/ParticleEmitterBase.h>
@@ -8,39 +13,21 @@
 namespace ge {
 	namespace particle {
 
-		class GPUParticleEmitter : public ParticleEmitterBase, public ComputeProgramWrapper {
+		/**
+		 * @brief Particle emitter accelrated on GPU.
+		 */
+		class GEPARTICLEGL_EXPORT GPUParticleEmitter : public ParticleEmitterBase, public ComputeProgramWrapper {
 		public:
 			GPUParticleEmitter(std::string shaderSource, int particlesPerSecond);
 			GPUParticleEmitter(std::string shaderSource, std::shared_ptr<Counter> counter);
 			void emitParticles(core::time_unit dt, std::shared_ptr<particle::ParticleContainer> particles) override;
 
 		protected:
+			/**
+			 * @brief Called from emitParticles. Run compute shader computation.
+			 */
 			void dispatchEmit(unsigned int newParticlesCount, std::shared_ptr<ParticleContainer> particles);
 		};
 
 	}
-}
-
-inline ge::particle::GPUParticleEmitter::GPUParticleEmitter(std::string shaderSource, int particlesPerSecond)
-	: GPUParticleEmitter(shaderSource, std::make_shared<ConstantRateCounter>(particlesPerSecond))
-{}
-
-inline ge::particle::GPUParticleEmitter::GPUParticleEmitter(std::string shaderSource, std::shared_ptr<Counter> counter)
-	: ComputeProgramWrapper(shaderSource), ParticleEmitterBase(counter)
-{
-	checkUniform("newParticles");
-	checkUniform("particleCount");
-}
-
-inline void ge::particle::GPUParticleEmitter::emitParticles(core::time_unit dt, std::shared_ptr<ge::particle::ParticleContainer> particles)
-{
-	unsigned int newParticlesCount = getNumOfParticlesToCreate(dt);
-	dispatchEmit(newParticlesCount, particles);
-}
-
-inline void ge::particle::GPUParticleEmitter::dispatchEmit(unsigned int newParticlesCount, std::shared_ptr<ParticleContainer> particles)
-{
-	program->set("newParticles", newParticlesCount);
-	program->set("particleCount", particles->size());
-	dispatch(1);
 }

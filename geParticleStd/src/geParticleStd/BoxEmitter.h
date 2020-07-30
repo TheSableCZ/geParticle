@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿/** @file BoxEmitter.h
+ *  @brief Emitter of box shape.
+ *  @author Jan Sobol xsobol04
+ */
+
+#pragma once
 
 #include <random>
 #include <glm/glm.hpp>
@@ -12,7 +17,10 @@ namespace ge
 {
 	namespace particle
 	{
-		class BoxEmitter : public StandardEmitter
+		/**
+		 * @brief Emitter of box shape.
+		 */
+		class GEPARTICLESTD_EXPORT BoxEmitter : public StandardEmitter
 		{
 			class BoxInitiator : public ParticleInitiator
 			{

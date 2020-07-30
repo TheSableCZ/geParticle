@@ -1,11 +1,20 @@
-﻿#pragma once
+﻿/** @file FloorAffector.h
+ *  @brief Affector simulating simple floor.
+ *  @author Jan Sobol xsobol04
+ */
+
+#pragma once
 #include <geParticle/ParticleAffector.h>
+#include <geParticleStd/Export.h>
 
 namespace ge
 {
 	namespace particle
 	{
-		class FloorAffector : public ParticleAffector
+		/**
+		 * @brief Affector simulating simple floor.
+		 */
+		class GEPARTICLESTD_EXPORT FloorAffector : public ParticleAffector
 		{
 		public:
 			void affect(core::time_unit dt, std::shared_ptr<ParticleContainer> particles) override;

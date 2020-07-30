@@ -1,4 +1,9 @@
-﻿#include "TrailEmitter.h"
+﻿/** @file TrailEmitter.cpp
+ *  @brief Firework trail emitter.
+ *  @author Jan Sobol xsobol04
+ */
+
+#include "TrailEmitter.h"
 
 
 #include "FireworkExample.h"

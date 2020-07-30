@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿/** @file TrailAffector.h
+ *  @brief Affect to leave trails.
+ *  @author Jan Sobol xsobol04
+ */
+
+#pragma once
 #include "TrailEmitter.h"
 #include "geParticle/ParticleAffector.h"
 

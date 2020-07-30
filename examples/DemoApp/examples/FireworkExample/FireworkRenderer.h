@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿/** @file FireworkRenderer.h
+ *  @brief Renderer for firework effect.
+ *  @author Jan Sobol xsobol04
+ */
+
+#pragma once
 #include "geParticle/ParticleRenderer.h"
 #include "geParticleGL/GPUParticleContainer.h"
 

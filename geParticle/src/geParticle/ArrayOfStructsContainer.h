@@ -1,3 +1,8 @@
+/** @file ArrayOfStructContainer.h
+ *  @brief Simple AoS storage
+ *  @author Jan Sobol xsobol04
+ */
+
 #pragma once
 
 #include <geParticle/ParticleContainer.h>
@@ -14,6 +19,9 @@ namespace ge {
 			inline ParticleContainerType getType() override { return ParticleContainerType::AoS; }
 		};
 
+		/**
+		 * @brief Simple AoS particle storage. Particles is stored in an array.
+		 */
 		template <class T>
 		class ArrayOfStructsContainer : public ArrayOfStructsContainerBase, public std::enable_shared_from_this<ArrayOfStructsContainer<T>> {
 

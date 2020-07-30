@@ -1,5 +1,9 @@
-﻿#include "TrailAffector.h"
+﻿/** @file TrailAffector.cpp
+ *  @brief Affect to leave trails.
+ *  @author Jan Sobol xsobol04
+ */
 
+#include "TrailAffector.h"
 
 #include "FireworkExample.h"
 #include "geParticle/ComponentSystemContainer.h"

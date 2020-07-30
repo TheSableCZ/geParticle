@@ -1,4 +1,9 @@
-﻿#include "SimpleExample.h"
+﻿/** @file SimpleExample.cpp
+ *  @brief Simple fountain particle system.
+ *  @author Jan Sobol xsobol04
+ */
+
+#include "SimpleExample.h"
 
 #include <imgui.h>
 #include <sstream>
@@ -10,6 +15,7 @@
 
 #include "examples/Common/SimpleExampleRenderer.h"
 #include "geParticleStd/ColorAffector.h"
+#include "geParticleStd/ConstantRateCounter.h"
 #include "geParticleStd/FloorAffector.h"
 
 constexpr auto MAX_PARTICLES = 500;
@@ -26,15 +32,6 @@ void ge::examples::SimpleExample::init()
 	pc->registerComponent<ge::particle::Velocity>(false);
 
 	pc->registerComponent<particle::Color>(true);
-
-	/*pc->setLiveParticlePredicate(
-		[](const int i, const ge::particle::ComponentSystemContainer &container) -> bool
-	{ return container.getComponent<ge::particle::LifeData>(i).livingFlag; }
-	);
-	pc->setDeadParticlePredicate(
-		[](const int i, const ge::particle::ComponentSystemContainer &container) -> bool
-	{ return !container.getComponent<ge::particle::LifeData>(i).livingFlag; }
-	);*/
 
 	auto it = pc->begin<particle::LifeData>();
 	pc->setLiveParticlePredicate(
@@ -169,7 +166,6 @@ void ge::examples::SimpleExample::renderGuiAffectorDetails(std::string affectorN
 			ss << cnt << ". " << "colorpoint";
 			if (ImGui::TreeNode(ss.str().c_str()))
 			{
-				//ImGui::Text(ss.str().c_str());
 				ImGui::SliderInt("%", &percentage, 0, 100);
 				ImGui::ColorEdit4("Color", &color[0]);
 				ImGui::TreePop();

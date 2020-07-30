@@ -1,4 +1,9 @@
-﻿#include "TextureHelper.h"
+﻿/** @file TextureHelper.cpp
+ *  @brief DDS texture loader.
+ *  @author Jan Sobol xsobol04
+ */
+
+#include "TextureHelper.h"
 
 #include <cstring>
 
@@ -6,6 +11,11 @@
 #define FOURCC_DXT3 0x33545844 // Equivalent to "DXT3" in ASCII
 #define FOURCC_DXT5 0x35545844 // Equivalent to "DXT5" in ASCII
 
+/*
+ * Function taken over and edited from opengl-tutorial Tutorial 5 : A Textured Cube
+ * url: http://www.opengl-tutorial.org/beginners-tutorials/tutorial-5-a-textured-cube/
+ * license: WTFPL Public Licence
+ */
 GLuint ge::examples::TextureHelper::loadDDS(std::string imagePath, const ge::gl::Context& context)
 {
 	unsigned char header[124];

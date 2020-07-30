@@ -1,3 +1,8 @@
+/** @file ParticleSystem.h
+ *  @brief Particle system class.
+ *  @author Jan Sobol xsobol04
+ */
+
 #include <geParticle/ParticleSystem.h>
 
 #include <geParticle/ParticleEmitter.h>

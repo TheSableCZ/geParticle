@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿/** @file ExampleManager.h
+ *  @brief Covers examples. Render gui and do example selection.
+ *  @author Jan Sobol xsobol04
+ */
+
+#pragma once
 #include <imgui.h>
 #include <string>
 #include <vector>
@@ -15,6 +20,9 @@ namespace ge
 	
 	namespace examples
 	{
+		/**
+		 * @brief An example abstract class.
+		 */
 		class Example
 		{
 		public:
@@ -52,7 +60,10 @@ namespace ge
 				}
 			}
 		};
-		
+
+		/**
+		 * @brief Covers examples. Render gui and do example selection.
+		 */
 		class ExampleManager
 		{
 		public:

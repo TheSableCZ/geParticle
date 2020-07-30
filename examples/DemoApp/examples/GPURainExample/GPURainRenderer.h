@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿/** @file GPURainRenderer.h
+ *  @brief Renderer for GPU rain example.
+ *  @author Jan Sobol xsobol04
+ */
+
+#pragma once
 #include "geParticle/ParticleRenderer.h"
 #include "geParticleGL/GPUParticleContainer.h"
 

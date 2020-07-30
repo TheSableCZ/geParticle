@@ -1,4 +1,9 @@
-﻿#include "ExampleManager.h"
+﻿/** @file ExampleManager.cpp
+ *  @brief Covers examples. Render gui and do example selection.
+ *  @author Jan Sobol xsobol04
+ */
+
+#include "ExampleManager.h"
 
 #include <imgui.h>
 #include <iostream>

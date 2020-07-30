@@ -1,3 +1,8 @@
+/** @file Particle.h
+ *  @brief Base particle class for ArrayOfStructContainer.
+ *  @author Jan Sobol xsobol04
+ */
+
 #pragma once
 
 #include <glm/glm.hpp>
@@ -7,6 +12,9 @@ namespace ge
 {
 	namespace particle
 	{
+		/**
+		 * @brief Base particle class for ArrayOfStructContainer.
+		 */
 		struct Particle
 		{
 			glm::vec3 pos, velocity;

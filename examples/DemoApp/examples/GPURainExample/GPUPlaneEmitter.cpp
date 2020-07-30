@@ -1,4 +1,9 @@
-﻿#include "GPUPlaneEmitter.h"
+﻿/** @file GPUPlaneEmitter.cpp
+ *  @brief GPU emitter with random particle distribution.
+ *  @author Jan Sobol xsobol04
+ */
+
+#include "GPUPlaneEmitter.h"
 
 ge::examples::GPUPlaneEmitter::GPUPlaneEmitter(std::string shaderSource, int particlesPerSecond, int bufferSize,
 	glm::vec2 planeDimensions, float axisY)

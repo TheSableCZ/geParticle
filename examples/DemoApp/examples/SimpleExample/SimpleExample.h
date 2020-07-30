@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿/** @file SimpleExample.h
+ *  @brief Simple fountain particle system.
+ *  @author Jan Sobol xsobol04
+ */
+
+#pragma once
 #include "ExampleManager.h"
 #include "geParticle/ParticleInitiator.h"
 #include "geParticle/ParticleRenderer.h"

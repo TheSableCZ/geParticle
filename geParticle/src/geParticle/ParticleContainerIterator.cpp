@@ -1,3 +1,8 @@
+/** @file ParticleContainerIterator.cpp
+ *  @brief Classes for iterating through particle container.
+ *  @author Jan Sobol xsobol04
+ */
+
 #include <geParticle/ParticleContainerIterator.h>
 #include <geParticle/ParticleContainer.h>
 

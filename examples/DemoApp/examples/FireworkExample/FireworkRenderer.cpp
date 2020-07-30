@@ -1,4 +1,9 @@
-﻿#include "FireworkRenderer.h"
+﻿/** @file FireworkRenderer.cpp
+ *  @brief Renderer for firework effect.
+ *  @author Jan Sobol xsobol04
+ */
+
+#include "FireworkRenderer.h"
 
 #include <geGL/Program.h>
 
@@ -32,7 +37,12 @@ ge::examples::FireworkRenderer::FireworkRenderer(std::shared_ptr<particle::GPUPa
 	container->addComponentVertexAttrib<particle::Color>(VAO, 1, 4, GL_FLOAT, sizeof(particle::Color), offsetof(particle::Color, color));
 	container->addComponentVertexAttrib<Size>(VAO, 2, 2, GL_FLOAT, sizeof(Size), offsetof(Size, size));
 
-	texture = TextureHelper::loadDDS(APP_RESOURCES"/Firework/smoke.dds", shaderProgram->getContext());
+#if defined(INDIR_RESOURCES)
+	const std::string texturePath = "smoke.DDS";
+#else
+	const std::string texturePath = APP_RESOURCES"/textures/smoke.dds";
+#endif
+	texture = TextureHelper::loadDDS(texturePath, shaderProgram->getContext());
 	textureUniformID = shaderProgram->getUniformLocation("myTextureSampler");
 }
 

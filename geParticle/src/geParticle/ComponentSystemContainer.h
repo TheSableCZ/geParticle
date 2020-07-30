@@ -1,5 +1,11 @@
+/** @file ComponentSystemContainer.h
+ *  @brief Storage for particles using ECS methodology
+ *  @author Jan Sobol xsobol04
+ */
+
 #pragma once
 
+#include <iostream>
 #include <geParticle/ParticleContainer.h>
 #include <unordered_map>
 #include <utility>
@@ -13,7 +19,10 @@
 namespace ge {
 	namespace particle {
 
-		class ComponentSystemContainer : public IndexBasedParticleContainer, public std::enable_shared_from_this<ComponentSystemContainer> {
+		/**
+		 * @brief Storage for particles using ECS methodology and SoA storage for components (ComponentPool).
+		 */
+		class GEPARTICLE_EXPORT ComponentSystemContainer : public IndexBasedParticleContainer, public std::enable_shared_from_this<ComponentSystemContainer> {
 		protected:
 			using PredicateFunction = std::function<bool(const int, const ComponentSystemContainer &)>;
 
@@ -213,20 +222,42 @@ namespace ge {
 			};
 
 		public:
+			/**
+			 * @brief Constructor. Set size parameters.
+			 * @param maxParticleCount Max container size. -1 for unlimited.
+			 * @param fixedSize If false, container can be resized.
+			 * @param reallocBlockSize Number of allocation particles block.
+			 */
 			ComponentSystemContainer(int maxParticleCount, bool fixedSize = true, unsigned int reallocBlockSize = 64);
 
 			int startIdx() override;
 			int endIdx() override;
 
+			/**
+			 * @brief Add (and allocate) component to container entity.
+			 * @tparam T Unique component class.
+			 * @param initData Init data.
+			 */
 			template <typename T>
 			void registerComponent(std::vector<T> initData = {});
 
+			/**
+			 * @brief Get particle attribute.
+			 * @param idx Index of particle.
+			 */
 			template <typename T>
 			T &getComponent(const int idx) const;
 
+			/**
+			 * @brief Get attributes pool (vector).
+			 */
 			template <typename T>
-			std::shared_ptr<ComponentPool<T>> getComponent() const;
+			std::shared_ptr<ComponentPool<T>> getComponent();
 
+			/**
+			 * @brief Resize if dynamic size container.
+			 * @param reallocBlockCount Number of block which resize method adds to actual size.
+			 */
 			virtual bool resize(int reallocBlockCount);
 
 			inline ParticleContainerType getType() override { return ParticleContainerType::SoA_CS; }
@@ -251,7 +282,7 @@ namespace ge {
 			bool fixedSize;
 			unsigned int reallocBlockSize;
 
-			std::unordered_map<const char *, std::shared_ptr<ComponentPoolBase>> components;
+			std::unordered_map<std::string, std::shared_ptr<ComponentPoolBase>> components;
 
 			std::shared_ptr<unused_particles_iterator> unusedParticlesIterator;
 			PredicateFunction liveParticlePredicate = [](const int, const ComponentSystemContainer &) { return true; };
@@ -273,7 +304,7 @@ inline int ge::particle::ComponentSystemContainer::endIdx()
 template<typename T>
 inline void ge::particle::ComponentSystemContainer::registerComponent(std::vector<T> initData)
 {
-	const char* typeName = typeid(T).name();
+	const std::string typeName = typeid(T).name();
 
 	assert(components.find(typeName) == components.end() && "Registering component type more than once.");
 
@@ -285,7 +316,7 @@ inline T & ge::particle::ComponentSystemContainer::getComponent(const int idx) c
 {
 	assert(idx < actSize);
 
-	const char* typeName = typeid(T).name();
+	const std::string typeName = typeid(T).name();
 
 	const auto component = components.find(typeName);
 
@@ -297,11 +328,12 @@ inline T & ge::particle::ComponentSystemContainer::getComponent(const int idx) c
 }
 
 template <typename T>
-std::shared_ptr<ge::particle::ComponentPool<T>> ge::particle::ComponentSystemContainer::getComponent() const
+std::shared_ptr<ge::particle::ComponentPool<T>> ge::particle::ComponentSystemContainer::getComponent()
 {
-	const char* typeName = typeid(T).name();
+	const std::string typeName = typeid(T).name();
 
 	const auto component = components.find(typeName);
+	auto component2 = components[typeName];
 
 	assert(component != components.end() && "Component not registered before use.");
 
