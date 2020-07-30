@@ -7,14 +7,14 @@ layout(location=1) in float life;
 out Particle
 {
 	vec4 position;
-	bool visible;
+	int visible;
 } particle;
 
 void main(void){
 	gl_Position = pos;
 	particle.position = pos;
 	if (life <= 0)
-		particle.visible = false;
-	else particle.visible = true;
+		particle.visible = 0;
+	else particle.visible = 1;
 }
 )"

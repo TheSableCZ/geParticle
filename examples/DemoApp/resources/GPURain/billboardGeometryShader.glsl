@@ -12,7 +12,7 @@ uniform vec3 CameraRight;
 in Particle
 {
 	vec4 position;
-	bool visible;
+	int visible;
 } particle[];
 
 out vec4 color;
@@ -24,7 +24,7 @@ const vec2 offsets[4] = {
 const vec2 particlesize = vec2(.1f, 1.f);
 
 void main(void){
-	if (particle[0].visible == false)
+	if (particle[0].visible == 0)
 		return;
 
 	for (int i = 0; i < 4; ++i) {
