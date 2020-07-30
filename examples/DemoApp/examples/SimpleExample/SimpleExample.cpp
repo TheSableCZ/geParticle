@@ -122,6 +122,11 @@ unsigned ge::examples::SimpleExample::getContainerSize() const
 	return pc->size();
 }
 
+void ge::examples::SimpleExample::stopEmitting()
+{
+	std::static_pointer_cast<particle::ConstantRateCounter>(emitter->getRefCounter())->setParticlesPerSecond(0);
+}
+
 void ge::examples::SimpleExample::initAffectors()
 {
 	auto lifeTimeAffector = std::make_shared<ge::particle::LifeTimeAffector>();

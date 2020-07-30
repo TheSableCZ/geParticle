@@ -54,6 +54,11 @@ void ge::examples::ExampleManager::toggleRealTime()
 	manager->startAll(time());
 }
 
+void ge::examples::ExampleManager::stopEmitting()
+{
+	examples[activeExampleIdx]->stopEmitting();
+}
+
 void ge::examples::ExampleManager::renderGui()
 {
 	ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);

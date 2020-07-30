@@ -68,6 +68,7 @@ void ge::examples::FireworkExample::init()
 		pointEm->initiators.emplace_back(colInit);
 		pointEm->initiators.emplace_back(fountainInit);
 
+		points[i] = pointEm;
 		ps->addEmitter(pointEm);
 	}
 
@@ -110,8 +111,12 @@ void ge::examples::FireworkExample::renderGui()
 	ImGui::Text("Zoom out!!");
 	
 	int numOfParticles = std::static_pointer_cast<particle::ConstantRateCounter>(plane->getRefCounter())->getParticlesPerSecond();
-	if (ImGui::SliderInt("Particles/sec", &numOfParticles, 1, 10))
+	if (ImGui::SliderInt("Particles/sec", &numOfParticles, 0, 10))
 		std::static_pointer_cast<particle::ConstantRateCounter>(plane->getRefCounter())->setParticlesPerSecond(numOfParticles);
+	
+	int numOfParticlesFountain = std::static_pointer_cast<particle::ConstantRateCounter>(points[0]->getRefCounter())->getParticlesPerSecond();
+	if (ImGui::SliderInt("Fountains Particles/sec", &numOfParticlesFountain, 0, 10))
+		setFountains(numOfParticlesFountain);
 
 	ImGui::End();
 }
@@ -119,4 +124,18 @@ void ge::examples::FireworkExample::renderGui()
 unsigned ge::examples::FireworkExample::getContainerSize() const
 {
 	return pc->size();
+}
+
+void ge::examples::FireworkExample::stopEmitting()
+{
+	std::static_pointer_cast<particle::ConstantRateCounter>(plane->getRefCounter())->setParticlesPerSecond(0);
+	setFountains(0);
+}
+
+void ge::examples::FireworkExample::setFountains(int particlesPerSecond)
+{
+	for (auto &point : points)
+	{
+		std::static_pointer_cast<particle::ConstantRateCounter>(point->getRefCounter())->setParticlesPerSecond(particlesPerSecond);
+	}
 }

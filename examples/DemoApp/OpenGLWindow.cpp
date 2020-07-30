@@ -184,6 +184,10 @@ void ge::examples::OpenGLWindow::keyPressEvent(QKeyEvent * event)
 	{
 		exampleManager->togglePaused();
 	}
+	if (event->key() == Qt::Key_Escape)
+	{
+		exampleManager->stopEmitting();
+	}
 }
 
 void ge::examples::OpenGLWindow::wheelEvent(QWheelEvent * event)

@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include <array>
+
 #include "ExampleManager.h"
 #include "geParticle/ParticleInitiator.h"
 #include "geParticle/ParticleRenderer.h"
@@ -7,6 +9,7 @@
 #include "geParticleStd/BoxEmitter.h"
 #include "geParticleStd/ColorAffector.h"
 #include "geParticleStd/GravityAffector.h"
+#include "geParticleStd/PointEmitter.h"
 #include "geParticleStd/StandardParticleComponents.h"
 
 namespace ge
@@ -23,14 +26,18 @@ namespace ge
 			void renderGui() override;
 			std::string getName() const override { return "Firework Effect"; }
 			unsigned getContainerSize() const override;
+			void stopEmitting() override;
 
 		private:
+			void setFountains(int particlesPerSecond);
+			
 			std::shared_ptr<particle::ParticleSystemManager> manager;
 			std::shared_ptr<particle::ParticleSystem> ps;
 			std::shared_ptr<particle::GPUParticleContainer> pc;
 			std::shared_ptr<particle::ParticleRenderer> renderer;
 
 			std::shared_ptr<particle::BoxEmitter> plane;
+			std::array<std::shared_ptr<particle::PointEmitter>, 5> points;
 		};
 
 		// custom particle attributes

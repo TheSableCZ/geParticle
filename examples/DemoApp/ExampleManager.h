@@ -28,6 +28,8 @@ namespace ge
 
 			virtual unsigned int getContainerSize() const = 0;
 
+			virtual void stopEmitting() {};
+
 			static void GuiRange(glm::vec2 &range, std::string label, float min, float max)
 			{
 				if (ImGui::TreeNode(label.c_str()))
@@ -59,6 +61,7 @@ namespace ge
 			void toggleShowGui() { showGui = !showGui; }
 			void togglePaused();
 			void toggleRealTime();
+			void stopEmitting();
 
 		private:
 			void renderGui();
