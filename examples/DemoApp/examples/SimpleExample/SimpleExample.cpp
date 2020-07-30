@@ -90,8 +90,10 @@ void ge::examples::SimpleExample::renderGui()
 		ImGui::SliderFloat("Spread", &velInitiator->spread, 0.f, 5.f);
 
 		float lifetime = emitter->getLife().count();
-		if (ImGui::SliderFloat("Lifetime", &lifetime, 0.f, 6.f))
-			emitter->setLife(core::time_unit(lifetime));
+		if (ImGui::SliderFloat("Lifetime", &lifetime, 0.f, 6.f)) {
+		    auto newTime = core::time_unit(lifetime);
+            emitter->setLife(newTime);
+        }
 
 		int numOfParticles = std::static_pointer_cast<particle::ConstantRateCounter>(emitter->getRefCounter())->getParticlesPerSecond();
 		if (ImGui::SliderInt("Particles/sec", &numOfParticles, 0, 100))

@@ -6,7 +6,8 @@
 
 ge::examples::TrailEmitter::TrailEmitter()
 {
-	initiators.emplace_back(std::make_shared<particle::LifeTimeInitiator>(core::time_unit(1.f)));
+    auto time = core::time_unit(1.f);
+	initiators.emplace_back(std::make_shared<particle::LifeTimeInitiator>(time));
 }
 
 void ge::examples::TrailEmitter::emitParticles(core::time_unit dt,

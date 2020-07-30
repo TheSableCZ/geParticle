@@ -291,7 +291,7 @@ inline T & ge::particle::ComponentSystemContainer::getComponent(const int idx) c
 
 	assert(component != components.end() && "Component not registered before use.");
 
-	auto &componentPool = std::static_pointer_cast<ComponentPool<T>>(component->second);
+	auto componentPool = std::static_pointer_cast<ComponentPool<T>>(component->second);
 
 	return componentPool->get(idx);
 }
@@ -305,7 +305,7 @@ std::shared_ptr<ge::particle::ComponentPool<T>> ge::particle::ComponentSystemCon
 
 	assert(component != components.end() && "Component not registered before use.");
 
-	auto &componentPool = std::static_pointer_cast<ComponentPool<T>>(component->second);
+	auto componentPool = std::static_pointer_cast<ComponentPool<T>>(component->second);
 
 	return componentPool;
 }

@@ -37,8 +37,12 @@ namespace ge {
 				cyclic_iterator(std::shared_ptr<ArrayOfStructsContainerBase> container, int idx)
 					: startIdx(container->startIdx()), endIdx(container->endIdx()), iterator(container, idx) {}
 
-				void operator++(int) override { idx++; if (idx == endIdx+1) idx = startIdx; }
-				void operator++() override { idx++; if (idx == endIdx+1) idx = startIdx; }
+				void operator++() override
+				{
+				    this->idx++;
+				    if (this->idx == endIdx+1) this->idx = startIdx;
+				}
+				void operator++(int) override { operator++(); }
 
 			protected:
 				int startIdx;
@@ -56,21 +60,21 @@ namespace ge {
 				void setPredicate(std::function<bool(int, std::shared_ptr<ArrayOfStructsContainerBase>)> predicate) { this->predicate = predicate; }
 
 				void operator++() override {
-					int tmpIdx = idx;
+					int tmpIdx = this->idx;
 
-					auto csContainer = std::static_pointer_cast<ArrayOfStructsContainerBase>(container);
+					auto csContainer = std::static_pointer_cast<ArrayOfStructsContainerBase>(this->container);
 
 					do {
-						idx++;
-						if (idx == endIdx+1) {
-							if (cyclic) idx = startIdx;
+						this->idx++;
+						if (this->idx == endIdx+1) {
+							if (cyclic) this->idx = startIdx;
 							else return;
 						}
 
-						if (predicate(idx, csContainer)) return;
+						if (predicate(this->idx, csContainer)) return;
 
 						// stop infinite loop when iterator is cyclic
-					} while (tmpIdx != idx);
+					} while (tmpIdx != this->idx);
 				}
 				void operator++(int) override { operator++(); }
 
@@ -169,13 +173,13 @@ int ge::particle::ArrayOfStructsContainer<T>::endIdx()
 template<class T>
 inline std::shared_ptr<ge::particle::ParticleContainerIterator> ge::particle::ArrayOfStructsContainer<T>::begin()
 {
-	return std::make_shared<iterator>(shared_from_this(), startIdx());
+	return std::make_shared<iterator>(this->shared_from_this(), startIdx());
 }
 
 template<class T>
 inline std::shared_ptr<ge::particle::ParticleContainerIterator> ge::particle::ArrayOfStructsContainer<T>::end()
 {
-	return std::make_shared<iterator>(shared_from_this(), size());
+	return std::make_shared<iterator>(this->shared_from_this(), size());
 }
 
 
@@ -183,7 +187,7 @@ template<class T>
 inline std::shared_ptr<ge::particle::ParticleContainerIterator> ge::particle::ArrayOfStructsContainer<T>::getUnusedParticlesIterator()
 {
 	if (!unusedParticlesIterator) {
-		unusedParticlesIterator = std::make_shared<filter_iterator>(shared_from_this(), true);
+		unusedParticlesIterator = std::make_shared<filter_iterator>(this->shared_from_this(), true);
 	}
 	return unusedParticlesIterator;
 }
@@ -191,5 +195,5 @@ inline std::shared_ptr<ge::particle::ParticleContainerIterator> ge::particle::Ar
 template<class T>
 inline std::shared_ptr<ge::particle::RangeParticleContainerIterator> ge::particle::ArrayOfStructsContainer<T>::createRangeIterator()
 {
-	return std::make_shared<range_iterator>(shared_from_this());
+	return std::make_shared<range_iterator>(this->shared_from_this());
 }

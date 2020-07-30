@@ -84,15 +84,16 @@ unsigned ge::examples::EmittersTestExample::getContainerSize() const
 
 void ge::examples::EmittersTestExample::initEmitters()
 {
-	allEmitters.emplace_back(std::make_pair("Point Emitter", std::make_shared<particle::PointEmitter>(10, glm::vec3(0, 0, 0), core::time_unit(1.f))));
+    auto lifeTime = core::time_unit(1.f);
+	allEmitters.emplace_back(std::make_pair("Point Emitter", std::make_shared<particle::PointEmitter>(10, glm::vec3(0, 0, 0), lifeTime)));
 	allEmitters.emplace_back(std::make_pair("Box Emitter", std::make_shared<particle::BoxEmitter>(
 		-1, 1, -1, 1, -1, 1, 
-		core::time_unit(1.f),
+		lifeTime,
 		std::make_shared<particle::ConstantRateCounter>(10)
 		)));
 	allEmitters.emplace_back(std::make_pair("Ball Emitter", std::make_shared<particle::BallEmitter>(
 		glm::vec3(0, 0, 0), 1.f,
-		core::time_unit(1.f),
+		lifeTime,
 		std::make_shared<particle::ConstantRateCounter>(10)
 		)));
 

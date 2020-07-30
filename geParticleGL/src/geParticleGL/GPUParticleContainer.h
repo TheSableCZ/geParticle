@@ -123,11 +123,11 @@ inline void ge::particle::GPUParticleContainer::syncComponent(SyncDirection dire
 	assert(component != components.end() && "Component not found.");
 
 	if (direction == CPU_TO_GPU) {
-		setBufferData(component.first, component.second->data());
+		setBufferData(component->first, component->second->data());
 	}
 
 	if (direction == GPU_TO_CPU) {
-		getBufferData(component.first, component.second->data());
+		getBufferData(component->first, component->second->data());
 	}
 }
 
@@ -141,7 +141,7 @@ inline void ge::particle::GPUParticleContainer::getBufferData(std::vector<T>& da
 
 	size_t size = buffer->second->getSize() / sizeof(T);
 
-	// TODO: v novìjším commitu GPUE je funkèní funkce buffer->getData, která dìlá pøesnì tohle
+	// TODO: v novï¿½jï¿½ï¿½m commitu GPUE je funkï¿½nï¿½ funkce buffer->getData, kterï¿½ dï¿½lï¿½ pï¿½esnï¿½ tohle
 	data.resize(size);
 	getBufferData(typeName, data.data());
 }

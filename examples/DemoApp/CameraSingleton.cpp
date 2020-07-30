@@ -7,7 +7,8 @@ ge::examples::CameraSingleton::CameraSingleton()
 {
 	auto manip = std::make_shared<util::OrbitManipulator>();
 	auto ptr = std::static_pointer_cast<util::BasicManipulatorInterface>(manip);
-	setActiveManipulator(ptr);
+    //BasicCamera::setActiveManipulator(ptr);
+    activeManipulator = ptr;
 	BasicCamera::setMatrix(manip->getRefMatrix());
 
 	projectionMatrix = std::make_shared<glm::mat4>();
