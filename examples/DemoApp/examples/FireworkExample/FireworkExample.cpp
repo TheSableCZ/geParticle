@@ -48,7 +48,8 @@ void ge::examples::FireworkExample::init()
 	ps = std::make_shared<ge::particle::ParticleSystem>(pc);
 
 	// Plane emitter 22x4 worldspace
-	plane = std::make_shared<particle::BoxEmitter>(-12, 12, -2, -2, -2, 2, core::time_unit(1.f), std::make_shared<particle::ConstantRateCounter>(2));
+	auto lifeTime = core::time_unit(1.f);
+	plane = std::make_shared<particle::BoxEmitter>(-12, 12, -2, -2, -2, 2, lifeTime, std::make_shared<particle::ConstantRateCounter>(2));
 	plane->initiators.emplace_back(std::make_shared<particle::VelocityInitiator>(glm::vec2(9, 12)));
 	plane->initiators.emplace_back(std::make_shared<particle::ColorInitiator>());
 	plane->initiators.emplace_back(std::make_shared<FireworkAttribInitiator>());

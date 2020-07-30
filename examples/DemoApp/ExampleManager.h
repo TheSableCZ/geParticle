@@ -4,6 +4,7 @@
 #include <vector>
 #include <geCore/Updatable.h>
 #include <glm/glm.hpp>
+#include <memory>
 
 namespace ge
 {

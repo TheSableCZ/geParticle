@@ -9,7 +9,8 @@
 
 ge::examples::ExplosionEmitter::ExplosionEmitter()
 {
-	initiators.emplace_back(std::make_shared<particle::LifeTimeInitiator>(core::time_unit(1.f)));
+    auto time = core::time_unit(1.f);
+	initiators.emplace_back(std::make_shared<particle::LifeTimeInitiator>(time));
 	initiators.emplace_back(std::make_shared<particle::VelocityInitiator>(glm::vec2(10, 10), 5, glm::vec3(0, 0, 0)));
 }
 
